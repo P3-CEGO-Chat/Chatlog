@@ -43,6 +43,13 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @PostMapping("/receiveDataJSON")
+    public @ResponseBody String addNewUserJSON (@RequestBody User user) {
+        user.setUserId(user.getCustomerId());
+        userRepository.save(user);
+        return "Saved";
+    }
+
 
     @GetMapping("/hello")
     public String hello(){
