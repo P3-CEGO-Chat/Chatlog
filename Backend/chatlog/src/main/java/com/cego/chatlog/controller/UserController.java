@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cego.chatlog.entity.User;
+import com.cego.chatlog.repository.UserRepository;
+
 @Controller
 public class UserController {
     

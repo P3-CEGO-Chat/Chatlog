@@ -1,4 +1,4 @@
-package com.cego.chatlog.controller;
+package com.cego.chatlog.entity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
