@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ChatlogApplication<chatlog>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.cego.chatlog.ChatlogApplication",
+            "projectName": "chatlog",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
