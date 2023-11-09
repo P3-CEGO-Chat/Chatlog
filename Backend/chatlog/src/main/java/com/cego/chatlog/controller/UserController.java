@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cego.chatlog.entity.DataUserMessage;
+import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.entity.User;
+import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.repository.UserRepository;
 
 @Controller
@@ -20,6 +23,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;   
 
+    @Autowired 
+    MessageRepository messageRepository;
     /*@PostMapping(
 		value = "/receiveData", consumes = "application/json", produces = "application/json")
 	  public User receiveData(@RequestBody User data) {
@@ -27,26 +32,24 @@ public class UserController {
 		return data;
     }*/
 
-    @PostMapping("/receiveData")
-    public @ResponseBody String addNewUser (@RequestParam String customerId, 
-           @RequestParam String username) {
-        User n = new User();
-        n.setCustomerId(customerId);
-        n.setUsername(username);
-        n.setUserId(customerId);
-        userRepository.save(n);
-        return "Saved";
-    }
-
-    @GetMapping("/user")
-    public @ResponseBody Iterable<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    
 
     @PostMapping("/receiveDataJSON")
-    public @ResponseBody String addNewUserJSON (@RequestBody User user) {
-        user.setUserId(user.getCustomerId());
+    public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
+        //user.setUserId(user.getCustomerId());
+        User user = new User();
+        user.setCustomerId(dataUserMessage.getCustomerId());
+        user.setUsername(dataUserMessage.getUsername());
+        user.setUserId(dataUserMessage.getCustomerId());
+
+        Message message = new Message();
+        message.setCustomerId(dataUserMessage.getCustomerId());
+        message.setMessageText(dataUserMessage.getMessage());
+        message.setDateTime(dataUserMessage.getDateTime());
+
+
         userRepository.save(user);
+        messageRepository.save(message);
         return "Saved";
     }
 

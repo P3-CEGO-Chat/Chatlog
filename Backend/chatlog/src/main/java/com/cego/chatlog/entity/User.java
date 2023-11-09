@@ -14,15 +14,6 @@ public class User {
     private String customerId;
     private int userId;
     private String username;
-    
-
-
-    /*public User(String customerId, String username, int userId) {
-        this.customerId = customerId;
-        this.userId = userId;
-        this.username = username;
-        
-    }*/
 
     public String getCustomerId() {
         return this.customerId;
@@ -48,23 +39,16 @@ public class User {
         convertToUserId(customerId);
     }
 
-    
-
-
-
-
-
-
-
-
 
     /* 
     *   Converts the customerId to a userId 
     *   The userId is used to identify the user in the database
     *   The userId is a base 5 number, where each digit is a number from 0-4
     *   The userId is converted back to a customerId when the user logs in
-    *  @param customerId 
-    *  @return userId
+    *   '1': Add 1 * 5^3 = 125 to userId
+    *   '2': Add 2 * 5^2 = 50 to userId
+    *   '3': Add 3 * 5^1 = 15 to userId
+    *   '4': Add 4 * 5^0 = 4 to userId
     */
     private void convertToUserId(String customerId){
         String tempId = customerId.substring(2);
