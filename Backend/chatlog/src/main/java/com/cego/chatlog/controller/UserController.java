@@ -25,14 +25,7 @@ public class UserController {
 
     @Autowired 
     MessageRepository messageRepository;
-    /*@PostMapping(
-		value = "/receiveData", consumes = "application/json", produces = "application/json")
-	  public User receiveData(@RequestBody User data) {
-        userRepository.save(data);
-		return data;
-    }*/
-
-    
+   
 
     @PostMapping("/receiveDataJSON")
     public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {

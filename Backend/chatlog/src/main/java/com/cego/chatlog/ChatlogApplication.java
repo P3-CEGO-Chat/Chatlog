@@ -17,24 +17,9 @@ import graphql.PublicApi;
 @SpringBootApplication
 public class ChatlogApplication  {
 
-
-	/*@Autowired
-	private JdbcTemplate jdbcTemplate;*/
-
 	public static void main(String[] args) {
 		SpringApplication.run(ChatlogApplication.class, args);
 	}
-
-	/*@Override
-	public void run(String... args) throws Exception {
-		String sql = "INSERT INTO user (customerId, username, userId) VALUES (?, ?, ?)";
-
-		int result = jdbcTemplate.update(sql, "S11", "b11a", 1121323);
-
-		if (result > 0) {
-			System.out.println("A new row has been inserted.");
-		}
-	} */
 	
 
 }
