@@ -1,6 +1,7 @@
 <template>
   <div>
-    <NuxtWelcome/>
+    <Searchbar>
+      Dav
+    </Searchbar>
   </div>
 </template>
-<!--sui-->
