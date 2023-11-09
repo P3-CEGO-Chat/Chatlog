@@ -1,12 +1,12 @@
 package com.cego.chatlog.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import com.cego.chatlog.entity.Message;
 
 
 @Repository
-public interface MessageRepository extends CrudRepository<Message, Integer> {
-    
+public interface MessageRepository extends JpaRepository<Message, Integer> {
+    List<Message> findByMessageIdBetween(int startId, int endId);
 }

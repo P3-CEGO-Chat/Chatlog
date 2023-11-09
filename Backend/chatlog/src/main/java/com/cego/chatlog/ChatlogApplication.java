@@ -10,6 +10,4 @@ public class ChatlogApplication  {
 	public static void main(String[] args) {
 		SpringApplication.run(ChatlogApplication.class, args);
 	}
-	
-
 }
