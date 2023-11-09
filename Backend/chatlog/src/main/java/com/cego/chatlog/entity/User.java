@@ -1,9 +1,5 @@
 package com.cego.chatlog.entity;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -22,7 +18,7 @@ public class User {
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
-
+    
     public String getUsername() {
         return this.username;
     }

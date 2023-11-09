@@ -1,9 +1,5 @@
 package com.cego.chatlog.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.cego.chatlog.repository.MessageRepository;
-import com.cego.chatlog.repository.UserRepository;
 
 public class DataUserMessage {
     private String customerId;

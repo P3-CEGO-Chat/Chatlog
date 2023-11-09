@@ -1,16 +1,11 @@
 package com.cego.chatlog.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.cego.chatlog.entity.DataUserMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.entity.User;
@@ -18,7 +13,7 @@ import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.repository.UserRepository;
 
 @Controller
-public class UserController {
+public class DataController {
     
     @Autowired
     UserRepository userRepository;   
