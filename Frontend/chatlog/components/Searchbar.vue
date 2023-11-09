@@ -4,19 +4,68 @@
         <div class="div-3">
           <div class="div-4">􀊫</div>
           <div class="div-5"> 
-            <form>
-                <input type="text" placeholder="Search" />
-                <input type="submit" value="Search" />
+            <form @submit.prevent="submitForm">
+              <div class="input-field">
+                <span class="keyword-box" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)">
+                {{ keyword }}
+              </span>
+              <input type="text" v-model="searchKeyword" placeholder="Search" />
+            </div>
+            <input type="submit" value="Search" />
             </form>
           </div>
         </div>
       </div>
     </div>
   </template>
+
+<script>
+export default {
+  data() {
+    return {
+      searchKeyword: '',
+      keywordArray: [], // New data property
+    };
+  },
+  methods: {
+    submitForm() {
+      // You can add your search logic here
+      this.keywordArray.push(this.searchKeyword)
+      console.log(this.searchKeyword);
+      console.log(this.keywordArray);
+    },
+    removeKeyword(index) {
+      this.keywordArray.splice(index, 1);
+    },
+  },
+};
+</script>
   
   
-  
-  <style scoped>
+
+<style scoped>
+.input-field {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.keyword-box {
+  background-color: #f2f2f2;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.input-field input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+}
+
   .div {
     display: flex;
     flex-direction: column;
