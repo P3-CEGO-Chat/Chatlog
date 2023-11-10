@@ -52,21 +52,6 @@ public class DataController {
         return "Hello World";
     }
 
-    @GetMapping("/getMessages")   
-    public @ResponseBody String getMessages(@RequestParam(value = "prevId") int prevId, @RequestParam(value = "nextId") int nextId) {
-        List<Message> messages = messageRepository.findByMessageIdBetween(prevId, nextId);
-        String json = convertMessagesToJSON(messages);
-        return json;
-    }
-
-    private String convertMessagesToJSON(List<Message> messages) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(messages);
-        } catch (JsonProcessingException e) {
-            return null;
-        } 
-    }
 
     @GetMapping("/getMessagesWithUsernames")
     public @ResponseBody String getMessagesWithUsernames(@RequestParam(value = "startId") int startId, @RequestParam(value = "endId") int endId) {
@@ -74,6 +59,16 @@ public class DataController {
         for (Object[] message : messages) {
             System.out.println(Arrays.toString(message));
         }
-        return "Hello";
+        String json = convertObjectToJSON(messages);
+        return json;
+    }
+
+    private String convertObjectToJSON(List<Object[]> messages) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(messages);
+        } catch (JsonProcessingException e) {
+            return null;
+        } 
     }
 }
