@@ -1,5 +1,6 @@
 package com.cego.chatlog.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,5 +66,14 @@ public class DataController {
         } catch (JsonProcessingException e) {
             return null;
         } 
+    }
+
+    @GetMapping("/getMessagesWithUsernames")
+    public @ResponseBody String getMessagesWithUsernames(@RequestParam(value = "startId") int startId, @RequestParam(value = "endId") int endId) {
+        List<Object[]> messages = messageRepository.findMessagesWithUsernames(startId, endId);
+        for (Object[] message : messages) {
+            System.out.println(Arrays.toString(message));
+        }
+        return "Hello";
     }
 }
