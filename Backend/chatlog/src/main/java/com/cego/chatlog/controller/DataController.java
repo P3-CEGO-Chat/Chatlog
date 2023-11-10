@@ -71,4 +71,14 @@ public class DataController {
             return null;
         } 
     }
+
+    @GetMapping("/getSearch")
+    public @ResponseBody String getSearch(@RequestParam(value = "search") String search) {
+        List<Object[]> messages = messageRepository.findSearch(search);
+        for (Object[] message : messages) {
+            System.out.println(Arrays.toString(message));
+        }
+        String json = convertObjectToJSON(messages);
+        return json;
+    }
 }
