@@ -11,5 +11,8 @@ import('~/assets/css/main.css')
     <Searchbar>
       Dav
     </Searchbar>
+    <Filterchat class=filterchat>
+      Dav
+    </Filterchat>
   </div>
 </template>
