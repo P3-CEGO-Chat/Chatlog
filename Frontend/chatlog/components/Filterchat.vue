@@ -39,9 +39,9 @@ export default{
     },
     methods: {
         submitForm() {
-            this.ObjectArray.push(this.messageObject = {message: "Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums Hej med dig din bums", username: "user4", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "fuck dig", username: "user498", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "Jackpot", username: "user4", dateTime: "2023-11-07T13:28:21.531Z"})
+            this.ObjectArray.push(this.messageObject = {message: "Hello, how are you?", username: "user1222", dateTime: "2023-11-07T13:28:21.531Z"})
+            this.ObjectArray.push(this.messageObject = {message: "I am doing well, thank you. How about you?", username: "user2", dateTime: "2023-11-07T13:28:21.531Z"})
+            this.ObjectArray.push(this.messageObject = {message: "I am also doing well. Thanks for asking!", username: "user12222", dateTime: "2023-11-07T13:28:21.531Z"})
             console.log(this.ObjectArray);
         },
     }     
