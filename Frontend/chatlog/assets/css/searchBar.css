@@ -1,10 +1,9 @@
 .container {
   display: flex;
   justify-content: space-between;
-  width: 50%;
   background-color: white;
   border-radius: 5px;
-  padding: 10px;
+  padding: 1rem;
   height: 7.5vh;
   gap: 0.5rem;
 }
@@ -13,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 85%;
   border: solid 1.5px #6CA5FC;
   border-radius: 5px;
   padding: 0rem 0.5rem;
@@ -31,7 +30,7 @@
   border: none;
   outline: none;
   font-size: 1rem;
-  width: 100%;
+  width: fit-content;
 }
 
 .searchField::placeholder {
@@ -57,10 +56,74 @@
 
 .keyword {
   border-radius: 5px;
-  padding: 0.25rem;
-  font-size: small;
-  height: 60%;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  
+  font-size: medium;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.2rem;;
+  color: white;
 }
+
+.keyword:hover, .calendarButton:hover {
+  cursor: pointer;
+}
+
+.keywordContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  max-width: 70%;
+  overflow: scroll;
+}
+
+.infoIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.infoDiv {
+  position: relative;
+  display: inline-block;
+}
+
+.infoDiv .infoText {
+  visibility: hidden;
+  width: 120px;
+  background-color: #6CA5FC;
+  color: white;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  position: absolute;
+  z-index: 1;
+}
+
+.infoDiv .infoText::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #6CA5FC transparent;
+}
+
+.infoDiv .infoText {
+  width: 120px;
+  top: 120%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.infoDiv:hover .infoText{
+  visibility: visible;
+}
+
