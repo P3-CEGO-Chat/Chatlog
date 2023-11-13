@@ -3,4 +3,46 @@
     background-color: #FFFFFF;
     padding: 1rem;
     justify-content: space-between;
+    font-family: sans-serif;
+}
+.SearchField{
+    border-radius: 5px;
+    width: 100%;
+    padding: 1rem;
+}
+
+.SearchTex {
+    border: solid 1.5px #6CA5FC;  
+    border-radius: 5px;  
+    padding: 1rem;
+    text-align: center;
+}
+
+.searchedMessage{
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    display: flex;
+    
+}
+
+.searchedMessage:nth-child(even){
+    background-color: #D9D9D9;
+}
+
+.searchedMessage:nth-child(odd){
+    background-color: #E3E8F0;
+}
+
+.messageContent {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
+}
+
+.dateTime {
+    word-wrap: break-word;
+    text-align: right;
+    white-space: nowrap;
+    margin-left: auto;
 }
