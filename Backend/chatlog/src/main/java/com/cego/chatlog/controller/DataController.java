@@ -29,18 +29,20 @@ public class DataController {
     @Autowired
     UserService userService;
    
-
+    //Api to post the data that we receive into the database.
     @PostMapping("/receiveDataJSON")
     public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
         //user.setUserId(user.getCustomerId());
-        /* User user = new User(); */
+        /* User user = new User(); */    
 
+        //Creating a user for the database, because the database stores both a user and a message seperately
         userService.createUser(dataUserMessage);
 
         /* user.setCustomerId(dataUserMessage.getCustomerId());
         user.setUsername(dataUserMessage.getUsername());
         user.setUserId(dataUserMessage.getCustomerId()); */
-
+        
+        //Creating the message for the database.
         Message message = new Message();
         message.setCustomerId(dataUserMessage.getCustomerId());
         message.setMessageText(dataUserMessage.getMessage());
@@ -52,23 +54,25 @@ public class DataController {
         return "Saved";
     }
 
-
+    //Test if API & Website is working
     @GetMapping("/hello")
     public @ResponseBody String hello(){
         return "Hello World";
     }
 
-
+    //API to get the messages and the corresponding username.
     @GetMapping("/getMessagesWithUsernames")
     public @ResponseBody String getMessagesWithUsernames(@RequestParam(value = "startId") int startId, @RequestParam(value = "endId") int endId) {
-        List<Object[]> messages = messageRepository.findMessagesWithUsernames(startId, endId);
+        List<Object[]> messages = messageRepository.findMessagesWithUsernames(startId, endId); //SQL Search to retrieve all the messages, and combining with usernames.
         for (Object[] message : messages) {
-            System.out.println(Arrays.toString(message));
+            System.out.println(Arrays.toString(message)); //Just a check to see if it receives the wanted data.
         }
+		//Converting it to JSON, for easier use later.
         String json = convertObjectToJSON(messages);
         return json;
     }
-
+	
+	//Generalized function to convert List<Object[]> to JSON.
     private String convertObjectToJSON(List<Object[]> messages) {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -77,13 +81,15 @@ public class DataController {
             return null;
         } 
     }
-
+	
+	//API to search for a specific string, and returning all messages containing this keyword.
     @GetMapping("/getSearch")
     public @ResponseBody String getSearch(@RequestParam(value = "search") String search) {
-        List<Object[]> messages = messageRepository.findSearch(search);
+        List<Object[]> messages = messageRepository.findSearch(search); //SQL Search to retrieve the messages
         for (Object[] message : messages) {
-            System.out.println(Arrays.toString(message));
+            System.out.println(Arrays.toString(message)); //Just a check to see if it receives the wanted data.
         }
+		//Converting it to JSON, for easier use later.
         String json = convertObjectToJSON(messages);
         return json;
     }
