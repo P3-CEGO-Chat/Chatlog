@@ -85,7 +85,7 @@
   scrollbar-width: none;  /* Firefox */
 }
 /* Hide scrollbar for Chrome, Safari and Opera on non-macOS systems */
-:not(:root:root).not-macos .keywordContainer::-webkit-scrollbar {
+.keywordContainer::-webkit-scrollbar {
   display: none;
 }
 

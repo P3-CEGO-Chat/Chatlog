@@ -48,14 +48,6 @@ export default {
 };
 </script>
 
-<script setup>
-  const { isApple } = useDevice();
-
-if (!isApple) {
-  document.body.classList.add('not-macos');
-}
-</script>
-
 <template>
   <div class="container">
     <div class="searchBox">

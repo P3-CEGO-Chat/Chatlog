@@ -2,6 +2,6 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["nuxt-icon", "@nuxtjs/device"]
+  modules: ["nuxt-icon"]
 })
 
