@@ -1,7 +1,9 @@
+<style scoped>
+@import url("assets/css/searchBar.css");
+</style>
 
 <script>
 
-import('~/assets/css/searchBar.css')
 
 
 export default {
@@ -10,8 +12,15 @@ export default {
       searchKeyword: '',
       keywordArray: [], // New data property
       wordObject: {word: "", isUser: false}
+     // errorMessage: '',
     };
   },
+  computed: {
+    placeholderText() {
+      return this.keywordArray.length > 0 ? 'Tilføj kriterier' : 'Søg efter brugernavn/kundenummer eller nøgleord';
+    }
+  },
+
   methods: {
     submitForm() {
       // You can add your search logic here
@@ -30,6 +39,7 @@ export default {
         this.wordObject = {"word": this.searchKeyword, "isUser": false};
       }
       this.keywordArray.push(this.wordObject);
+      this.searchKeyword = "";
     }
   },
 };
@@ -39,10 +49,20 @@ export default {
   <div class="container">
     <div class="searchBox">
       <Icon name="heroicons-solid:search" color="#D9D9D9" class="searchIcon" />
-      <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)">
-          {{ keyword.word }} - {{ keyword.isUser ? "User" : "Not User" }}
+      <div class="keywordContainer">
+        <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)" :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
+            {{ keyword.word }}
+            <Icon name="ri:close-circle-line" color="white"></Icon>
+        </div>
       </div>
-      <input class="searchField" type="text" v-model="searchKeyword" placeholder="Søg efter brugernavn/kundenummer og nøgleord"  v-on:keyup.enter="onEnter"/>
+
+      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter"/>
+      <div class="infoDiv">
+        <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
+        <span class="infoText">Brug @ foran brugernavn</span>
+        <!-- <span class="errorText" v-if="errorMessage">{{ errorMessage }}</span> -->
+      </div>
+        
     </div>
     <button class="calendarButton">
       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em"/>
@@ -51,33 +71,5 @@ export default {
 </template>
 
 
-
-
-
-
-<!-- <template>
-    <div class="div">
-      <div class="div-2">
-        <div class="div-3">
-          <div class="div-4">􀊫</div>
-          <div class="div-5"> 
-            <form @submit.prevent="submitForm">
-              <div class="input-field">
-                <span class="keyword-box" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)">
-                {{ keyword }}
-              </span>
-              <input type="text" v-model="searchKeyword" placeholder="Search" />
-            </div>
-            <input type="submit" value="Search" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </template> -->
-
-
-
-  
   
 
