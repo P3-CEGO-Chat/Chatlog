@@ -12,11 +12,12 @@ export default {
       searchKeyword: '',
       keywordArray: [], // New data property
       wordObject: {word: "", isUser: false}
+     // errorMessage: '',
     };
   },
   computed: {
     placeholderText() {
-      return this.keywordArray.length > 0 ? 'Tilføje kriterier' : 'Søg efter brugernavn/kundenummer eller nøgleord';
+      return this.keywordArray.length > 0 ? 'Tilføj kriterier' : 'Søg efter brugernavn/kundenummer eller nøgleord';
     }
   },
 
@@ -48,10 +49,20 @@ export default {
   <div class="container">
     <div class="searchBox">
       <Icon name="heroicons-solid:search" color="#D9D9D9" class="searchIcon" />
-      <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)" :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
-          {{ keyword.word }}
+      <div class="keywordContainer">
+        <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)" :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
+            {{ keyword.word }}
+            <Icon name="ri:close-circle-line" color="white"></Icon>
+        </div>
       </div>
+
       <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter"/>
+      <div class="infoDiv">
+        <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
+        <span class="infoText">Brug @ foran brugernavn</span>
+        <!-- <span class="errorText" v-if="errorMessage">{{ errorMessage }}</span> -->
+      </div>
+        
     </div>
     <button class="calendarButton">
       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em"/>
@@ -59,6 +70,6 @@ export default {
   </div>
 </template>
 
-  
+
   
 
