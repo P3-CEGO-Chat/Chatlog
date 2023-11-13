@@ -4,16 +4,17 @@
             <div class="SearchTex">
                 Viser resultat for: "{{ keyword }}"
             </div>
-            
-            <div class="searchedMessage" v-for="(object, index) in ObjectArray" :key="index"> 
-                <div>
-                    {{ object.username }}:&nbsp;
-                </div>
-                <div classe="messageContent">
-                    {{ object.message }}
-                </div> 
-                <div class="dateTime">
-                    {{ object.dateTime  }}
+            <div class="scrollBar">
+                <div class="searchedMessage" v-for="(object, index) in ObjectArray" :key="index"> 
+                    <div class="messagesender">
+                        {{ object.username }}:
+                    </div>
+                    <div classe="messageContent">
+                        {{ object.message }}
+                    </div> 
+                    <div class="dateTime">
+                        {{ object.dateTime  }}
+                    </div>
                 </div>
             </div>
             <button @click="submitForm">submit</button>
