@@ -12,7 +12,6 @@ export default {
       searchKeyword: '',
       keywordArray: [], // New data property
       wordObject: {word: "", isUser: false}
-     // errorMessage: '',
     };
   },
   computed: {
@@ -23,8 +22,12 @@ export default {
 
   methods: {
     submitForm() {
+      if (this.searchKeyword.trim() === '') {
+        return; 
+      } 
       // You can add your search logic here
       this.keywordArray.push(this.searchKeyword)
+      this.searchKeyword = '';
       console.log(this.searchKeyword);
       console.log(this.keywordArray);
     },
@@ -45,6 +48,14 @@ export default {
 };
 </script>
 
+<script setup>
+  const { isApple } = useDevice();
+
+if (!isApple) {
+  document.body.classList.add('not-macos');
+}
+</script>
+
 <template>
   <div class="container">
     <div class="searchBox">
@@ -60,7 +71,6 @@ export default {
       <div class="infoDiv">
         <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
         <span class="infoText">Brug @ foran brugernavn</span>
-        <!-- <span class="errorText" v-if="errorMessage">{{ errorMessage }}</span> -->
       </div>
         
     </div>
