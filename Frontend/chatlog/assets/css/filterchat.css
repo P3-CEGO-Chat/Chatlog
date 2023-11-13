@@ -56,3 +56,10 @@
 .messagesender{
     width: 100px;
 }
+
+.scrollBar{
+    overflow-y: scroll;
+    max-height: calc(80vh - 150px);
+    padding-right: 0.5rem;
+    margin-top: 0.5rem;
+}
