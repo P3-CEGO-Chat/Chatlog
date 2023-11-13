@@ -43,6 +43,17 @@ export default {
       }
       this.keywordArray.push(this.wordObject);
       this.searchKeyword = "";
+    },
+
+    detectSpace() {
+      if (this.searchKeyword.includes(" ")) {
+        // Remove all whitespace from the string
+        const wordWithoutSpace = this.searchKeyword.replace(/\s/g, "");
+        if (wordWithoutSpace.length > 0) {
+          console.log(wordWithoutSpace, wordWithoutSpace.length);
+          this.onEnter();
+        }
+      }
     }
   },
 };
@@ -59,7 +70,7 @@ export default {
         </div>
       </div>
 
-      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter"/>
+      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter" v-on:input="detectSpace"/>
       <div class="infoDiv">
         <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
         <span class="infoText">Brug @ foran brugernavn</span>
