@@ -21,6 +21,7 @@
 <template>
     <div class="container">
         <div class="messageWindow">
+            <div class="header">Live chat</div>
             <div class="messageBox" v-for="message in messages" :key="message.id">
                     <div class="messageHeader">
                         <div class="CustomerId">{{ message.sender }}:</div>
