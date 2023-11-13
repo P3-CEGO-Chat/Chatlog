@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cego.chatlog.entity.DataUserMessage;
 import com.cego.chatlog.entity.Message;
-import com.cego.chatlog.entity.User;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.repository.UserRepository;
+import com.cego.chatlog.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,15 +25,21 @@ public class DataController {
 
     @Autowired 
     MessageRepository messageRepository;
+
+    @Autowired
+    UserService userService;
    
 
     @PostMapping("/receiveDataJSON")
     public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
         //user.setUserId(user.getCustomerId());
-        User user = new User();
-        user.setCustomerId(dataUserMessage.getCustomerId());
+        /* User user = new User(); */
+
+        userService.createUser(dataUserMessage);
+
+        /* user.setCustomerId(dataUserMessage.getCustomerId());
         user.setUsername(dataUserMessage.getUsername());
-        user.setUserId(dataUserMessage.getCustomerId());
+        user.setUserId(dataUserMessage.getCustomerId()); */
 
         Message message = new Message();
         message.setCustomerId(dataUserMessage.getCustomerId());
@@ -41,7 +47,7 @@ public class DataController {
         message.setDateTime(dataUserMessage.getDateTime());
 
 
-        userRepository.save(user);
+        /* userRepository.save(user); */
         messageRepository.save(message);
         return "Saved";
     }
