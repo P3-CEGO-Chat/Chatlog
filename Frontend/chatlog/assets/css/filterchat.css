@@ -19,10 +19,12 @@
 }
 
 .searchedMessage{
-    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    padding: 1rem;
     border-radius: 5px;
     margin-top: 0.5rem;
-    display: flex;
     
 }
 
@@ -39,10 +41,18 @@
     overflow-wrap: break-word;
     flex: 1;
 }
+.messagesender, .dateTime {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 
 .dateTime {
-    word-wrap: break-word;
     text-align: right;
     white-space: nowrap;
-    margin-left: auto;
+    min-width: 100px;
+}
+
+.messagesender{
+    width: 100px;
 }
