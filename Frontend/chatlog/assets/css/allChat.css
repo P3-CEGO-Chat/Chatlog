@@ -9,11 +9,11 @@
 
 .messageWindow{
     justify-content: space-between;
-    height: 90vh;
     width: 100%;    
     border-radius: 5px;
     padding: 0.5rem;
     box-sizing: border-box;
+    height: 100%;
 } 
 
 .messageBox{
@@ -71,6 +71,6 @@
 
 .scrollBar{
     overflow-y: scroll;
-    height: 90%;
+    height: calc(100% - 85px);
     padding-right: 0.5rem;
 }
