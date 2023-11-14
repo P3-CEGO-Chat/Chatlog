@@ -25,7 +25,6 @@ export default {
 
     updateKeywords() {
       this.$emit("updateKeywordArray", this.keywordArray);
-      console.log('Emitting updateKeywordArray:', this.keywordArray);
     },
 
     onEnter() {
@@ -34,7 +33,11 @@ export default {
       } else {
         this.wordObject = {"word": this.searchKeyword, "isUser": false};
       }
+      const newKeywordLowercase = this.wordObject.word.toLowerCase(); 
+      const keywordExists = this.keywordArray.some(keyword => keyword.word.toLowerCase() === newKeywordLowercase);
+      if (!keywordExists) {
       this.keywordArray.push(this.wordObject);
+      }      
       this.searchKeyword = "";
       this.updateKeywords();
     },
