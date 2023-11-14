@@ -13,7 +13,7 @@
                         {{ object.message }}
                     </div> 
                     <div class="dateTime">
-                        {{ object.dateTime  }}
+                        {{ formatDate(object.dateTime)  }}
                     </div>
                 </div>
             </div>
@@ -45,6 +45,10 @@ export default{
             this.ObjectArray.push(this.messageObject = {message: "Hej! Jeg har haft en travl dag, men det går godt. Hvad laver I?", username: "user12222", dateTime: "2023-11-07T13:28:21.531Z"})
             console.log(this.ObjectArray);
         },
+        formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
     },
     props: {
     keywordArray: {
@@ -55,7 +59,7 @@ export default{
     watch: {
     keywordArray(newVal) {
       console.log('Received new keywordArray:', newVal);
-    },
-  }, 
+    }
+    }
 };
 </script>
