@@ -1,11 +1,11 @@
 .container{
     display: flex;
     background-color: #FFFFFF;
-    padding: 1rem;
+    padding: 0 1rem;
     justify-content: space-between;
     font-family: sans-serif;
     border-radius: 5px;
-    height: 87.5vh;
+    height: 81.5vh;
 }
 .SearchField{
     border-radius: 5px;
