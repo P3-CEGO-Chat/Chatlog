@@ -19,4 +19,9 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     //SQL Search to find all messages containing a specific keyword.
     @Query(value = "SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE chatlog.message.message_text LIKE %:keyword% ORDER BY chatlog.message.message_id", nativeQuery = true)
     List<Object[]> findSearch(@Param("keyword") String keyword);
+
+
+    //SQL fulltext search to find all messages containing a specific keyword. and find containg a specific username
+    @Query(value="SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE MATCH(chatlog.message.message_text) AGAINST(:keyword% IN NATURAL LANGUAGE MODE) AND chatlog.user.username LIKE :keyword2% ORDER BY chatlog.message.message_id", nativeQuery = true)
+    List<Object[]> findSearchFullText(@Param("keyword") String keyword, @Param("keyword2") String keyword2);
 }

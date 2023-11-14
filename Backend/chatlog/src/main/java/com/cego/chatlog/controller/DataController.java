@@ -93,4 +93,11 @@ public class DataController {
         String json = convertObjectToJSON(messages);
         return json;
     }
+
+    @GetMapping("/search-fulltext")
+    public @ResponseBody String searchfulltext(@RequestParam(value = "keyword") String keyword, @RequestParam(value = "keyword2") String keyword2){
+        List<Object[]> messages = messageRepository.findSearchFullText(keyword, keyword2);
+        String json = convertObjectToJSON(messages);
+        return json;
+    }
 }
