@@ -71,6 +71,6 @@
 
 .scrollBar{
     overflow-y: scroll;
-    height: 80vh;
+    height: 90%;
     padding-right: 0.5rem;
 }
