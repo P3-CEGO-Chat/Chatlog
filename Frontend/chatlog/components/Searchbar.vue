@@ -35,6 +35,12 @@ export default {
       this.keywordArray.splice(index, 1);
     },
 
+    handleKeydown(event) {
+      if (this.searchKeyword === '' && (event.key === 'Backspace' || event.key === 'Delete')) {
+        this.keywordArray.pop();
+      }
+    },
+
     onEnter() {
       if (this.searchKeyword[0] === "@") {
         this.wordObject = {"word": this.searchKeyword, "isUser": true};
@@ -70,7 +76,7 @@ export default {
         </div>
       </div>
 
-      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter" v-on:input="detectSpace"/>
+      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown"/>
       <div class="infoDiv">
         <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
         <span class="infoText">Brug @ foran brugernavn</span>
