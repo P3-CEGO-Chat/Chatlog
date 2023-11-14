@@ -3,9 +3,6 @@
 </style>
 
 <script>
-
-
-
 export default {
   data() {
     return {
@@ -35,6 +32,11 @@ export default {
     },
     removeKeyword(index) {
       this.keywordArray.splice(index, 1);
+      this.updateKeywords();
+    },
+
+    updateKeywords() {
+      this.$emit("updateKeywordArray", this.keywordArray);
     },
 
     handleKeydown(event) {
@@ -59,8 +61,13 @@ export default {
       } else {
         this.wordObject = { "word": this.searchKeyword, "isUser": false };
       }
+      const newKeywordLowercase = this.wordObject.word.toLowerCase(); 
+      const keywordExists = this.keywordArray.some(keyword => keyword.word.toLowerCase() === newKeywordLowercase);
+      if (!keywordExists) {
       this.keywordArray.push(this.wordObject);
+      }      
       this.searchKeyword = "";
+      this.updateKeywords();
     },
 
     detectSpace() {
