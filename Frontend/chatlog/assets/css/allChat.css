@@ -1,0 +1,76 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    height: 100%;
+  }
+
+.messageWindow{
+    justify-content: space-between;
+    height: 90vh;
+    width: 100%;    
+    border-radius: 5px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+} 
+
+.messageBox{
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+
+.messageBox:nth-child(even){
+    background-color: #d9d9d9;
+}
+.messageBox:nth-child(odd){
+    background-color: #e3e8f0;
+}
+
+.messageHeader {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    margin-bottom: 2px;
+    padding: 0.5rem;
+}
+
+.CustomerId, .Time {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.CustomerId{
+    width: 100px;
+}
+
+.messageContent {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
+}
+
+.Time {
+    text-align: right;
+    white-space: nowrap;
+    min-width: 100px;
+}
+
+.header{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;    
+}
+
+.scrollBar{
+    overflow-y: scroll;
+    height: 80vh;
+    padding-right: 0.5rem;
+}

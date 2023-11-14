@@ -1,9 +1,11 @@
 .container{
     display: flex;
     background-color: #FFFFFF;
-    padding: 1rem;
+    padding: 0 1rem;
     justify-content: space-between;
     font-family: sans-serif;
+    border-radius: 5px;
+    height: 81.5vh;
 }
 .SearchField{
     border-radius: 5px;
@@ -16,13 +18,16 @@
     border-radius: 5px;  
     padding: 1rem;
     text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .searchedMessage{
-    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    padding: 1rem;
     border-radius: 5px;
-    margin-top: 0.5rem;
-    display: flex;
+    margin-bottom: 0.5rem;
     
 }
 
@@ -34,15 +39,33 @@
     background-color: #E3E8F0;
 }
 
+.searchedMessage:nth-last-child(1){
+    margin-bottom: 0rem;
+}
+
 .messageContent {
     word-wrap: break-word;
     overflow-wrap: break-word;
     flex: 1;
 }
+.messagesender, .dateTime {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 
 .dateTime {
-    word-wrap: break-word;
     text-align: right;
     white-space: nowrap;
-    margin-left: auto;
+    min-width: 100px;
+}
+
+.messagesender{
+    width: 100px;
+}
+
+.scrollBar{
+    overflow-y: scroll;
+    max-height: calc(87vh - 150px);
+    padding-right: 0.5rem;
 }
