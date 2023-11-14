@@ -141,3 +141,26 @@
   visibility: visible;
 }
 
+.infoText {
+  color: rgb(255, 255, 255); /* Text color */
+  visibility: visible; /* Make the text visible */
+}
+
+.infoBox {
+  display: none; /* Hidden by default */
+  position: absolute; /* Position it relative to the input field */
+  background-color: #6CA5FC; /* Background color */
+  min-width: 95px; /* Minimum width */
+  color: rgb(255, 255, 255); /* Text color */
+  text-align: center; /* Center the text */
+  padding: 5px 0; /* Padding */
+  border-radius: 6px; /* Border radius */
+  z-index: 1; /* Make it appear on top */
+}
+
+.infoBox.show {
+  position: absolute; /* Position the popup absolutely within the search field */
+  top: 100%; /* Position the popup just below the search field */
+  left: 0; /* Align the popup to the left of the search field */
+  display: block; /* Make the popup visible */
+}

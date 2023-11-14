@@ -11,7 +11,9 @@ export default {
     return {
       searchKeyword: '',
       keywordArray: [], // New data property
-      wordObject: {word: "", isUser: false}
+      wordObject: { word: "", isUser: false },
+      showInfoBox: false, // Add this line
+      infoBoxLeft: '0px'
     };
   },
   computed: {
@@ -23,8 +25,8 @@ export default {
   methods: {
     submitForm() {
       if (this.searchKeyword.trim() === '') {
-        return; 
-      } 
+        return;
+      }
       // You can add your search logic here
       this.keywordArray.push(this.searchKeyword)
       this.searchKeyword = '';
@@ -42,10 +44,20 @@ export default {
     },
 
     onEnter() {
+      if (this.searchKeyword.trim() === '') {
+        this.showInfoBox = true;
+        const offset = -45; // Adjust this value as needed
+        this.infoBoxLeft = `${this.$refs.searchInput.getBoundingClientRect().left + offset}px`;
+        setTimeout(() => {
+          this.showInfoBox = false;
+        }, 2000); // 3000 milliseconds = 3 seconds
+        return;
+      }
+
       if (this.searchKeyword[0] === "@") {
-        this.wordObject = {"word": this.searchKeyword, "isUser": true};
+        this.wordObject = { "word": this.searchKeyword, "isUser": true };
       } else {
-        this.wordObject = {"word": this.searchKeyword, "isUser": false};
+        this.wordObject = { "word": this.searchKeyword, "isUser": false };
       }
       this.keywordArray.push(this.wordObject);
       this.searchKeyword = "";
@@ -70,21 +82,29 @@ export default {
     <div class="searchBox">
       <Icon name="heroicons-solid:search" color="#D9D9D9" class="searchIcon" />
       <div class="keywordContainer">
-        <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)" :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
-            {{ keyword.word }}
-            <Icon name="ri:close-circle-line" color="white"></Icon>
+        <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)"
+          :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
+          {{ keyword.word }}
+          <Icon name="ri:close-circle-line" color="white"></Icon>
         </div>
       </div>
 
-      <input class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"  v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown"/>
+      <div class="infoBox" :class="{ show: showInfoBox }" :style="{ left: infoBoxLeft }">
+        <span class="infoText">Intet skrevet</span>
+      </div>
+
+      <input ref="searchInput" class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"
+        v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown" />
+
+
       <div class="infoDiv">
         <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
         <span class="infoText">Brug @ foran brugernavn</span>
       </div>
-        
+
     </div>
     <button class="calendarButton">
-      <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em"/>
+      <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" />
     </button>
   </div>
 </template>
