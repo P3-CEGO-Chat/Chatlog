@@ -3,7 +3,25 @@
 
 </style>
 
-<script>
+<script setup lang="ts">
+    
+
+    interface Message {
+        id: number;
+        sender: string;
+        time: string;
+        content: string;
+    }
+
+    const messages = ref<Message[]>([]);
+
+    useFetch('http://localhost:8080/messages/1').then((data) => {
+        messages.value = JSON.parse(data) as Message[];
+    });
+    
+</script>
+
+<script lang="ts">
     export default{
      data(){
         return{
@@ -22,6 +40,7 @@
     <div class="container">
         <div class="messageWindow">
             <div class="header">Live chat</div>
+            {{ messages }}
                 <div class="scrollBar">
                     <div class="messageBox" v-for="message in messages" :key="message.id">
                         <div class="messageHeader">
