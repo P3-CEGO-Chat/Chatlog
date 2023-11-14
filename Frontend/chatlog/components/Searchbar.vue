@@ -3,9 +3,6 @@
 </style>
 
 <script>
-
-
-
 export default {
   data() {
     return {
@@ -21,18 +18,14 @@ export default {
   },
 
   methods: {
-    submitForm() {
-      if (this.searchKeyword.trim() === '') {
-        return; 
-      } 
-      // You can add your search logic here
-      this.keywordArray.push(this.searchKeyword)
-      this.searchKeyword = '';
-      console.log(this.searchKeyword);
-      console.log(this.keywordArray);
-    },
     removeKeyword(index) {
       this.keywordArray.splice(index, 1);
+      this.updateKeywords();
+    },
+
+    updateKeywords() {
+      this.$emit("updateKeywordArray", this.keywordArray);
+      console.log('Emitting updateKeywordArray:', this.keywordArray);
     },
 
     onEnter() {
@@ -43,6 +36,7 @@ export default {
       }
       this.keywordArray.push(this.wordObject);
       this.searchKeyword = "";
+      this.updateKeywords();
     },
 
     detectSpace() {
