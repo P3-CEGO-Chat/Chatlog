@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cego.chatlog.entity.DataUserMessage;
 import com.cego.chatlog.entity.Message;
+import com.cego.chatlog.repository.MessageRepoCustom;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.repository.UserRepository;
 import com.cego.chatlog.service.UserService;
@@ -28,6 +29,10 @@ public class DataController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MessageRepoCustom messageRepoCustom;
+
    
     //Api to post the data that we receive into the database.
     @PostMapping("/receiveDataJSON")
@@ -99,5 +104,10 @@ public class DataController {
         List<Object[]> messages = messageRepository.findSearchFullText(keyword, keyword2);
         String json = convertObjectToJSON(messages);
         return json;
+    }
+
+    @GetMapping("/search-fulltext-custom")
+    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String username) {
+        return messageRepoCustom.fullTextSearch(keywords, username);
     }
 }
