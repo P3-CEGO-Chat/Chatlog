@@ -164,3 +164,13 @@
   left: 0; /* Align the popup to the left of the search field */
   display: block; /* Make the popup visible */
 }
+
+.calendarDropdown {
+  position: relative;
+}
+
+.calendar {
+  position: absolute;
+  top: 4%;
+  left: 0;
+} 

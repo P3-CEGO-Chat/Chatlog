@@ -3,6 +3,9 @@
 </style>
 
 <script>
+import Calendar from './Calendar.vue';
+
+
 export default {
   data() {
     return {
@@ -10,7 +13,8 @@ export default {
       keywordArray: [], // New data property
       wordObject: { word: "", isUser: false },
       showInfoBox: false, // Add this line
-      infoBoxLeft: '0px'
+      infoBoxLeft: '0px',
+      showCalendar: true
     };
   },
   computed: {
@@ -96,6 +100,10 @@ export default {
         </div>
       </div>
 
+      <div class="calendarDropdown">
+      <Datepicker v-model="date" range/>
+      </div>
+
       <div class="infoBox" :class="{ show: showInfoBox }" :style="{ left: infoBoxLeft }">
         <span class="infoText">Intet skrevet</span>
       </div>
@@ -104,15 +112,18 @@ export default {
         v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown" />
 
 
-      <div class="infoDiv">
-        <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
-        <span class="infoText">Brug @ foran brugernavn</span>
-      </div>
+         <div class="infoDiv">
+           <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
+           <span class="infoText">Brug @ foran brugernavn</span>
+         </div>
 
+        <div v-if="showCalendar" class="calendar">
+           <Calendar />
+        </div>
     </div>
-    <button class="calendarButton">
+    <!--<button class="calendarButton">
       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" />
-    </button>
+    </button>-->
   </div>
 </template>
 
