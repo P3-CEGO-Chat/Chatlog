@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/messages")
-public class messageController {
+public class MessageController {
 
     @Autowired 
     MessageRepository messageRepository;
@@ -32,7 +32,7 @@ public class messageController {
             //Converting it to JSON, for easier use later.
             String json = convertObjectToJSON(messages);
             return ResponseEntity.ok(json);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException error) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -42,7 +42,8 @@ public class messageController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(messages);
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException error) {
+            
             return null;
         } 
     }
