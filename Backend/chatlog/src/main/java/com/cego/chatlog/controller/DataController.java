@@ -59,18 +59,6 @@ public class DataController {
     public @ResponseBody String hello(){
         return "Hello World";
     }
-
-    //API to get the messages and the corresponding username.
-    @GetMapping("/getMessagesWithUsernames")
-    public @ResponseBody String getMessagesWithUsernames(@RequestParam(value = "startId") int startId, @RequestParam(value = "endId") int endId) {
-        List<Object[]> messages = messageRepository.findMessagesWithUsernames(startId, endId); //SQL Search to retrieve all the messages, and combining with usernames.
-        for (Object[] message : messages) {
-            System.out.println(Arrays.toString(message)); //Just a check to see if it receives the wanted data.
-        }
-		//Converting it to JSON, for easier use later.
-        String json = convertObjectToJSON(messages);
-        return json;
-    }
 	
 	//Generalized function to convert List<Object[]> to JSON.
     private String convertObjectToJSON(List<Object[]> messages) {
