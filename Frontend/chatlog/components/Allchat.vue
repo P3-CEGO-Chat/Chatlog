@@ -15,6 +15,13 @@
 
 <script lang="ts">
 
+interface Message {
+  customerId: string;
+  username: string;
+  message: string;
+  dateTime: string;
+}
+
 export default {
   data() {
     return {
@@ -31,19 +38,18 @@ export default {
     });
   },
   methods: {
-    async checkScroll(event: Event) {
-      const target = event.target as Element;
-      if (target.scrollTop === 0) {
-        console.log('Reached the top of the scrollbar');
-        // Fetch more messages
-        const {data} = await useFetch('http://localhost:8080/messages/2',{mode: 'no-cors'});
-        console.log(data.value); 
-        const newMessages = JSON.parse(data.value as string);
-        console.log(newMessages);
-        this.messages = [...newMessages, ...this.messages];
-        }
-      }
-    },
+  async checkScroll(event: Event) {
+    const target = event.target as Element;
+    if (target.scrollTop === 0) {
+      console.log('Reached the top of the scrollbar');
+      // Fetch more messages
+      const {data} = await useFetch('http://localhost:8080/messages/2',{mode: 'no-cors'}); 
+      
+      const newMessages: Message[] = JSON.parse(data.value as string);
+      console.log(newMessages);
+    }
+  }
+},
 };
 </script> 
 
