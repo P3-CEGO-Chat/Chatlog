@@ -16,6 +16,12 @@
 <script lang="ts">
 
 export default {
+  data() {
+    return {
+      messages: [] as any[],
+      // Rest of your data
+    };
+  },
     mounted() {
     this.$nextTick(() => {
       const scrollBar = this.$el.querySelector('.scrollBar');
@@ -25,16 +31,19 @@ export default {
     });
   },
   methods: {
-    checkScroll(event: Event) {
+    async checkScroll(event: Event) {
       const target = event.target as Element;
       if (target.scrollTop === 0) {
         console.log('Reached the top of the scrollbar');
-        // Load more messages or perform other actions
-      }
-    
-    // Rest of your methods
+        // Fetch more messages
+        const {data} = await useFetch('http://localhost:8080/messages/2',{mode: 'no-cors'});
+        console.log(data.value); 
+        const newMessages = JSON.parse(data.value as string);
+        console.log(newMessages);
+        this.messages = [...newMessages, ...this.messages];
         }
-    }
+      }
+    },
 };
 </script> 
 
