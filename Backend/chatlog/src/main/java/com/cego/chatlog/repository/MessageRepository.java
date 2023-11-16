@@ -21,7 +21,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
         Integer maxMessageId = findMaxMessageId();
         return Math.max(1, maxMessageId - (pageId - 1) * 25);
 
-
+    }
     default int getStartId(int pageId) {
         Integer maxMessageId = findMaxMessageId();
         return maxMessageId - (pageId - 1) * 25 - 24;
