@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/messages")
-public class MessageController {
+public class messageController {
 
     @Autowired 
     MessageRepository messageRepository;
