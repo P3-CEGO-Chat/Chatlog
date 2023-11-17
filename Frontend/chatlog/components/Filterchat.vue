@@ -51,14 +51,17 @@ export default{
                         username: this.keywordArray[usernameIndex].word.slice(1)
                     }
                 });
+            } else if (usernameIndex == -1 && this.keywordArray.length >= 2) {
+
+            } else if (usernameIndex == -1 && this.keywordArray.length == 1) {
+                const { data } = await useFetch('http://localhost:8080/search/', {
+                    query: {
+                        search: this.keywordArray[0].word
+                    }
+                });
             }
             
-
-            const { data } = await useFetch('http://localhost:8080/search/', {
-                query: {
-                    search: this.keywordArray[0].word
-                }
-            });
+            
             console.log(data.value);
             this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
                 id: item[0],
