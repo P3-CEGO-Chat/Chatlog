@@ -49,4 +49,21 @@ public class messageController {
             return null;
         } 
     }
+
+    //Gets the page for an message with a specific ID.
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/message-id/{messageId}")
+    public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
+        try {
+            int startId = Integer.parseInt(messageId) - 12;
+            int endId = Integer.parseInt(messageId) + 12;
+    
+            List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
+
+            String json = convertObjectToJSON(messages);
+            return ResponseEntity.ok(json);
+        } catch (NumberFormatException error) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

@@ -33,9 +33,9 @@ export default {
       this.messages = newMessages.concat(this.messages);
       console.log(this.messages);
       this.pageCounter++;
-
     }
   }
+  
 },
 };
 </script> 
