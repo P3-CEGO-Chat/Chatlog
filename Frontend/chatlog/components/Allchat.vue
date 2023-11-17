@@ -2,34 +2,19 @@
 @import url("~/assets/css/allChat.css");
 </style>
 
-
-<script setup lang="ts">
-
-    const { data } = await useFetch('http://localhost:8080/messages/1');
-
-    const messages = JSON.parse(data.value as string);
-
-    console.log(messages);
-
-</script>
-
 <script lang="ts">
-
-interface Message {
-  customerId: string;
-  username: string;
-  message: string;
-  dateTime: string;
-}
 
 export default {
   data() {
     return {
-      messages: [] as any[],
-      // Rest of your data
+      messages: [],
+      pageCounter: 2,
     };
   },
-    mounted() {
+    async mounted() {
+    const { data } = await useFetch('http://localhost:8080/messages/1');
+    this.messages = JSON.parse(data.value as string);
+    console.log(this.messages);
     this.$nextTick(() => {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
@@ -43,10 +28,12 @@ export default {
     if (target.scrollTop === 0) {
       console.log('Reached the top of the scrollbar');
       // Fetch more messages
-      const {data} = await useFetch('http://localhost:8080/messages/2',{mode: 'no-cors'}); 
-      
-      const newMessages: Message[] = JSON.parse(data.value as string);
-      console.log(newMessages);
+      const {data} = await useFetch(`http://localhost:8080/messages/${this.pageCounter}`); 
+      const newMessages = JSON.parse(data.value as string);
+      this.messages = newMessages.concat(this.messages);
+      console.log(this.messages);
+      this.pageCounter++;
+
     }
   }
 },
