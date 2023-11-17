@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.cego.chatlog.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @RequestMapping("/messages")
@@ -19,6 +20,7 @@ public class messageController {
     @Autowired 
     MessageRepository messageRepository;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{pageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId) {
         try {
