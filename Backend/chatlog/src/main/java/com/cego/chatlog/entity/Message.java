@@ -6,17 +6,19 @@ import jakarta.persistence.Id;
 @Entity
 public class Message {
     @Id
-    private int messageId;
+    private int id;
     private String dateTime;
     private String messageText;
     private String customerId;
+    private String ogUsername;
+    private Boolean isFlagged;
 
-    public int getMessageId() {
-        return this.messageId;
+    public int getId() {
+        return this.id;
     }
 
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDateTime() {
@@ -43,5 +45,19 @@ public class Message {
         this.customerId = customerId;
     }
 
+    public String getOGUsername() {
+        return this.ogUsername;
+    }
 
+    public void setOGUsername(String ogUsername) {
+        this.ogUsername = ogUsername;
+    }
+
+    public Boolean getIsFlagged() {
+        return this.isFlagged;
+    }
+
+    public void setIsFlagged(Boolean isFlagged) {
+        this.isFlagged = isFlagged;
+    }
 }

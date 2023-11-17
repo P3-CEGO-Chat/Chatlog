@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.cego.chatlog.entity.DataUserMessage;
+import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.MessageRepository;
-import com.cego.chatlog.repository.UserRepository;
-import com.cego.chatlog.service.UserService;
+import com.cego.chatlog.repository.CustomerRepository;
+import com.cego.chatlog.service.CustomerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,17 +21,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DataController {
     
     @Autowired
-    UserRepository userRepository;   
+    CustomerRepository userRepository;   
 
     @Autowired 
     MessageRepository messageRepository;
 
     @Autowired
-    UserService userService;
+    CustomerService userService;
    
     //Api to post the data that we receive into the database.
     @PostMapping("/receiveDataJSON")
-    public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
+    public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataUserMessage) {
         //user.setUserId(user.getCustomerId());
         /* User user = new User(); */    
 
@@ -47,6 +47,8 @@ public class DataController {
         message.setCustomerId(dataUserMessage.getCustomerId());
         message.setMessageText(dataUserMessage.getMessage());
         message.setDateTime(dataUserMessage.getDateTime());
+        message.setOGUsername(dataUserMessage.getUsername());
+        message.setIsFlagged(false); // false for now until we implement flag feature
 
 
         /* userRepository.save(user); */

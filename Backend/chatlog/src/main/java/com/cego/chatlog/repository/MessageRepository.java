@@ -11,7 +11,7 @@ import com.cego.chatlog.entity.Message;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
     //SQL Search to find all messages and combining them with the corresponding Username.
-    @Query(value = "SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username, chatlog.user.user_id FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE chatlog.message.message_id BETWEEN :startId AND :endId ORDER BY chatlog.message.message_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.message.id BETWEEN :startId AND :endId ORDER BY chatlog.message.id", nativeQuery = true)
     List<Object[]> findMessagesByStartEndId(@Param("startId") int startId, @Param("endId") int endId);
 
     default int getStartId(int pageId) {

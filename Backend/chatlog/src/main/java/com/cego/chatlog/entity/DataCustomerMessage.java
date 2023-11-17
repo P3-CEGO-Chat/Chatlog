@@ -1,7 +1,7 @@
 package com.cego.chatlog.entity;
 
 
-public class DataUserMessage {
+public class DataCustomerMessage {
     private String customerId;
     private String username;
     private String message;
