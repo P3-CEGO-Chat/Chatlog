@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.cego.chatlog.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @RequestMapping("/messages")
@@ -19,6 +20,7 @@ public class messageController {
     @Autowired 
     MessageRepository messageRepository;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{pageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId) {
         try {
@@ -46,5 +48,22 @@ public class messageController {
             
             return null;
         } 
+    }
+
+    //Gets the page for an message with a specific ID.
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/message-id/{messageId}")
+    public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
+        try {
+            int startId = Integer.parseInt(messageId) - 12;
+            int endId = Integer.parseInt(messageId) + 12;
+    
+            List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
+
+            String json = convertObjectToJSON(messages);
+            return ResponseEntity.ok(json);
+        } catch (NumberFormatException error) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

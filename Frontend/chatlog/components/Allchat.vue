@@ -2,21 +2,19 @@
 @import url("~/assets/css/allChat.css");
 </style>
 
-
-<script setup lang="ts">
-
-    const { data } = await useFetch('http://localhost:8080/messages/1');
-
-    const messages = JSON.parse(data.value as string);
-
-    console.log(messages);
-
-</script>
-
 <script lang="ts">
 
 export default {
-    mounted() {
+  data() {
+    return {
+      messages: [],
+      pageCounter: 2,
+    };
+  },
+    async mounted() {
+    const { data } = await useFetch('http://localhost:8080/messages/1');
+    this.messages = JSON.parse(data.value as string);
+    console.log(this.messages);
     this.$nextTick(() => {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
@@ -25,16 +23,20 @@ export default {
     });
   },
   methods: {
-    checkScroll(event: Event) {
-      const target = event.target as Element;
-      if (target.scrollTop === 0) {
-        console.log('Reached the top of the scrollbar');
-        // Load more messages or perform other actions
-      }
-    
-    // Rest of your methods
-        }
+  async checkScroll(event: Event) {
+    const target = event.target as Element;
+    if (target.scrollTop === 0) {
+      console.log('Reached the top of the scrollbar');
+      // Fetch more messages
+      const {data} = await useFetch(`http://localhost:8080/messages/${this.pageCounter}`); 
+      const newMessages = JSON.parse(data.value as string);
+      this.messages = newMessages.concat(this.messages);
+      console.log(this.messages);
+      this.pageCounter++;
     }
+  }
+  
+},
 };
 </script> 
 
