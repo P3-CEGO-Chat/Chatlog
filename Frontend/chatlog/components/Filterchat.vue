@@ -40,23 +40,41 @@ export default{
     },
     watch: {
     async keywordArray(newVal: Array<{ word: string, isUser: boolean }>) {
+        if (this.keywordArray.length > 0) {
 
-        const { data } = await useFetch('http://localhost:8080/search/', {
-            query: {
-                search: this.keywordArray[0].word
+            const usernameIndex = newVal.findIndex(item => item.isUser);
+
+            if (usernameIndex !== -1 && this.keywordArray.length >= 2) {
+                const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
+                    query: {
+                        keywords: this.keywordArray[0].word,
+                        username: this.keywordArray[usernameIndex].word.slice(1)
+                    }
+                });
             }
-        });
-        console.log(data.value);
-        this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
-            id: item[0],
-            customerId: item[1],
-            text: item[2],
-            dateTime: item[3],
-            username: item[4]
-        }));
-        console.log(this.messages);
-        console.log('Received new keywordArray:', newVal);
+            
+
+            const { data } = await useFetch('http://localhost:8080/search/', {
+                query: {
+                    search: this.keywordArray[0].word
+                }
+            });
+            console.log(data.value);
+            this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
+                id: item[0],
+                customerId: item[1],
+                text: item[2],
+                dateTime: item[3],
+                username: item[4]
+            }));
+            console.log(this.messages);
+        }
     },
+    'keywordArray.length': function(newLength) {
+        if (newLength === 0) {
+            this.messages = [];
+        }
+    }
   }, 
 };
 </script>
