@@ -11,6 +11,7 @@ export default {
       pageCounter: 2,
     };
   },
+
     async mounted() {
     const { data } = await useFetch('http://localhost:8080/messages/1');
     this.messages = JSON.parse(data.value as string);
@@ -22,9 +23,14 @@ export default {
       }
     });
   },
+
+  
   methods: {
   async checkScroll(event: Event) {
     const target = event.target as Element;
+    const scrollTopBeforeLoad = target.scrollTop;
+    const scrollHeightBeforeLoad = target.scrollHeight;
+
     if (target.scrollTop === 0) {
       console.log('Reached the top of the scrollbar');
       // Fetch more messages
@@ -34,9 +40,16 @@ export default {
       console.log(this.messages);
       this.pageCounter++;
     }
-  }
-  
-},
+    this.$nextTick(() => {
+      const scrollHeightAfterLoad = target.scrollHeight;
+      const scrollHeightChange = scrollHeightAfterLoad - scrollHeightBeforeLoad;
+      target.scrollTop = scrollTopBeforeLoad + scrollHeightChange;
+      if (target.scrollTop + target.clientHeight === scrollHeightAfterLoad) {
+        console.log('Reached the bottom of the scrollbar');
+      }
+      });
+    }
+  },
 };
 </script> 
 
@@ -48,8 +61,8 @@ export default {
                     <div class="messageBox" v-for="message in messages" :key="message[0]">
                         <div class="messageHeader">
                             <div class="CustomerId">{{ message[1] }}:&nbsp</div>
-                            <div class="messageContent">{{ message[2] }}</div>
-                            <div class="Time">{{ new Date(message[3]).toLocaleString() }}</div>
+                            <div class="messageContent">{{ message[3] }}</div>
+                            <div class="Time">{{ new Date(message[2]).toLocaleString() }}</div>
                         </div>
                     </div>
                 </div>
