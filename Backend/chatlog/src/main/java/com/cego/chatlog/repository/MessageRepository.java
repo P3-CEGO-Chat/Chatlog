@@ -14,7 +14,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Query(value = "SELECT * FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.message.id BETWEEN :startId AND :endId ORDER BY chatlog.message.id", nativeQuery = true)
     List<Object[]> findMessagesByStartEndId(@Param("startId") int startId, @Param("endId") int endId);
 
-    @Query(value = "SELECT max(message_id) FROM chatlog.message", nativeQuery = true)
+    @Query(value = "SELECT max(id) FROM chatlog.message", nativeQuery = true)
     Integer findMaxMessageId();
 
     default int getEndId(int pageId) {
