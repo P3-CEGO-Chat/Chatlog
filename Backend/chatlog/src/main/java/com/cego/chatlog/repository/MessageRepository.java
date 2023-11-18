@@ -19,12 +19,12 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     default int getEndId(int pageId) {
         Integer maxMessageId = findMaxMessageId();
-        return Math.max(1, maxMessageId - (pageId - 1) * 25);
+        return Math.max(1, maxMessageId - (pageId - 1) * 50);
 
     }
     default int getStartId(int pageId) {
         Integer maxMessageId = findMaxMessageId();
-        return maxMessageId - (pageId - 1) * 25 - 24;
+        return maxMessageId - (pageId - 1) * 50 - 49;
     }
 
     //public List<Object[]> findSearch(@Param("search") List<Object[]> search);
