@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
 import('~/assets/css/main.css')
 import Searchbar from './components/Searchbar.vue';
@@ -26,11 +26,11 @@ export default {
   },
   data() {
     return {
-      keywordArray: []
+      keywordArray: Array<{ word: string, isUser: boolean }>()
     }
   },
   methods: {
-    updateKeywordArray(newKeywordArray) {
+    updateKeywordArray(newKeywordArray: Array<{ word: string, isUser: boolean }>) {
       this.keywordArray = newKeywordArray;
       console.log('Received updateKeywordArray:', this.keywordArray);
     },

@@ -2,12 +2,12 @@
 @import url("assets/css/searchBar.css");
 </style>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {
       searchKeyword: '',
-      keywordArray: [], // New data property
+      keywordArray: Array<{ word: string, isUser: boolean }>(), // New data property
       wordObject: {word: "", isUser: false}
     };
   },
@@ -18,7 +18,7 @@ export default {
   },
 
   methods: {
-    removeKeyword(index) {
+    removeKeyword(index: number) {
       this.keywordArray.splice(index, 1);
       this.updateKeywords();
     },
