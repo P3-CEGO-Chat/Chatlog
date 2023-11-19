@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MultiPostMessage",
+            "request": "launch",
+            "mainClass": "com.cego.chatlog.util.MultiPostMessage",
+            "projectName": "chatlog"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-ChatlogApplication<chatlog>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

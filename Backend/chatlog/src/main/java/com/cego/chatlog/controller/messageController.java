@@ -19,6 +19,7 @@ import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @RequestMapping("/messages")
@@ -27,7 +28,7 @@ public class MessageController {
 
     @Autowired 
     MessageRepository messageRepository;
-
+  
     @Autowired
     UserService userService;
 
@@ -59,7 +60,7 @@ public class MessageController {
             return null;
         } 
     }
-
+  
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
@@ -83,5 +84,20 @@ public class MessageController {
         /* userRepository.save(user); */
         messageRepository.save(message);
         return "Saved";
+      
+    //Gets the page for an message with a specific ID.
+    @GetMapping("/message-id/{messageId}")
+    public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
+        try {
+            int startId = Integer.parseInt(messageId) - 12;
+            int endId = Integer.parseInt(messageId) + 12;
+    
+            List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
+
+            String json = convertObjectToJSON(messages);
+            return ResponseEntity.ok(json);
+        } catch (NumberFormatException error) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
