@@ -11,8 +11,9 @@ import type { PropType } from 'vue';
 interface Message {
     id: number;
     customerId: string;
-    text: string;
     dateTime: string;
+    text: string;
+    isFlagged: boolean;
     username: string;
 }
 
@@ -48,6 +49,7 @@ export default{
             let jsonData: any; // TODO: define type
 
             if (usernameIndex !== -1 && this.keywordArray.length >= 2) {
+                console.log('searching with username and keyword');
                 const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
                     query: {
                         keywords: this.keywordArray[0].word,
@@ -57,14 +59,16 @@ export default{
 
                 jsonData = JSON.parse(data.value as string);
             } else if (usernameIndex == -1 && this.keywordArray.length >= 2) {
+                console.log('searching with keywords');
 
             } else if (usernameIndex == -1 && this.keywordArray.length == 1) {
+                console.log('searching with keyword')
                 const { data } = await useFetch('http://localhost:8080/search/', {
                     query: {
                         search: this.keywordArray[0].word
                     }
                 });
-
+                console.log(data.value);
                 jsonData = JSON.parse(data.value as string);
             }
             
@@ -73,9 +77,10 @@ export default{
             this.messages = jsonData.map((item: any[]): Message => ({
                 id: item[0],
                 customerId: item[1],
-                text: item[2],
-                dateTime: item[3],
-                username: item[4]
+                dateTime: item[2],
+                text: item[3],
+                isFlagged: item[4],
+                username: item[5]
             }));
             console.log(this.messages);
         }

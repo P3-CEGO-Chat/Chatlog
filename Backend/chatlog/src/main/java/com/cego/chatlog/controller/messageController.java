@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cego.chatlog.entity.DataUserMessage;
+import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.MessageRepository;
-import com.cego.chatlog.service.UserService;
+import com.cego.chatlog.service.CustomerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @RequestMapping("/messages")
@@ -30,7 +29,7 @@ public class MessageController {
     MessageRepository messageRepository;
   
     @Autowired
-    UserService userService;
+    CustomerService customerService;
 
     @GetMapping("/{pageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId) {
@@ -63,12 +62,12 @@ public class MessageController {
   
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
-    public @ResponseBody String addNewUserJSON (@RequestBody DataUserMessage dataUserMessage) {
+    public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataCustomerMessage) {
         //user.setUserId(user.getCustomerId());
         /* User user = new User(); */    
 
         //Creating a user for the database, because the database stores both a user and a message seperately
-        userService.createUser(dataUserMessage);
+        customerService.createUser(dataCustomerMessage);
 
         /* user.setCustomerId(dataUserMessage.getCustomerId());
         user.setUsername(dataUserMessage.getUsername());
@@ -76,15 +75,16 @@ public class MessageController {
         
         //Creating the message for the database.
         Message message = new Message();
-        message.setCustomerId(dataUserMessage.getCustomerId());
-        message.setMessageText(dataUserMessage.getMessage());
-        message.setDateTime(dataUserMessage.getDateTime());
+        message.setCustomerId(dataCustomerMessage.getCustomerId());
+        message.setMessageText(dataCustomerMessage.getMessage());
+        message.setDateTime(dataCustomerMessage.getDateTime());
 
 
         /* userRepository.save(user); */
         messageRepository.save(message);
         return "Saved";
-      
+    }
+
     //Gets the page for an message with a specific ID.
     @GetMapping("/message-id/{messageId}")
     public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
