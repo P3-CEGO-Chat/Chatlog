@@ -1,15 +1,22 @@
 <template>
     <div>
       <Datepicker v-model="date" 
+      :auto-position="false"
       range
       :clearable="true"
       :month-change-on-scroll="false"
       ref="datepickerRef"
       @open="onOpen"
       @closed="onClose"
-      />
+      > <template #trigger>
+       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" ></Icon>
+        </template>
+</datepicker>
+<!--<button class="calendarButton">
+      <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" />
+    </button>-->
     </div>
-    <button @click="CalendarHandler">Open/Close</button>
+   <!-- <button @click="CalendarHandler">Open/Close</button> -->
   </template>
   
 
