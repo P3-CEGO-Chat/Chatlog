@@ -5,6 +5,7 @@
  </style>
 
 <script lang="ts">
+import type { AsyncData } from '#app';
 import type { PropType } from 'vue';
 
 interface Message {
@@ -44,6 +45,8 @@ export default{
 
             const usernameIndex = newVal.findIndex(item => item.isUser);
 
+            let jsonData: any; // TODO: define type
+
             if (usernameIndex !== -1 && this.keywordArray.length >= 2) {
                 const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
                     query: {
@@ -51,6 +54,8 @@ export default{
                         username: this.keywordArray[usernameIndex].word.slice(1)
                     }
                 });
+
+                jsonData = JSON.parse(data.value as string);
             } else if (usernameIndex == -1 && this.keywordArray.length >= 2) {
 
             } else if (usernameIndex == -1 && this.keywordArray.length == 1) {
@@ -59,11 +64,13 @@ export default{
                         search: this.keywordArray[0].word
                     }
                 });
+
+                jsonData = JSON.parse(data.value as string);
             }
             
             
-            console.log(data.value);
-            this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
+            console.log(jsonData);
+            this.messages = jsonData.map((item: any[]): Message => ({
                 id: item[0],
                 customerId: item[1],
                 text: item[2],
