@@ -17,7 +17,7 @@ public class MessageRepoImpl implements MessageRepoCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Object[]> fullTextSearch(List<String> keywords, String username) {
+    public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username) {
         
         String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.customer.current_username LIKE :username ORDER BY chatlog.message.id";
 
@@ -40,6 +40,11 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 fullTextSearch.append(")");
             }
 
+            if (dateTimeFrom != null && dateTimeTo != null) {
+                fullTextSearch.append(" AND chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
+            }
+            
+
             System.out.println("----testst----" + ((int)(keywords.size())));
             
             String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
@@ -49,6 +54,8 @@ public class MessageRepoImpl implements MessageRepoCustom {
             for (int i = 0; i < keywords.size(); i++) {
                 query.setParameter("keyword" + i, keywords.get(i));
             }     
+            query.setParameter("dateTimeFrom", dateTimeFrom);
+            query.setParameter("dateTimeTo", dateTimeTo);
             
             query.setParameter("username", username + "%");
             return query.getResultList();
@@ -60,4 +67,16 @@ public class MessageRepoImpl implements MessageRepoCustom {
             return query.getResultList();
         }
     }
+
+    @Override 
+    public List<Object[]> dateTime(String dateTimeFrom, String dateTimeTo) {
+        String baseQuery = "SELECT * FROM chatlog.message WHERE chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo ORDER BY chatlog.message.id";
+
+        Query query = entityManager.createNativeQuery(baseQuery);
+        query.setParameter("dateTimeFrom", dateTimeFrom);
+        query.setParameter("dateTimeTo", dateTimeTo);
+
+        return query.getResultList();
+    }
+    
 }

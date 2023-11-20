@@ -40,6 +40,10 @@ export default{
             type: Array as PropType<{ word: string, isUser: boolean }[]>,
             default: () => [] as { word: string, isUser: boolean }[]
         },
+        dateTimeArray: {
+            type: Array as PropType<string[]>,
+            default: () => [] as {dateTimeFrom: string, dateTimeTo: string}[]
+        }
     },
     watch: {
         'keywordArray.length': async function(newLength) {
@@ -94,7 +98,29 @@ export default{
             } else {
                 this.messages = [];
             }
-        }
+        },
+        'dateTimeArray.length': async function(dateTimeLength){
+            if (this.dateTimeArray.length > 0) {
+                const { data } = await useFetch('http://localhost:8080/search/datetime', {
+                    query: {
+                        dateTimeFrom: this.dateTimeArray[0],
+                        dateTimeTo: this.dateTimeArray[1],
+                    }
+                });
+                const jsonData: any = data.value as Message[];
+                this.messages = jsonData.map((item: any[]): Message => ({
+                    id: item[0],
+                    customerId: item[1],
+                    text: item[2],
+                    dateTime: item[3],
+                    isFlagged: item[4],
+                    ogUsername: item[5],
+                    username: item[6],
+                }));
+            } else {
+                this.messages = [];
+            }
+        } 
     },    
 };
 </script>
@@ -117,6 +143,7 @@ export default{
                     <div class="dateTime">
                         {{ new Date(message.dateTime).toLocaleString()  }}
                     </div>
+                    <span></span>
                 </div>
             </div>
         </div>

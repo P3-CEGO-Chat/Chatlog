@@ -40,8 +40,13 @@ public class SearchController {
     }
 
     @GetMapping("/fulltext")
-    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String username) {
-        return messageRepoCustom.fullTextSearch(keywords, username);
+    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username) {
+        return messageRepoCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username);
+    }
+
+    @GetMapping("/datetime")
+    public @ResponseBody List<Object[]> dateTimeSearch(@RequestParam String dateTimeFrom, @RequestParam String dateTimeTo) {
+        return messageRepoCustom.dateTime(dateTimeFrom, dateTimeTo);
     }
 
     //Generalized function to convert List<Object[]> to JSON.
