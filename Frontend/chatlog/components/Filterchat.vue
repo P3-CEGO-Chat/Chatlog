@@ -1,5 +1,3 @@
-
-
 <style scoped>
  @import url('~/assets/css/filterchat.css');
  </style>
@@ -27,14 +25,7 @@ export default{
             messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
         };
     },
-    methods: {
-        /* submitForm() {
-            this.ObjectArray.push(this.messageObject = {message: "Hej alle sammen! Hvordan har I det i dag?", username: "user1222", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "Hej! Jeg har det godt, tak. Hvordan går det med dig?", username: "user2", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "Hej! Jeg har haft en travl dag, men det går godt. Hvad laver I?", username: "user12222", dateTime: "2023-11-07T13:28:21.531Z"})
-            console.log(this.ObjectArray);
-        }, */
-    },
+    methods: {},
     props: {
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean }[]>,

@@ -40,19 +40,16 @@
   font-size: 1rem;
 }
 
-.calendarIcon {
-  width: 100%;
 
-}
 
-.calendarButton {
+.calendarDropdown {
   all: unset;
-  width: 4vw;
-  border: #6CA5FC solid 1.5px;
+  width: 1vw;
+  border: #6CA5FC solid 3.8vh;
   border-radius: 5px;
-  display: flex;
+  display: right;
   justify-content: center;
-  align-items: center;
+  align-items: right;
   
 }
 
@@ -69,7 +66,7 @@
   color: white;
 }
 
-.keyword:hover, .calendarButton:hover {
+.keyword:hover, .calendar:hover {
   cursor: pointer;
 }
 
@@ -141,3 +138,44 @@
   visibility: visible;
 }
 
+.infoText {
+  color: rgb(255, 255, 255); /* Text color */
+  visibility: visible; /* Make the text visible */
+}
+
+.infoBox {
+  display: none; /* Hidden by default */
+  position: absolute; /* Position it relative to the input field */
+  background-color: #6CA5FC; /* Background color */
+  min-width: 95px; /* Minimum width */
+  color: rgb(255, 255, 255); /* Text color */
+  text-align: center; /* Center the text */
+  padding: 5px 0; /* Padding */
+  border-radius: 6px; /* Border radius */
+  z-index: 1; /* Make it appear on top */
+}
+
+.infoBox.show {
+  position: absolute; /* Position the popup absolutely within the search field */
+  top: 100%; /* Position the popup just below the search field */
+  left: 0; /* Align the popup to the left of the search field */
+  display: block; /* Make the popup visible */
+}
+
+
+.calendar {
+  position: absolute;
+  right: 54%;
+  border-radius: 6px;
+  all: unset;
+  border: #6CA5FC solid 1.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* justify-content: space-between; */
+  width: 5%;
+  border: solid 1.5px #6CA5FC;
+  border-radius: 5px;
+  padding: 0rem 0.5rem;
+  gap: 0.5rem;
+}

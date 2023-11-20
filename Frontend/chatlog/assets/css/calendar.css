@@ -1,0 +1,14 @@
+
+
+.calendarIcon {
+    width: 100%;
+    align-items:  center;
+    
+  }
+
+  .action-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
