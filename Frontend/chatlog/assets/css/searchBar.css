@@ -41,6 +41,7 @@
 }
 
 
+
 .calendarDropdown {
   all: unset;
   width: 1vw;
@@ -168,10 +169,14 @@
   right: 54%;
   border-radius: 6px;
   all: unset;
-  border: #6CA5FC solid 0.33vh;
-  border-radius: 3px;
+  border: #6CA5FC solid 1.5px;
   display: flex;
   justify-content: center;
-  width: 4.5vw;
-  height: 3.32vw;
+  
+  /* justify-content: space-between; */
+  width: 10%;
+  border: solid 1.5px #6CA5FC;
+  border-radius: 5px;
+  padding: 0rem 0.5rem;
+  gap: 0.5rem;
 }
