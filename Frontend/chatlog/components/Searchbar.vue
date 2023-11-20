@@ -116,13 +116,10 @@ export default {
 
          
          
-    </div>
+  </div>
     <div v-if="showCalendar" class="calendar">
            <Calendar />
-        </div>
-    <!--<button class="calendarButton">
-      <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" />
-    </button>-->
+    </div>
   </div>
   
 </template>

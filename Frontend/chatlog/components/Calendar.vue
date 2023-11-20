@@ -31,13 +31,11 @@
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css';
     import type { DatePickerInstance } from '@vuepic/vue-datepicker';
-    import { format } from 'date-fns'
-    import { nextTick } from 'vue';
+   
 
 
 
     const date = ref();
-    /*const datet = ref(new Date()); */
     const datepickerRef = ref<DatePickerInstance>(null);
     let isOpen = false;
 
@@ -55,15 +53,6 @@
       isOpen = false;
     }
 
-   
-
-    const CalendarHandler = () => {
-      if (!isOpen && datepickerRef) {
-        datepickerRef.value?.openMenu();
-      } else if (isOpen && datepickerRef) {
-        datepickerRef.value?.closeMenu();
-      }
-    }
     watch(date, (newDate) => {
     if (newDate[1] === undefined || newDate[1] === null) {
       newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate());
@@ -76,12 +65,8 @@
     
     console.log(newDate);
   });
- /*
-  const formatDate = (datet: number | Date) => {
-  return format(datet, 'dd.MM.yyyy, HH:mm'); 
-}; */
 
-  </script>
+</script>
 
 <style scoped>
 @import '~/assets/css/Calendar.css';
