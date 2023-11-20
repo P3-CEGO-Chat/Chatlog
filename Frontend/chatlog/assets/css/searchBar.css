@@ -40,19 +40,15 @@
   font-size: 1rem;
 }
 
-.calendarIcon {
-  width: 100%;
 
-}
-
-.calendarButton {
+.calendarDropdown {
   all: unset;
-  width: 4vw;
-  border: #6CA5FC solid 1.5px;
+  width: 1vw;
+  border: #6CA5FC solid 3.8vh;
   border-radius: 5px;
-  display: flex;
+  display: right;
   justify-content: center;
-  align-items: center;
+  align-items: right;
   
 }
 
@@ -69,7 +65,7 @@
   color: white;
 }
 
-.keyword:hover, .calendarButton:hover {
+.keyword:hover, .calendar:hover {
   cursor: pointer;
 }
 
@@ -165,12 +161,17 @@
   display: block; /* Make the popup visible */
 }
 
-.calendarDropdown {
-  position: relative;
-}
 
 .calendar {
   position: absolute;
-  top: 4%;
-  left: 0;
-} 
+  top: 5.5%;
+  right: 54%;
+  border-radius: 6px;
+  all: unset;
+  border: #6CA5FC solid 0.33vh;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  width: 4.5vw;
+  height: 3.32vw;
+}

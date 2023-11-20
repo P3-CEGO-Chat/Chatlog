@@ -1,29 +1,5 @@
-.calendarContainer {
-    position: absolute;
-  
-  }
-
 .calendarIcon {
-    all: unset;
-    width: 3vw;
-    border: #6CA5FC solid 1.5px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.calendarDiv {
-    position: relative;
-    display: inline-block;
-  }
-
-  .calendarIcon {
-    transform: translate(0, 0);
-  }
-
-  .datepicker-container {
-    position: absolute;
-    top: 0%;
-    left: 0%;
+    width: 100%;
+    align-items:  center;
+    margin-top: 0.5rem;
   }

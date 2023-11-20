@@ -100,10 +100,7 @@ export default {
         </div>
       </div>
 
-      <div class="calendarDropdown">
-      <Datepicker v-model="date" range/>
-      </div>
-
+     
       <div class="infoBox" :class="{ show: showInfoBox }" :style="{ left: infoBoxLeft }">
         <span class="infoText">Intet skrevet</span>
       </div>
@@ -117,14 +114,17 @@ export default {
            <span class="infoText">Brug @ foran brugernavn</span>
          </div>
 
-        <div v-if="showCalendar" class="calendar">
+         
+         
+    </div>
+    <div v-if="showCalendar" class="calendar">
            <Calendar />
         </div>
-    </div>
     <!--<button class="calendarButton">
       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" />
     </button>-->
   </div>
+  
 </template>
 
 

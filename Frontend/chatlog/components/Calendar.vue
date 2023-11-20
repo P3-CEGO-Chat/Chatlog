@@ -59,5 +59,9 @@
 
 <style scoped>
 @import '~/assets/css/Calendar.css';
+.datepicker-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
   
