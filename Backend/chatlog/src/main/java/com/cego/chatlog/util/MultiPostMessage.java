@@ -118,7 +118,7 @@ class MessageGenerator {
 
 public class MultiPostMessage {
     public static void main(String[] args) {
-        String endpointURL = "http://localhost:8080/receiveDataJSON";
+        String endpointURL = "http://localhost:8080/messages/send-message";
 
         // Create an instance of the HttpClient
         HttpClient httpClient = new HttpClient(endpointURL);
@@ -150,7 +150,12 @@ public class MultiPostMessage {
             if (base5CustomerId.isEmpty()) {
                 base5CustomerId = "0";
             }
-            String timestamp = "2023-11-13T" + random.nextInt(24) + ":" + random.nextInt(60) + ":" + random.nextInt(60) + "." + random.nextInt(1000) + "Z";
+            int hour = random.nextInt(24);
+            int minute = random.nextInt(60);
+            int second = random.nextInt(60);
+            int millisecond = random.nextInt(1000);
+
+            String timestamp = String.format("2023-11-13T%02d:%02d:%02d.%03dZ", hour, minute, second, millisecond);
             Message newMessage = new Message("SN" + base5CustomerId, username, message, timestamp);
             messages.add(newMessage);
         }

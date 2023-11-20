@@ -78,6 +78,8 @@ public class MessageController {
         message.setCustomerId(dataCustomerMessage.getCustomerId());
         message.setMessageText(dataCustomerMessage.getMessage());
         message.setDateTime(dataCustomerMessage.getDateTime());
+        message.setIsFlagged(false);
+        message.setOGUsername(dataCustomerMessage.getUsername());
 
 
         /* userRepository.save(user); */

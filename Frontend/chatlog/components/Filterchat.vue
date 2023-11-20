@@ -48,30 +48,17 @@ export default{
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
 
                 if (usernameIndex !== -1) { // if username is in the array
-
-
                     const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
 
-                    let jsonData: any; // declare variable to store json data
-
-                    const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
+                    const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                         query: {
                             keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
                             username: this.keywordArray[usernameIndex].word.slice(1) // remove @ from username
                         }
                     });
-                    console.log("noice");
-
-                    console.log(data.value)
                     
-                    jsonData = data.value as Message[];
+                    const jsonData: any = data.value as Message[];
 
-                    console.log("jsonData:", jsonData);
-
-                    console.log(arrayWithoutUsername);
-                    console.log(arrayWithoutUsername.map(item => item.word).join(','));
-
-                    console.log(jsonData);
                     this.messages = jsonData.map((item: any[]): Message => ({
                         id: item[0],
                         customerId: item[1],
@@ -82,6 +69,26 @@ export default{
                         username: item[6],
                     }));
 
+                } else {
+                    const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                        query: {
+                            keywords: this.keywordArray.map(item => item.word).join(','),
+                            username: "",
+                        }
+                    });
+
+                    const jsonData: any = data.value as Message[];
+
+                    this.messages = jsonData.map((item: any[]): Message => ({
+                        id: item[0],
+                        customerId: item[1],
+                        text: item[2],
+                        dateTime: item[3],
+                        isFlagged: item[4],
+                        ogUsername: item[5],
+                        username: item[6],
+                    }));
+                    
                 }
                 console.log("messages:", this.messages);
             } else {

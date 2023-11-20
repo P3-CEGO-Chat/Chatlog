@@ -40,13 +40,6 @@ public class SearchController {
     }
 
     @GetMapping("/fulltext")
-    public @ResponseBody String searchfulltext(@RequestParam(value = "keyword") String keyword, @RequestParam(value = "keyword2") String keyword2){
-        List<Object[]> messages = messageRepository.findSearchFullText(keyword, keyword2);
-        String json = convertObjectToJSON(messages);
-        return json;
-    }
-
-    @GetMapping("/fulltext/custom")
     public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String username) {
         return messageRepoCustom.fullTextSearch(keywords, username);
     }
