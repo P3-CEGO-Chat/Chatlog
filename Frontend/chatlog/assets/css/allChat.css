@@ -74,3 +74,11 @@
     height: 80vh;
     padding-right: 0.5rem;
 }
+
+.highlightedMessage:nth-child(even), .highlightedMessage:nth-child(odd) {
+    background-color: yellow;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
+  }
+

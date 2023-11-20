@@ -68,7 +68,8 @@ export default {
     this.initialLoad = false;
     });
     },  
-     async buttonClicked() {
+
+    async buttonClicked() {
       console.log('Button clicked');
       
       this.initialLoad = true;
@@ -80,8 +81,9 @@ export default {
       console.log(this.messages);
       this.findTheCurrentPage();
         this.$nextTick(() => {
-          this.scrollToMiddle();
+          this.scrollToMessage();
     });
+
       },
     
     findTheCurrentPage(){
@@ -106,6 +108,18 @@ export default {
         scrollBar.scrollTop = (scrollBar.scrollHeight - scrollBar.clientHeight) / 2;
     }
   },
+
+  scrollToMessage() {
+  const messageRef = `message-${this.messageId}`;
+  const messageElement = this.$refs[messageRef] as HTMLElement[];
+
+  if (messageElement && messageElement[0]) {
+    const scrollBar = this.$el.querySelector('.scrollBar');
+    if (scrollBar) {
+      scrollBar.scrollTop = messageElement[0].offsetTop - scrollBar.offsetTop;
+      }
+    } 
+  }
   },
 };
 </script> 
@@ -115,7 +129,7 @@ export default {
       <div class="messageWindow">
           <div class="header">Live chat</div>
               <div class="scrollBar" @scroll="checkScroll">
-                  <div class="messageBox" v-for="message in messages" :key="message[0]">
+                <div class="messageBox" v-for="message in messages" :key="message[0]" :ref="`message-${message[0]}`" :class="{'highlightedMessage': message[0] === messageId}">
                       <div class="messageHeader">
                           <div class="CustomerId">{{ message[5] }}:&nbsp</div>
                           <div class="messageContent">{{ message[3] }}</div>
