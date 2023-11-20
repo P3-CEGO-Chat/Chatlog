@@ -9,7 +9,7 @@
       @open="onOpen"
       @closed="onClose"
       > <template #trigger>
-       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="1.5em" ></Icon>
+       <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="2.5em" ></Icon>
         </template>
 </datepicker>
 <!--<button class="calendarButton">
@@ -59,9 +59,5 @@
 
 <style scoped>
 @import '~/assets/css/Calendar.css';
-.datepicker-wrapper {
-  display: flex;
-  justify-content: flex-end;
-}
 </style>
   

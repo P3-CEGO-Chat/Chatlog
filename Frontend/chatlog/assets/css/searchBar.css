@@ -165,7 +165,6 @@
 
 .calendar {
   position: absolute;
-  top: 5.5%;
   right: 54%;
   border-radius: 6px;
   all: unset;
@@ -174,7 +173,7 @@
   justify-content: center;
   
   /* justify-content: space-between; */
-  width: 10%;
+  width: 5%;
   border: solid 1.5px #6CA5FC;
   border-radius: 5px;
   padding: 0rem 0.5rem;
