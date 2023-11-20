@@ -1,65 +1,129 @@
-<template>
-    <div class="container">
-        <div class="SearchField">
-            <div class="SearchTex">
-                Viser resultat for: "{{ keywordArray.map(keyword => keyword.word).join(', ')}}"
-            </div>
-            <div class="scrollBar">
-                <div class="searchedMessage" v-for="(object, index) in ObjectArray" :key="index"> 
-                    <div class="messagesender">
-                        {{ object.username }}:
-                    </div>
-                    <div classe="messageContent">
-                        {{ object.message }}
-                    </div> 
-                    <div class="dateTime">
-                        {{ formatDate(object.dateTime)  }}
-                    </div>
-                </div>
-            </div>
-            <button @click="submitForm">submit</button>
-        </div>
-    </div>
-
-</template>
-
-
 <style scoped>
  @import url('~/assets/css/filterchat.css');
-</style>
+ </style>
 
-<script>
+<script lang="ts">
+import type { AsyncData } from '#app';
+import type { PropType } from 'vue';
+
+interface Message {
+    id: number;
+    customerId: string;
+    dateTime: string;
+    text: string;
+    isFlagged: boolean;
+    ogUsername: string;
+    username: string;
+}
+
 
 export default{
     data() {
         return {
-            keyword: '',
+            keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
-            messageObject: {message: "", username: "", dateTime: ""},
+            messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
         };
     },
-    methods: {
-        submitForm() {
-            this.ObjectArray.push(this.messageObject = {message: "Hej alle sammen! Hvordan har I det i dag?", username: "user1222", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "Hej! Jeg har det godt, tak. Hvordan går det med dig?", username: "user2", dateTime: "2023-11-07T13:28:21.531Z"})
-            this.ObjectArray.push(this.messageObject = {message: "Hej! Jeg har haft en travl dag, men det går godt. Hvad laver I?", username: "user12222", dateTime: "2023-11-07T13:28:21.531Z"})
-            console.log(this.ObjectArray);
+    methods: {},
+    props: {
+        keywordArray: {
+            type: Array as PropType<{ word: string, isUser: boolean }[]>,
+            default: () => [] as { word: string, isUser: boolean }[]
         },
-        formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
+        dateTimeArray: {
+            type: Array as PropType<string[]>,
+            default: () => [] as {dateTimeFrom: string, dateTimeTo: string}[]
         }
     },
-    props: {
-    keywordArray: {
-      type: Array,
-      default: () => [],
-        },
-    },
     watch: {
-    keywordArray(newVal) {
-      console.log('Received new keywordArray:', newVal);
-    }
-    }
+        'keywordArray.length': async function(newLength) {
+            if (this.keywordArray.length > 0) {
+
+                const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
+
+                if (usernameIndex !== -1) { // if username is in the array
+                    const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
+
+                    if (this.dateTimeArray.length == 0) {
+                        const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                            query: {
+                                keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
+                                dateTimeFrom: null,
+                                dateTimeTo: null,
+                                username: this.keywordArray[usernameIndex].word.slice(1), // remove @ from username
+                            }
+                        });
+                        
+                        const jsonData: any = data.value as Message[];
+
+                        this.messages = jsonData.map((item: any[]): Message => ({
+                            id: item[0],
+                            customerId: item[1],
+                            text: item[2],
+                            dateTime: item[3],
+                            isFlagged: item[4],
+                            ogUsername: item[5],
+                            username: item[6],
+                        }));
+                    }
+
+                } else {
+                    if (this.dateTimeArray.length == 0) {
+                        const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                            query: {
+                                keywords: this.keywordArray.map(item => item.word).join(','),
+                                dateTimeFrom: null,
+                                dateTimeTo: null,
+                                username: "",
+                            }
+                        });
+
+                        const jsonData: any = data.value as Message[];
+
+                        this.messages = jsonData.map((item: any[]): Message => ({
+                            id: item[0],
+                            customerId: item[1],
+                            text: item[2],
+                            dateTime: item[3],
+                            isFlagged: item[4],
+                            ogUsername: item[5],
+                            username: item[6],
+                        }));
+                    }
+                    
+                }
+                console.log("messages:", this.messages);
+            } else {
+                this.messages = [];
+            }
+        }
+    },    
 };
 </script>
+
+<template>
+    <div class="container">
+        <div class="SearchField">
+            <div class="SearchTex">
+
+                Viser resultat for: "{{ keywordArray.map(keyword => keyword.word).join(', ')}}"
+            </div>
+            <div class="scrollBar">
+                <div class="searchedMessage" v-for="(message) in messages" :key="message.id"> 
+                    <div class="messagesender">
+                        {{ message.username }}:
+                    </div>
+                    <div classe="messageContent">
+                        {{ message.text }}
+                    </div> 
+                    <div class="dateTime">
+                        {{ new Date(message.dateTime).toLocaleString()  }}
+                    </div>
+                    <span>Customer Id: {{ message.customerId }}, Original Username: {{ message.ogUsername }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>

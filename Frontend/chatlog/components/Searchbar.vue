@@ -2,18 +2,15 @@
 @import url("assets/css/searchBar.css");
 </style>
 
-<script>
+<script lang="ts">
 import Calendar from './Calendar.vue';
-
 
 export default {
   data() {
     return {
       searchKeyword: '',
-      keywordArray: [], // New data property
-      wordObject: { word: "", isUser: false },
-      showInfoBox: false, // Add this line
-      infoBoxLeft: '0px',
+      keywordArray: Array<{ word: string, isUser: boolean }>(), // New data property
+      wordObject: {word: "", isUser: false}
       showCalendar: true
     };
   },
@@ -24,17 +21,7 @@ export default {
   },
 
   methods: {
-    submitForm() {
-      if (this.searchKeyword.trim() === '') {
-        return;
-      }
-      // You can add your search logic here
-      this.keywordArray.push(this.searchKeyword)
-      this.searchKeyword = '';
-      console.log(this.searchKeyword);
-      console.log(this.keywordArray);
-    },
-    removeKeyword(index) {
+    removeKeyword(index: number) {
       this.keywordArray.splice(index, 1);
       this.updateKeywords();
     },
