@@ -8,7 +8,7 @@ export default {
   data() {
     return {
       messages: [],
-      currentPage: 1,
+      currentPage: 2,
       originalPageCounter: 1,
       initialLoad: true,
       messageId: 65,
@@ -20,13 +20,8 @@ export default {
     this.messages = JSON.parse(data.value as string);
     console.log(this.messages);
     this.originalPageCounter = this.currentPage;
-    
-    
     this.$nextTick(() => {
-      const scrollBar = this.$el.querySelector('.scrollBar');
-      if (scrollBar) {
-        scrollBar.scrollTop = scrollBar.scrollHeight;
-      }
+      this.scrollTobottom();
     });
   },
 
@@ -70,6 +65,7 @@ export default {
     },  
      async buttonClicked() {
       console.log('Button clicked');
+      this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
       const {data} = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
@@ -79,7 +75,14 @@ export default {
       const pageId = Math.ceil(this.messageId / 25);
       console.log(`Page ID: ${pageId}`);
       this.currentPage = pageId;
-      } 
+      }, 
+
+    scrollTobottom() {
+      const scrollBar = this.$el.querySelector('.scrollBar');
+    if (scrollBar) {
+      scrollBar.scrollTop = scrollBar.scrollHeight;
+    }
+  },
   },
 };
 </script> 
