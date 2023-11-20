@@ -10,7 +10,9 @@ export default {
     return {
       searchKeyword: '',
       keywordArray: Array<{ word: string, isUser: boolean }>(), // New data property
-      wordObject: {word: "", isUser: false}
+      wordObject: {word: "", isUser: false},
+      showInfoBox: false,
+      infoBoxLeft: '0px',
       showCalendar: true
     };
   },
@@ -30,7 +32,7 @@ export default {
       this.$emit("updateKeywordArray", this.keywordArray);
     },
 
-    handleKeydown(event) {
+    handleKeydown(event: KeyboardEvent) {
       if (this.searchKeyword === '' && (event.key === 'Backspace' || event.key === 'Delete')) {
         this.keywordArray.pop();
       }
@@ -40,7 +42,8 @@ export default {
       if (this.searchKeyword.trim() === '') {
         this.showInfoBox = true;
         const offset = -45; // Adjust this value as needed
-        this.infoBoxLeft = `${this.$refs.searchInput.getBoundingClientRect().left + offset}px`;
+        this.infoBoxLeft = `${(this.$refs.searchInput as HTMLInputElement).getBoundingClientRect().left + offset}px`;
+
         setTimeout(() => {
           this.showInfoBox = false;
         }, 2000); // 3000 milliseconds = 3 seconds
