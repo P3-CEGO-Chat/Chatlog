@@ -54,8 +54,10 @@ public class MessageRepoImpl implements MessageRepoCustom {
             for (int i = 0; i < keywords.size(); i++) {
                 query.setParameter("keyword" + i, keywords.get(i));
             }     
-            query.setParameter("dateTimeFrom", dateTimeFrom);
-            query.setParameter("dateTimeTo", dateTimeTo);
+            if (dateTimeFrom != null && dateTimeTo != null) {
+                query.setParameter("dateTimeFrom", dateTimeFrom);
+                query.setParameter("dateTimeTo", dateTimeTo);
+            }
             
             query.setParameter("username", username + "%");
             return query.getResultList();

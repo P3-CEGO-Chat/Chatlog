@@ -54,73 +54,59 @@ export default{
                 if (usernameIndex !== -1) { // if username is in the array
                     const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
 
-                    const { data } = await useFetch('http://localhost:8080/search/fulltext', {
-                        query: {
-                            keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
-                            username: this.keywordArray[usernameIndex].word.slice(1) // remove @ from username
-                        }
-                    });
-                    
-                    const jsonData: any = data.value as Message[];
+                    if (this.dateTimeArray.length == 0) {
+                        const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                            query: {
+                                keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
+                                dateTimeFrom: null,
+                                dateTimeTo: null,
+                                username: this.keywordArray[usernameIndex].word.slice(1), // remove @ from username
+                            }
+                        });
+                        
+                        const jsonData: any = data.value as Message[];
 
-                    this.messages = jsonData.map((item: any[]): Message => ({
-                        id: item[0],
-                        customerId: item[1],
-                        text: item[2],
-                        dateTime: item[3],
-                        isFlagged: item[4],
-                        ogUsername: item[5],
-                        username: item[6],
-                    }));
+                        this.messages = jsonData.map((item: any[]): Message => ({
+                            id: item[0],
+                            customerId: item[1],
+                            text: item[2],
+                            dateTime: item[3],
+                            isFlagged: item[4],
+                            ogUsername: item[5],
+                            username: item[6],
+                        }));
+                    }
 
                 } else {
-                    const { data } = await useFetch('http://localhost:8080/search/fulltext', {
-                        query: {
-                            keywords: this.keywordArray.map(item => item.word).join(','),
-                            username: "",
-                        }
-                    });
+                    if (this.dateTimeArray.length == 0) {
+                        const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                            query: {
+                                keywords: this.keywordArray.map(item => item.word).join(','),
+                                dateTimeFrom: null,
+                                dateTimeTo: null,
+                                username: "",
+                            }
+                        });
 
-                    const jsonData: any = data.value as Message[];
+                        const jsonData: any = data.value as Message[];
 
-                    this.messages = jsonData.map((item: any[]): Message => ({
-                        id: item[0],
-                        customerId: item[1],
-                        text: item[2],
-                        dateTime: item[3],
-                        isFlagged: item[4],
-                        ogUsername: item[5],
-                        username: item[6],
-                    }));
+                        this.messages = jsonData.map((item: any[]): Message => ({
+                            id: item[0],
+                            customerId: item[1],
+                            text: item[2],
+                            dateTime: item[3],
+                            isFlagged: item[4],
+                            ogUsername: item[5],
+                            username: item[6],
+                        }));
+                    }
                     
                 }
                 console.log("messages:", this.messages);
             } else {
                 this.messages = [];
             }
-        },
-        'dateTimeArray.length': async function(dateTimeLength){
-            if (this.dateTimeArray.length > 0) {
-                const { data } = await useFetch('http://localhost:8080/search/datetime', {
-                    query: {
-                        dateTimeFrom: this.dateTimeArray[0],
-                        dateTimeTo: this.dateTimeArray[1],
-                    }
-                });
-                const jsonData: any = data.value as Message[];
-                this.messages = jsonData.map((item: any[]): Message => ({
-                    id: item[0],
-                    customerId: item[1],
-                    text: item[2],
-                    dateTime: item[3],
-                    isFlagged: item[4],
-                    ogUsername: item[5],
-                    username: item[6],
-                }));
-            } else {
-                this.messages = [];
-            }
-        } 
+        }
     },    
 };
 </script>
@@ -143,7 +129,7 @@ export default{
                     <div class="dateTime">
                         {{ new Date(message.dateTime).toLocaleString()  }}
                     </div>
-                    <span></span>
+                    <span>Customer Id: {{ message.customerId }}, Original Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>
