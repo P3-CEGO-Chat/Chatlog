@@ -14,6 +14,7 @@ interface Message {
     dateTime: string;
     text: string;
     isFlagged: boolean;
+    ogUsername: string;
     username: string;
 }
 
@@ -41,56 +42,53 @@ export default{
         },
     },
     watch: {
-    async keywordArray(newVal: Array<{ word: string, isUser: boolean }>) {
-        if (this.keywordArray.length > 0) {
+        'keywordArray.length': async function(newLength) {
+            if (this.keywordArray.length > 0) {
 
-            const usernameIndex = newVal.findIndex(item => item.isUser);
+                const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
 
-            let jsonData: any; // TODO: define type
+                if (usernameIndex !== -1) { // if username is in the array
 
-            if (usernameIndex !== -1 && this.keywordArray.length >= 2) {
-                console.log('searching with username and keyword');
-                const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
-                    query: {
-                        keywords: this.keywordArray[0].word,
-                        username: this.keywordArray[usernameIndex].word.slice(1)
-                    }
-                });
 
-                jsonData = JSON.parse(data.value as string);
-            } else if (usernameIndex == -1 && this.keywordArray.length >= 2) {
-                console.log('searching with keywords');
+                    const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
 
-            } else if (usernameIndex == -1 && this.keywordArray.length == 1) {
-                console.log('searching with keyword')
-                const { data } = await useFetch('http://localhost:8080/search/', {
-                    query: {
-                        search: this.keywordArray[0].word
-                    }
-                });
-                console.log(data.value);
-                jsonData = JSON.parse(data.value as string);
+                    let jsonData: any; // declare variable to store json data
+
+                    const { data } = await useFetch('http://localhost:8080/search/fulltext/custom', {
+                        query: {
+                            keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
+                            username: this.keywordArray[usernameIndex].word.slice(1) // remove @ from username
+                        }
+                    });
+                    console.log("noice");
+
+                    console.log(data.value)
+                    
+                    jsonData = data.value as Message[];
+
+                    console.log("jsonData:", jsonData);
+
+                    console.log(arrayWithoutUsername);
+                    console.log(arrayWithoutUsername.map(item => item.word).join(','));
+
+                    console.log(jsonData);
+                    this.messages = jsonData.map((item: any[]): Message => ({
+                        id: item[0],
+                        customerId: item[1],
+                        text: item[2],
+                        dateTime: item[3],
+                        isFlagged: item[4],
+                        ogUsername: item[5],
+                        username: item[6],
+                    }));
+
+                }
+                console.log("messages:", this.messages);
+            } else {
+                this.messages = [];
             }
-            
-            
-            console.log(jsonData);
-            this.messages = jsonData.map((item: any[]): Message => ({
-                id: item[0],
-                customerId: item[1],
-                dateTime: item[2],
-                text: item[3],
-                isFlagged: item[4],
-                username: item[5]
-            }));
-            console.log(this.messages);
         }
-    },
-    'keywordArray.length': function(newLength) {
-        if (newLength === 0) {
-            this.messages = [];
-        }
-    }
-  }, 
+    },    
 };
 </script>
 
@@ -114,7 +112,6 @@ export default{
                     </div>
                 </div>
             </div>
-            <!-- <button @click="submitForm">submit</button> -->
         </div>
     </div>
 

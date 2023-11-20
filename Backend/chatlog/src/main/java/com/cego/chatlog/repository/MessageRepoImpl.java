@@ -19,28 +19,45 @@ public class MessageRepoImpl implements MessageRepoCustom {
     @Override
     public List<Object[]> fullTextSearch(List<String> keywords, String username) {
         
-        String baseQuery = "SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE chatlog.user.username LIKE :username ORDER BY chatlog.message.message_id";
+        String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.customer.current_username LIKE :username ORDER BY chatlog.message.id";
+
+        System.out.println(keywords);
 
         StringBuilder fullTextSearch = new StringBuilder();
-        for (int i = 0; i < keywords.size(); i++) {
-            fullTextSearch.append("MATCH(chatlog.message.message_text) AGAINST(:keyword");
-            fullTextSearch.append(i);
-            fullTextSearch.append(" IN NATURAL LANGUAGE MODE)");
-            if (i < keywords.size() - 1) {
-                fullTextSearch.append(" AND ");
+        if (keywords.size() != 0) { 
+            if (keywords.size() > 1) {
+                fullTextSearch.append("(");
             }
+            for (int i = 0; i < keywords.size(); i++) {
+                fullTextSearch.append("MATCH(chatlog.message.message_text) AGAINST(:keyword");
+                fullTextSearch.append(i);
+                fullTextSearch.append(" IN NATURAL LANGUAGE MODE)");
+                if (i < keywords.size() - 1) {
+                    fullTextSearch.append(" OR ");
+                }
+            }
+            if (keywords.size() > 1) {
+                fullTextSearch.append(")");
+            }
+
+            System.out.println("----testst----" + ((int)(keywords.size())));
+            
+            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
+
+            System.out.println("Final SQL query: " + finalQuery);
+            Query query = entityManager.createNativeQuery(finalQuery);
+            for (int i = 0; i < keywords.size(); i++) {
+                query.setParameter("keyword" + i, keywords.get(i));
+            }     
+            
+            query.setParameter("username", username + "%");
+            return query.getResultList();
+
+        } else {
+            Query query = entityManager.createNativeQuery(baseQuery);
+            query.setParameter("username", username + "%");
+
+            return query.getResultList();
         }
-        System.out.println("----testst----" + ((int)(keywords.size())));
-        
-        String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
-
-        System.out.println("Final SQL query: " + finalQuery);
-        Query query = entityManager.createNativeQuery(finalQuery);
-        for (int i = 0; i < keywords.size(); i++) {
-            query.setParameter("keyword" + i, keywords.get(i));
-        }     
-        query.setParameter("username", username + "%");
-
-        return query.getResultList();
     }
 }
