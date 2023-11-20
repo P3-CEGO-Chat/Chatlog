@@ -171,7 +171,7 @@
   border: #6CA5FC solid 1.5px;
   display: flex;
   justify-content: center;
-  
+  align-items: center;
   /* justify-content: space-between; */
   width: 5%;
   border: solid 1.5px #6CA5FC;
