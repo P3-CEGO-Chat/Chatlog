@@ -55,8 +55,8 @@ public class messageController {
     @GetMapping("/message-id/{messageId}")
     public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
         try {
-            int startId = Integer.parseInt(messageId) - 12;
-            int endId = Integer.parseInt(messageId) + 12;
+            int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId)+1;
+            int endId = startId + 24;
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 

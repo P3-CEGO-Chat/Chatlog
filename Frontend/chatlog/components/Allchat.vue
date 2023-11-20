@@ -32,7 +32,7 @@ export default {
     const scrollHeightBeforeLoad = target.scrollHeight;
 
     // Check if the user has scrolled to the top of the scrollbar
-    if (target.scrollTop === 0) {
+    if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
       console.log('Reached the top of the scrollbar');
       // Fetch more messages
       this.currentPage++;
@@ -40,6 +40,7 @@ export default {
       const newMessages = JSON.parse(data.value as string);
       this.messages = newMessages.concat(this.messages);
       console.log(this.messages);
+      console.log(`Current page: ${this.currentPage}`);
     }
 
 
@@ -65,6 +66,7 @@ export default {
     },  
      async buttonClicked() {
       console.log('Button clicked');
+      
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
@@ -74,13 +76,22 @@ export default {
       console.log(this.messages);
       const pageId = Math.ceil(this.messageId / 25);
       console.log(`Page ID: ${pageId}`);
-      this.currentPage = pageId;
+      this.currentPage = pageId-1;
+        this.$nextTick(() => {
+          this.scrollToMiddle();
+    });
       }, 
 
     scrollTobottom() {
       const scrollBar = this.$el.querySelector('.scrollBar');
     if (scrollBar) {
       scrollBar.scrollTop = scrollBar.scrollHeight;
+    }
+  },
+    scrollToMiddle() {
+      const scrollBar = this.$el.querySelector('.scrollBar');
+      if (scrollBar) {
+        scrollBar.scrollTop = (scrollBar.scrollHeight - scrollBar.clientHeight) / 2;
     }
   },
   },
@@ -94,13 +105,13 @@ export default {
               <div class="scrollBar" @scroll="checkScroll">
                   <div class="messageBox" v-for="message in messages" :key="message[0]">
                       <div class="messageHeader">
-                          <div class="CustomerId">{{ message[1] }}:&nbsp</div>
+                          <div class="CustomerId">{{ message[5] }}:&nbsp</div>
                           <div class="messageContent">{{ message[3] }}</div>
                           <div class="Time">{{ new Date(message[2]).toLocaleString() }}</div>
                       </div>
                   </div>
               </div>
-              <button class="myButton" @click="buttonClicked">Click me</button>
       </div>
+      <button class="myButton" @click="buttonClicked">Click me</button>
   </div>
 </template>
