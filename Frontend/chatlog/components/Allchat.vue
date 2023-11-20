@@ -8,18 +8,22 @@ export default {
   data() {
     return {
       messages: [],
-      currentPage: 2,
+      currentPage: 1,
       originalPageCounter: 1,
       initialLoad: true,
       messageId: 65,
+      HighestMessageId: 0,
     };
   },
 
     async mounted() {
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
     this.messages = JSON.parse(data.value as string);
+    this.HighestMessageId = this.messages[this.messages.length - 1][0];
+    console.log(`Highest message ID: ${this.HighestMessageId}`);
     console.log(this.messages);
     this.originalPageCounter = this.currentPage;
+
     this.$nextTick(() => {
       this.scrollTobottom();
     });
@@ -51,7 +55,7 @@ export default {
       target.scrollTop = scrollTopBeforeLoad + scrollHeightChange;
 
       // Check if the user has scrolled to the bottom of the scrollbar
-      if (target.scrollTop + target.clientHeight === scrollHeightAfterLoad) {
+      if (target.scrollTop + target.clientHeight >= scrollHeightAfterLoad - 1) {
         console.log('Reached the bottom of the scrollbar');
         if (!this.initialLoad && this.originalPageCounter != 1) {
           this.originalPageCounter--;
@@ -74,13 +78,20 @@ export default {
       const messageIdInterval = JSON.parse(data.value as string);
       this.messages = messageIdInterval;
       console.log(this.messages);
-      const pageId = Math.ceil(this.messageId / 25);
-      console.log(`Page ID: ${pageId}`);
-      this.currentPage = pageId-1;
+      this.findTheCurrentPage();
         this.$nextTick(() => {
           this.scrollToMiddle();
     });
-      }, 
+      },
+    
+    findTheCurrentPage(){
+      let lowIntervalId = -(this.messageId % 25) + this.messageId + 1;
+      lowIntervalId = Math.floor(lowIntervalId / 25);
+      let NumberOfPages = Math.ceil(this.HighestMessageId/25);
+      this.currentPage = NumberOfPages - lowIntervalId;
+      this.originalPageCounter = this.currentPage;
+      console.log(`Current page: ${this.currentPage}`);
+    },
 
     scrollTobottom() {
       const scrollBar = this.$el.querySelector('.scrollBar');
@@ -88,6 +99,7 @@ export default {
       scrollBar.scrollTop = scrollBar.scrollHeight;
     }
   },
+
     scrollToMiddle() {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
