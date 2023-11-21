@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +63,7 @@ public class MessageController {
   
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
+    @SendTo("/topic/reply")
     public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataCustomerMessage) {
         //user.setUserId(user.getCustomerId());
         /* User user = new User(); */    
@@ -84,7 +86,7 @@ public class MessageController {
 
         /* userRepository.save(user); */
         messageRepository.save(message);
-        return "Saved";
+        return "Wuhuuu";
     }
 
     //Gets the page for an message with a specific ID.
