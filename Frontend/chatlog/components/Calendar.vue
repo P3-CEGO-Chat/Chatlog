@@ -26,14 +26,24 @@
 </template>
   
 
-  <script setup lang="ts">
+  <script lang="ts">
     import { ref, onMounted  } from 'vue';
-    import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css';
     import type { DatePickerInstance } from '@vuepic/vue-datepicker';
    
 
-
+    export default {
+      data() {
+        return {
+          
+        };
+      },
+      methods: {
+        sendDateTime(startDateISO: string, endDateISO: string) {
+          this.$emit("updateDateTimeArray", [startDateISO, endDateISO]);
+        }
+       }
+     }
 
     const date = ref();
     const datepickerRef = ref<DatePickerInstance>(null);
@@ -63,9 +73,24 @@
       newDate[1] = new Date(newDate[0].getTime() + 1000 * 60 * 60 * 24); // Plus 24 hours
     }
     
-    console.log(newDate);
+    
+    const startDateISO = newDate[0].toISOString();
+    const endDateISO = newDate[1].toISOString();    
+    console.log(`Start Date: ${startDateISO}, End Date: ${endDateISO}`);
+
+    
+    
+
+
   });
 
+
+</script>
+
+
+<script setup lang="ts">
+    import Datepicker from '@vuepic/vue-datepicker';
+    
 </script>
 
 <style scoped>

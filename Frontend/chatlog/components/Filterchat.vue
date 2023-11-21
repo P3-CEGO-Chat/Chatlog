@@ -6,6 +6,7 @@
 import type { AsyncData } from '#app';
 import type { PropType } from 'vue';
 
+
 interface Message {
     id: number;
     customerId: string;
@@ -32,9 +33,12 @@ export default{
             default: () => [] as { word: string, isUser: boolean }[]
         },
         dateTimeArray: {
-            type: Array as PropType<string[]>,
+            type: Array as PropType< {dateTimeFrom: string, dateTimeTo: string}[]>,
             default: () => [] as {dateTimeFrom: string, dateTimeTo: string}[]
-        }
+        },
+      
+
+
     },
     watch: {
         'keywordArray.length': async function(newLength) {
@@ -66,7 +70,8 @@ export default{
                             ogUsername: item[5],
                             username: item[6],
                         }));
-                    }
+                    } else {
+                    }//else statement med null
 
                 } else {
                     if (this.dateTimeArray.length == 0) {
@@ -79,6 +84,8 @@ export default{
                             }
                         });
 
+
+
                         const jsonData: any = data.value as Message[];
 
                         this.messages = jsonData.map((item: any[]): Message => ({
@@ -90,15 +97,31 @@ export default{
                             ogUsername: item[5],
                             username: item[6],
                         }));
-                    }
+                    } else {
+                        console.log("dateTimeArray:", this.dateTimeArray);
+                        const { data } = await useFetch('http://localhost:8080/search/fulltext', {
+                            query: {
+                                keywords: this.keywordArray.map(item => item.word).join(','),
+                                dateTimeFrom: this.dateTimeArray[0].dateTimeFrom,
+                                dateTimeTo: this.dateTimeArray[1].dateTimeTo,
+                                username: null,
+                            }
+                        });
+                    }  //else statement null
                     
+                     
                 }
                 console.log("messages:", this.messages);
             } else {
                 this.messages = [];
             }
+        },
+        'dateTimeArray.length': async function(newLength) {
+            console.log(this.dateTimeArray)
         }
     },    
+
+    
 };
 </script>
 
