@@ -2,10 +2,10 @@
   <div class="layout">
     <div>
       <Searchbar @updateKeywordArray="updateKeywordArray" />
-      <Filterchat :keywordArray="keywordArray" />
+      <Filterchat :keywordArray="keywordArray" @updateMessageId="updateMessageId" />
     </div>
     <div>
-      <Allchat>
+      <Allchat :messageId="messageId">
         ikke dav
       </Allchat>
     </div>
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      keywordArray: Array<{ word: string, isUser: boolean }>()
+      keywordArray: Array<{ word: string, isUser: boolean }>(),
+      messageId: Number,
     }
   },
   methods: {
@@ -34,6 +35,10 @@ export default {
       this.keywordArray = newKeywordArray;
       console.log('Received updateKeywordArray:', this.keywordArray);
     },
+    updateMessageId(newMessageId: NumberConstructor) {
+      this.messageId = newMessageId;
+      console.log('Received updateMessageId:', this.messageId);
+    }
   },
 };
 </script>

@@ -11,7 +11,6 @@ export default {
       currentPage: 1,
       originalPageCounter: 1,
       initialLoad: true,
-      messageId: 65,
       HighestMessageId: 0,
     };
   },
@@ -27,6 +26,19 @@ export default {
     this.$nextTick(() => {
       this.scrollTobottom();
     });
+  },
+
+  props: {
+    messageId: {
+      type: Number,
+      default: 0,
+    },
+  },
+
+  watch: {
+    async messageId() {
+      this.findMessage();
+    },
   },
 
   methods: {
@@ -69,7 +81,7 @@ export default {
     });
     },  
 
-    async buttonClicked() {
+    async findMessage() {
       console.log('Button clicked');
       
       this.initialLoad = true;
@@ -138,6 +150,5 @@ export default {
                   </div>
               </div>
       </div>
-      <button class="myButton" @click="buttonClicked">Click me</button>
   </div>
 </template>
