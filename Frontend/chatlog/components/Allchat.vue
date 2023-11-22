@@ -4,6 +4,8 @@
 
 <script lang="ts">
 
+import io from 'socket.io-client';
+
 interface Message {
   id: number;
   customerId: string;
@@ -43,6 +45,46 @@ export default {
     this.$nextTick(() => {
       this.scrollTobottom();
     });
+
+    // socket connection
+    const socket = new WebSocket("ws://localhost:8080/websocket");
+
+    socket.onopen = function(event) {
+      console.log("[open] Connection established");
+    }
+
+    socket.onmessage = (event) => {
+      console.log(`[message] Data received from server: ${event.data}`);
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.event === "newMessage") {
+        console.log("Received new message event");
+        console.log(parsedData.data);
+
+        // Create a new message object from parsedData.data
+        const newMessage = {
+            id: parsedData.data.id,
+            customerId: parsedData.data.customerId,
+            text: parsedData.data.messageText,
+            dateTime: parsedData.data.dateTime,
+            isFlagged: parsedData.data.isFlagged,
+            ogUsername: parsedData.data.ogusername
+        };
+
+        // Prepend the new message to the messages array
+        this.messages = [...this.messages, newMessage];
+
+        this.$nextTick(() => {
+          this.scrollTobottom();
+        });
+      }
+
+    }
+
+    socket.onerror = function(error) {
+      console.error("Socket encountered error:", error, "Closing socket");
+      socket.close();
+    }
+
   },
 
   props: {
