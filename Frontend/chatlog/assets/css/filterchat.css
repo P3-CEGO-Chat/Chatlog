@@ -100,7 +100,48 @@
     max-height: calc(87vh - 150px);
     padding-right: 0.5rem;
 }
-
 .flagged{
-    
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+    grid-column: 1/ -1;
+    font-size: 1.5rem;
+    color: red;
+}
+
+.flaggedText {
+    display: none;
+    position: absolute;
+    background-color: #6CA5FC; /* Background color */
+    z-index: 1; /* z-index places the element on top of other elements */
+    padding: 0.5rem; /* Padding */
+    top: 105%; /* At the top of the tooltip */
+    border-width: 5px;  
+    border-style: solid;
+    border-color: transparent transparent #6CA5FC transparent;
+    border-radius: 5px;
+    right: 0;
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+
+.icon{
+    z-index: 2;
+}
+
+.icon .flaggedText::after{
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #6CA5FC transparent;
+}
+
+.icon:hover .flaggedText {
+    display: block;
+    z-index: 2;
 }
