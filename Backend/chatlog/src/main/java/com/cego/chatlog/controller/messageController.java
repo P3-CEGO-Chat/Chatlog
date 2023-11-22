@@ -38,9 +38,7 @@ public class MessageController {
             int endId = messageRepository.getEndId(Integer.parseInt(pageId));
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
-            /* for (Object[] message : messages) {
-                System.out.println(Arrays.toString(message)); //Just a check to see if it receives the wanted data.
-            } */
+            
             //Converting it to JSON, for easier use later.
             String json = convertObjectToJSON(messages);
             return ResponseEntity.ok(json);
