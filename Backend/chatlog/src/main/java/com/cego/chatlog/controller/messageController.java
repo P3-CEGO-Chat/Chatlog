@@ -1,5 +1,6 @@
 package com.cego.chatlog.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.CustomerService;
+import com.cego.chatlog.service.WebSocketSessionManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,10 +29,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MessageController {
 
     @Autowired 
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
   
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
+
+    @Autowired
+    private WebSocketSessionManager sessionManager;
 
     @GetMapping("/{pageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId) {
@@ -63,30 +68,29 @@ public class MessageController {
   
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
-    @SendTo("/topic/reply")
     public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataCustomerMessage) {
-        //user.setUserId(user.getCustomerId());
-        /* User user = new User(); */    
+        try {
+            //Creating a user for the database, because the database stores both a user and a message seperately
+            customerService.createUser(dataCustomerMessage);
 
-        //Creating a user for the database, because the database stores both a user and a message seperately
-        customerService.createUser(dataCustomerMessage);
+            /* user.setCustomerId(dataUserMessage.getCustomerId());
+            user.setUsername(dataUserMessage.getUsername());
+            user.setUserId(dataUserMessage.getCustomerId()); */
+            
+            //Creating the message for the database.
+            Message message = new Message();
+            message.setCustomerId(dataCustomerMessage.getCustomerId());
+            message.setMessageText(dataCustomerMessage.getMessage());
+            message.setDateTime(dataCustomerMessage.getDateTime());
+            message.setIsFlagged(false);
+            message.setOGUsername(dataCustomerMessage.getUsername());
 
-        /* user.setCustomerId(dataUserMessage.getCustomerId());
-        user.setUsername(dataUserMessage.getUsername());
-        user.setUserId(dataUserMessage.getCustomerId()); */
-        
-        //Creating the message for the database.
-        Message message = new Message();
-        message.setCustomerId(dataCustomerMessage.getCustomerId());
-        message.setMessageText(dataCustomerMessage.getMessage());
-        message.setDateTime(dataCustomerMessage.getDateTime());
-        message.setIsFlagged(false);
-        message.setOGUsername(dataCustomerMessage.getUsername());
-
-
-        /* userRepository.save(user); */
-        messageRepository.save(message);
-        return "Wuhuuu";
+            sessionManager.sendMessageToAll("Wuhuu det virker");
+            messageRepository.save(message);
+            return "Saved and message sent";
+        } catch (IOException error) {
+            return "Error saving and sending message";
+        }
     }
 
     //Gets the page for an message with a specific ID.
