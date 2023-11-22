@@ -20,13 +20,23 @@ export default {
       currentPage: 1,
       originalPageCounter: 1,
       initialLoad: true,
-      HighestMessageId: 0,
+      HighestMessageId: 156,
       title: "Live Chat",
     };
   },
+  async created()
 
+  
+ 
   async mounted() {
-    const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+    
+    const highestMessageIdResponse = await useFetch("http://localhost:8080/messages/find-highest-id");
+    console.log(highestMessageIdResponse);
+    this.HighestMessageId = Number(highestMessageIdResponse.data);
+    console.log(this.HighestMessageId);
+
+  
+    const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
       customerId: item[1],
@@ -35,14 +45,16 @@ export default {
       isFlagged: item[4],
       ogUsername: item[5],
     }));
-
+    
     this.HighestMessageId = this.messages[this.messages.length - 1].id;
     console.log(this.HighestMessageId);
+    
     this.originalPageCounter = this.currentPage;
 
     this.$nextTick(() => {
       this.scrollTobottom();
     });
+    
   },
 
   props: {
@@ -68,7 +80,7 @@ export default {
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
         // Fetch more messages
         this.currentPage++;
-        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
           customerId: item[1],
@@ -100,7 +112,7 @@ export default {
             this.originalPageCounter--;
             
             
-            const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}`);
+            const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}-${this.HighestMessageId}`);
             const prevMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
               id: item[0],
               customerId: item[1],
@@ -126,7 +138,7 @@ export default {
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
-      const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+      const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
       this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],

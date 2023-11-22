@@ -31,11 +31,11 @@ public class MessageController {
     @Autowired
     CustomerService customerService;
 
-    @GetMapping("/{pageId}")
-    public ResponseEntity<String> getMessagePage(@PathVariable String pageId) {
+    @GetMapping("/{pageId}-{highestMessageId}")
+    public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
         try {
-            int startId = messageRepository.getStartId(Integer.parseInt(pageId));
-            int endId = messageRepository.getEndId(Integer.parseInt(pageId));
+            int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
+            int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
             
@@ -84,11 +84,17 @@ public class MessageController {
         messageRepository.save(message);
         return "Saved";
     }
+    @GetMapping("find-highest-id")
+    public ResponseEntity<String> getHighestId(){
+        Integer highestId = messageRepository.findHighestMessageId();
+        return ResponseEntity.ok(highestId.toString());
+    }
 
     //Gets the page for an message with a specific ID.
     @GetMapping("/message-id/{messageId}")
     public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
         try {
+
             Integer highestId = messageRepository.findHighestMessageId();
             int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
             int endId = startId + 24;
@@ -97,14 +103,6 @@ public class MessageController {
                 startId = 1;
                 endId = highestId%25+25;
             }
-            //this.HighestMessageId = this.messages[this.messages.length - 1].id;
-            
-            
-
-            // 101-125
-            // 129-153
-            // endid+ 
-
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 
