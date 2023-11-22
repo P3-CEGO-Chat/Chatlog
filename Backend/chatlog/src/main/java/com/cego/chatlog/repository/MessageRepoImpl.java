@@ -72,12 +72,12 @@ public class MessageRepoImpl implements MessageRepoCustom {
 
     @Override 
     public List<Object[]> dateTime(String dateTimeFrom, String dateTimeTo) {
-        String baseQuery = "SELECT * FROM chatlog.message WHERE chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo ORDER BY chatlog.message.id";
-
+        String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo ORDER BY chatlog.message.id";
+        System.out.println("----testst----" + dateTimeFrom);
         Query query = entityManager.createNativeQuery(baseQuery);
         query.setParameter("dateTimeFrom", dateTimeFrom);
         query.setParameter("dateTimeTo", dateTimeTo);
-
+        System.out.println("----testst----" + query.getResultList());
         return query.getResultList();
     }
     

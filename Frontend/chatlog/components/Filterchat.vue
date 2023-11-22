@@ -24,6 +24,8 @@ export default{
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
             messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
+            dateTimeFrom: "",
+            dateTimeTo: "",
         };
     },
     methods: {},
@@ -53,9 +55,9 @@ export default{
                         const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                             query: {
                                 keywords: arrayWithoutUsername.length == 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','), // if array is empty, send empty string
+                                username: this.keywordArray[usernameIndex].word.slice(1), // remove @ from username
                                 dateTimeFrom: null,
                                 dateTimeTo: null,
-                                username: this.keywordArray[usernameIndex].word.slice(1), // remove @ from username
                             }
                         });
                         
@@ -70,8 +72,30 @@ export default{
                             ogUsername: item[5],
                             username: item[6],
                         }));
-                    } else {
-                    }//else statement med null
+                    } /*else if (this.keywordArray.length == 0) {
+                        const dateTimeFrom = this.dateTimeArray[0].dateTimeFrom;
+                        const dateTimeTo =  this.dateTimeArray[1].dateTimeTo;
+                        console.log("filter", this.dateTimeArray);
+                        const { data } = await useFetch('http://localhost:8080/search/datetime', {
+                            query: {
+                                dateTimeFrom: this.dateTimeArray[0].dateTimeFrom,
+                                dateTimeTo: this.dateTimeArray[1].dateTimeTo,
+                            }
+                            
+                        });
+                        
+                        const jsonData: any = data.value as Message[];
+
+                        this.messages = jsonData.map((item: any[]): Message => ({
+                            id: item[0],
+                            customerId: item[1],
+                            text: item[2],
+                            dateTime: item[3],
+                            isFlagged: item[4],
+                            ogUsername: item[5],
+                            username: item[6],
+                        }));
+                    }*/  //else statement med null
 
                 } else {
                     if (this.dateTimeArray.length == 0) {
@@ -116,9 +140,35 @@ export default{
                 this.messages = [];
             }
         },
-        'dateTimeArray.length': async function(newLength) {
-            console.log(this.dateTimeArray)
-        }
+        dateTimeArray: {
+        handler: async function(newDateTimeArray, oldDateTimeArray) {
+            console.log("Hello World");
+            const dateTimeFrom = this.dateTimeArray[0].dateTimeFrom;
+            const dateTimeTo =  this.dateTimeArray[1].dateTimeTo;
+            console.log("filter", this.dateTimeArray);
+            const { data } = await useFetch('http://localhost:8080/search/datetime', {
+                query: {
+                    dateTimeFrom: this.dateTimeArray[0].dateTimeFrom,
+                    dateTimeTo: this.dateTimeArray[1].dateTimeTo,
+                }
+                
+            });
+            console.log(this.messages)
+            const jsonData: any = data.value as Message[];
+
+            this.messages = jsonData.map((item: any[]): Message => ({
+                id: item[0],
+                customerId: item[1],
+                text: item[2],
+                dateTime: item[3],
+                isFlagged: item[4],
+                ogUsername: item[5],
+                username: item[6],
+            }));
+
+        },
+        deep: true
+    },
     },    
 
     

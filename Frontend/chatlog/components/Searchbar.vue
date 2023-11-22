@@ -14,7 +14,7 @@ export default {
       showInfoBox: false,
       infoBoxLeft: '0px',
       showCalendar: true,
-      dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>() 
+      dateTimeArray: Array<{startDateISO: string, endDateISO: string}>() 
     };
   },
   computed: {
@@ -75,7 +75,7 @@ export default {
         }
       }
     },
-    updateDateTimeArray(newDateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>) {
+    updateDateTimeArray(newDateTimeArray: Array<{startDateISO: string, endDateISO: string}>) {
       this.dateTimeArray = newDateTimeArray;
       console.log('Received updateDateTimeArray:', this.dateTimeArray);
       this.$emit("updateDateTimeArray", this.dateTimeArray);
