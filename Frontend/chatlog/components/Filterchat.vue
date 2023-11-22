@@ -58,9 +58,7 @@ export default{
                                 username: this.keywordArray[usernameIndex].word.slice(1), // remove @ from username
                             }
                         });
-                        console.log(data.value)
                         const jsonData: any = data.value as Message[];
-                        console.log(jsonData)
                         this.messages = jsonData.map((item: any[]): Message => ({
                             id: item[0],
                             customerId: item[1],
@@ -77,8 +75,8 @@ export default{
                         const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                             query: {
                                 keywords: this.keywordArray.map(item => item.word).join(','),
-                                dateTimeFrom: null,
-                                dateTimeTo: null,
+                                dateTimeFrom: "",
+                                dateTimeTo: "",
                                 username: "",
                             }
                         });
@@ -96,7 +94,6 @@ export default{
                     }
                     
                 }
-                console.log("messages:", this.messages);
             } else {
                 this.messages = [];
             }
@@ -123,6 +120,24 @@ export default{
                     <div class="dateTime">
                         {{ new Date(message.dateTime).toLocaleString()  }}
                     </div>
+
+                    <div v-if="message.isFlagged" class="flagged">
+                        
+                        <div class="icon">
+                        <Icon name="material-symbols:warning-outline-rounded" class="icon"/>
+
+                            <div class="flaggedText">
+                                Flagged reason
+                            </div>
+                        </div>
+                        
+
+
+                    </div>
+                    
+                    <!-- {message.isFlagged ? <div class="flagged">
+                        {{ message.isFlagged ? "Flagged" : "" }}
+                    </div>} -->
                     <span>Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
