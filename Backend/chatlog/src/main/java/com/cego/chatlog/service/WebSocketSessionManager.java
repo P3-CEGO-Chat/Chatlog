@@ -19,6 +19,11 @@ public class WebSocketSessionManager {
         sessions.remove(session.getId());
     }
 
+    public void emitEvent(String eventName, String data) throws IOException {
+        String message = "{\"event\":\"" + eventName + "\", \"data\":" + data + "}";
+        sendMessageToAll(message);
+    }    
+
     public void sendMessageToAll(String message) throws IOException {
         TextMessage textMessage = new TextMessage(message);
         for (WebSocketSession session : sessions.values()) {

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +64,17 @@ public class MessageController {
             return null;
         } 
     }
+
+    // Overload for a single object
+    private String convertObjectToJSON(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            // Log the error and handle it appropriately
+            return null;
+        }
+    }
   
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
@@ -85,7 +95,10 @@ public class MessageController {
             message.setIsFlagged(false);
             message.setOGUsername(dataCustomerMessage.getUsername());
 
-            sessionManager.sendMessageToAll("Wuhuu det virker");
+            String json = convertObjectToJSON(message);
+            
+
+            sessionManager.emitEvent("newMessage", json);
             messageRepository.save(message);
             return "Saved and message sent";
         } catch (IOException error) {
