@@ -35,6 +35,8 @@
     gap: 10px;
     margin-bottom: 2px;
     padding: 0.5rem;
+    font-family: "Exo 2","Helvetica Neue",helvetica,arial,sans-serif;
+    font-size: 14px;
 }
 
 .CustomerId, .Time {

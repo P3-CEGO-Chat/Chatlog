@@ -37,6 +37,7 @@ export default {
     }));
 
     this.HighestMessageId = this.messages[this.messages.length - 1].id;
+    console.log(this.HighestMessageId);
     this.originalPageCounter = this.currentPage;
 
     this.$nextTick(() => {
@@ -77,6 +78,7 @@ export default {
           ogUsername: item[5],
         }));
         this.messages = newMessages.concat(this.messages);
+        console.log(this.messages);
       }
 
 
@@ -86,10 +88,18 @@ export default {
         const scrollHeightChange = scrollHeightAfterLoad - scrollHeightBeforeLoad;
         target.scrollTop = scrollTopBeforeLoad + scrollHeightChange;
 
+
         // Check if the user has scrolled to the bottom of the scrollbar
         if (target.scrollTop + target.clientHeight >= scrollHeightAfterLoad - 1) {
+          
+          
           if (!this.initialLoad && this.originalPageCounter != 1) {
+            if (this.originalPageCounter === Math.ceil(this.HighestMessageId / 25 )){
+              this.originalPageCounter--;
+            }
             this.originalPageCounter--;
+            
+            
             const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}`);
             const prevMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
               id: item[0],
@@ -99,8 +109,14 @@ export default {
               isFlagged: item[4],
               ogUsername: item[5],
             }));
+          
+
+            
             this.messages = this.messages.concat(prevMessages);
-          }
+            console.log(this.messages);
+            }
+          
+          
         }
         this.initialLoad = false;
       });
@@ -126,11 +142,14 @@ export default {
     },
 
     async findMessage() {
-      console.log('Button clicked');
-      
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
+      this.findTheCurrentPage();
+      if (this.currentPage === 1) {
+        this.buttonClear();
+        return;
+      }
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -142,18 +161,21 @@ export default {
       }));
       this.messages = messageIdInterval;
       this.title = `Chat historie`;
-      this.findTheCurrentPage();
+      console.log(this.messages);
       this.$nextTick(() => {
         this.scrollToMessage();
       });
     },
 
     findTheCurrentPage() {
-      let lowIntervalId = -(this.messageId % 25) + this.messageId + 1;
+      /* let lowIntervalId = -(this.messageId % 25) + this.messageId + 1;
       lowIntervalId = Math.floor(lowIntervalId / 25);
       let NumberOfPages = Math.ceil(this.HighestMessageId / 25);
-      this.currentPage = NumberOfPages - lowIntervalId;
+      this.currentPage = NumberOfPages - lowIntervalId; */
+      this.currentPage = Math.ceil((this.HighestMessageId-this.messageId)/ 25);
+
       this.originalPageCounter = this.currentPage;
+      
       console.log(`Current page: ${this.currentPage}`);
     },
 

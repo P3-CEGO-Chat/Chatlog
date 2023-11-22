@@ -28,6 +28,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     }
 
     //public List<Object[]> findSearch(@Param("search") List<Object[]> search);
+    @Query("SELECT max(m.id) FROM Message m")
+    Integer findHighestMessageId();
     
     //SQL Search to find all messages containing a specific keyword.
     @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.message_text LIKE %:keyword% ORDER BY chatlog.message.id", nativeQuery = true)

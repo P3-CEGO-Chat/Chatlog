@@ -91,8 +91,22 @@ public class MessageController {
     @GetMapping("/message-id/{messageId}")
     public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
         try {
-            int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId)+1;
+            Integer highestId = messageRepository.findHighestMessageId();
+            int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
             int endId = startId + 24;
+
+            if(startId < 24){
+                startId = 1;
+                endId = highestId%25+25;
+            }
+            //this.HighestMessageId = this.messages[this.messages.length - 1].id;
+            
+            
+
+            // 101-125
+            // 129-153
+            // endid+ 
+
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 
