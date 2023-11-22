@@ -106,4 +106,51 @@
     color: #f0f0f0;
 }
 
+.flagged {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+    grid-column: 1/ -1;
+    font-size: 1.5rem;
+    color: red;
+}
 
+.icon {
+    position: relative; /* Add this line if it's not already positioned */
+    z-index: 2;
+}
+
+/* Adjust the tooltip positioning */
+.flaggedText {
+    display: none;
+    position: absolute;
+    background-color: #6CA5FC;
+    z-index: 1;
+    padding: 0.5rem;
+    top: 110%; /* Adjust this if needed */
+    right: 0; /* Adjust this if needed */
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #FFFFFF;
+    max-width: 200px; /* Adjust this based on your container's size */
+    word-wrap: break-word;
+}
+
+/* Tooltip arrow */
+.icon .flaggedText::after {
+    content: " ";
+    position: absolute;
+    left: 2.5rem;
+    top: -0.5rem;
+    transform: translateX(-50%) rotate(180deg);
+    margin-left: 1rem;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #6CA5FC transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.icon:hover .flaggedText {
+    display: block;
+}
