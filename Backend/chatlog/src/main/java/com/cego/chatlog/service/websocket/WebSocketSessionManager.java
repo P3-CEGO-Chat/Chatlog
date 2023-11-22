@@ -1,4 +1,4 @@
-package com.cego.chatlog.service;
+package com.cego.chatlog.service.websocket;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;

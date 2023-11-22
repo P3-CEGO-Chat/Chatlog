@@ -1,4 +1,4 @@
-package com.cego.chatlog.config;
+package com.cego.chatlog.controller.websocket;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.util.HtmlUtils;
 
-import com.cego.chatlog.service.WebSocketSessionManager;
+import com.cego.chatlog.service.websocket.WebSocketSessionManager;
 
 public class serverWebSocketHandler extends TextWebSocketHandler {
     private static final Logger logger = LoggerFactory.getLogger(serverWebSocketHandler.class);

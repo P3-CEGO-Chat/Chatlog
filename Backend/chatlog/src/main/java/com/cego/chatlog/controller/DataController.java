@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cego.chatlog.service.WebSocketSessionManager;
+import com.cego.chatlog.service.websocket.WebSocketSessionManager;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000")

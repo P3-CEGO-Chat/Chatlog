@@ -6,6 +6,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import com.cego.chatlog.controller.websocket.serverWebSocketHandler;
+
 @Configuration
 @EnableWebSocket
 public class WebSocketconfig implements WebSocketConfigurer {
