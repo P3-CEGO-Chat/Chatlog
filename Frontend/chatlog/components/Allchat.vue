@@ -25,10 +25,13 @@ export default {
       HighestMessageId: 0,
       title: "Live Chat",
     };
-  },
-
+  },  
+ 
   async mounted() {
-    const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+
+    await this.fetchHighestId();
+
+    const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
       customerId: item[1],
@@ -37,9 +40,7 @@ export default {
       isFlagged: item[4],
       ogUsername: item[5],
     }));
-
-    this.HighestMessageId = this.messages[this.messages.length - 1].id;
-    console.log(this.HighestMessageId);
+    
     this.originalPageCounter = this.currentPage;
 
     this.$nextTick(() => {
@@ -110,7 +111,7 @@ export default {
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
         // Fetch more messages
         this.currentPage++;
-        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
           customerId: item[1],
@@ -142,7 +143,7 @@ export default {
             this.originalPageCounter--;
             
             
-            const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}`);
+            const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}-${this.HighestMessageId}`);
             const prevMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
               id: item[0],
               customerId: item[1],
@@ -165,10 +166,11 @@ export default {
     },
 
     async buttonClear() {
+      await this.fetchHighestId();
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
-      const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}`);
+      const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
       this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],
@@ -184,6 +186,7 @@ export default {
     },
 
     async findMessage() {
+      await this.fetchHighestId();
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
@@ -244,6 +247,15 @@ export default {
         if (scrollBar) {
           scrollBar.scrollTop = messageElement[0].offsetTop - scrollBar.offsetTop;
         }
+      }
+    },
+
+    async fetchHighestId() {
+      try {
+        const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
+        this.HighestMessageId = Number(data.value);
+      } catch (error) {
+        console.error('Error fetching number:', error);
       }
     }
   }
