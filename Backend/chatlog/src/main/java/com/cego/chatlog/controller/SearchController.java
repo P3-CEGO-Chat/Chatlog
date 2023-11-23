@@ -1,6 +1,5 @@
 package com.cego.chatlog.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ public class SearchController {
     @GetMapping("/")
     public @ResponseBody String getSearch(@RequestParam(value = "search") String search) {
         List<Object[]> messages = messageRepository.findSearch(search); //SQL Search to retrieve the messages
-        for (Object[] message : messages) {
-            System.out.println(Arrays.toString(message)); //Just a check to see if it receives the wanted data.
-        }
 		//Converting it to JSON, for easier use later.
         String json = convertObjectToJSON(messages);
         return json;

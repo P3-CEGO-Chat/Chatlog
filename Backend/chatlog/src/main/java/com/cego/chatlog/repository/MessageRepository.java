@@ -16,18 +16,19 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     @Query(value = "SELECT max(id) FROM chatlog.message", nativeQuery = true)
     Integer findMaxMessageId();
-
-    default int getEndId(int pageId) {
-        Integer maxMessageId = findMaxMessageId();
+    
+    
+    default int getEndId(int pageId, int maxMessageId) {
         return Math.max(1, maxMessageId - (pageId - 1) * 25);
 
     }
-    default int getStartId(int pageId) {
-        Integer maxMessageId = findMaxMessageId();
+    default int getStartId(int pageId, int maxMessageId) {
         return maxMessageId - (pageId - 1) * 25 - 24;
     }
 
     //public List<Object[]> findSearch(@Param("search") List<Object[]> search);
+    @Query("SELECT max(m.id) FROM Message m")
+    Integer findHighestMessageId();
     
     //SQL Search to find all messages containing a specific keyword.
     @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.message_text LIKE %:keyword% ORDER BY chatlog.message.id", nativeQuery = true)

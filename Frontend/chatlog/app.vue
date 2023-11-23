@@ -2,10 +2,10 @@
   <div class="layout">
     <div>
       <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeArray="updateDateTimeArray" />
-      <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray"/>
+      <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray" @updateMessageId="updateMessageId"/>
     </div>
     <div>
-      <Allchat>
+      <Allchat :messageId="messageId">
         ikke dav
       </Allchat>
     </div>
@@ -28,6 +28,7 @@ export default {
     return {
       keywordArray: Array<{ word: string, isUser: boolean }>(),
       dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>()
+      messageId: Number,
     }
   },
   methods: {
@@ -38,6 +39,10 @@ export default {
     updateDateTimeArray(newDateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>) {
       this.dateTimeArray = newDateTimeArray;
       console.log('Received updateDateTimeArray:', this.dateTimeArray);
+    },
+    updateMessageId(newMessageId: NumberConstructor) {
+      this.messageId = newMessageId;
+      console.log('Received updateMessageId:', this.messageId);
     }
   },
 };

@@ -68,9 +68,8 @@ export default {
     detectSpace() {
       if (this.searchKeyword.includes(" ")) {
         // Remove all whitespace from the string
-        const wordWithoutSpace = this.searchKeyword.replace(/\s/g, "");
-        if (wordWithoutSpace.length > 0) {
-          console.log(wordWithoutSpace, wordWithoutSpace.length);
+        this.searchKeyword = this.searchKeyword.replace(/\s/g, "");
+        if (this.searchKeyword.length > 0) {
           this.onEnter();
         }
       }

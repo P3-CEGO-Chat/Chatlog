@@ -28,7 +28,11 @@ export default{
             dateTimeTo: "",
         };
     },
-    methods: {},
+    methods: {
+        sendMessageId(messageId: Number) {
+            this.$emit("updateMessageId", messageId);
+        },
+    },
     props: {
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean }[]>,
@@ -60,9 +64,7 @@ export default{
                                 dateTimeTo: null,
                             }
                         });
-                        
                         const jsonData: any = data.value as Message[];
-
                         this.messages = jsonData.map((item: any[]): Message => ({
                             id: item[0],
                             customerId: item[1],
@@ -102,8 +104,8 @@ export default{
                         const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                             query: {
                                 keywords: this.keywordArray.map(item => item.word).join(','),
-                                dateTimeFrom: null,
-                                dateTimeTo: null,
+                                dateTimeFrom: "",
+                                dateTimeTo: "",
                                 username: "",
                             }
                         });
@@ -111,7 +113,6 @@ export default{
 
 
                         const jsonData: any = data.value as Message[];
-
                         this.messages = jsonData.map((item: any[]): Message => ({
                             id: item[0],
                             customerId: item[1],
@@ -135,7 +136,6 @@ export default{
                     
                      
                 }
-                console.log("messages:", this.messages);
             } else {
                 this.messages = [];
             }
@@ -179,7 +179,7 @@ export default{
                 Viser resultat for: "{{ keywordArray.map(keyword => keyword.word).join(', ')}}"
             </div>
             <div class="scrollBar">
-                <div class="searchedMessage" v-for="(message) in messages" :key="message.id"> 
+                <div class="searchedMessage" v-for="(message) in messages" :key="message.id" @click="sendMessageId(message.id)"> 
                     <div class="messagesender">
                         {{ message.username }}:
                     </div>
@@ -189,7 +189,25 @@ export default{
                     <div class="dateTime">
                         {{ new Date(message.dateTime).toLocaleString()  }}
                     </div>
-                    <span>Customer Id: {{ message.customerId }}, Original Username: {{ message.ogUsername }}</span>
+
+                    <div v-if="message.isFlagged" class="flagged">
+                        
+                        <div class="icon">
+                        <Icon name="material-symbols:warning-outline-rounded" class="icon"/>
+
+                            <div class="flaggedText">
+                                Flagged reason
+                            </div>
+                        </div>
+                        
+
+
+                    </div>
+                    
+                    <!-- {message.isFlagged ? <div class="flagged">
+                        {{ message.isFlagged ? "Flagged" : "" }}
+                    </div>} -->
+                    <span>Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>
