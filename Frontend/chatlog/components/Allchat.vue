@@ -24,7 +24,6 @@ export default {
       initialLoad: true,
       HighestMessageId: 0,
       title: "Live Chat",
-      ChatLive: true,
     };
   },  
  
@@ -56,15 +55,13 @@ export default {
     }
 
     socket.onmessage = (event) => {
-      if (this.ChatLive === true) {
       console.log(`[message] Data received from server: ${event.data}`);
       const parsedData = JSON.parse(event.data);
       if (parsedData.event === "newMessage") {
-          console.log("Received new message event");
+        console.log("Received new message event");
         console.log(parsedData.data);
 
         // Create a new message object from parsedData.data
-
         const newMessage = {
             id: parsedData.data.id,
             customerId: parsedData.data.customerId,
@@ -73,6 +70,7 @@ export default {
             isFlagged: parsedData.data.isFlagged,
             ogUsername: parsedData.data.ogusername
         };
+
         // Prepend the new message to the messages array
         this.messages = [...this.messages, newMessage];
 
@@ -80,7 +78,6 @@ export default {
           this.scrollTobottom();
         });
       }
-    }
 
     }
 
@@ -100,7 +97,7 @@ export default {
 
   watch: {
     async messageId() {
-      this.findMessage(); 
+      this.findMessage();
     },
   },
 
@@ -109,10 +106,9 @@ export default {
       const target = event.target as Element;
       const scrollTopBeforeLoad = target.scrollTop;
       const scrollHeightBeforeLoad = target.scrollHeight;
-      const temp = Math.ceil(this.HighestMessageId/25);
 
       // Check if the user has scrolled to the top of the scrollbar
-      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
+      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
         // Fetch more messages
         this.currentPage++;
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
@@ -156,6 +152,8 @@ export default {
               isFlagged: item[4],
               ogUsername: item[5],
             }));
+          
+
             
             this.messages = this.messages.concat(prevMessages);
             console.log(this.messages);
@@ -169,7 +167,6 @@ export default {
 
     async buttonClear() {
       await this.fetchHighestId();
-      this.ChatLive = true;
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
@@ -189,7 +186,6 @@ export default {
     },
 
     async findMessage() {
-      this.ChatLive = false;
       await this.fetchHighestId();
       this.initialLoad = true;
       //find a specific message and update it
