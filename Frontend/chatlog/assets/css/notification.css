@@ -1,0 +1,11 @@
+.notification {
+    position: absolute;
+    z-index: 3;
+    bottom: 2%;
+    right: 2%;
+    background-color: aqua;
+    border-radius: 5px;
+    padding: 0.5rem;
+    display: flex;
+    visibility: show;
+}

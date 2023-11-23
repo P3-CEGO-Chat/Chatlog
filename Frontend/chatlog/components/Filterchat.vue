@@ -207,5 +207,5 @@ export default{
             </div>
         </div>
     </div>
-
+    <Notification icon="/Tick.svg" notificationText="CustomerId copied" />
 </template>
