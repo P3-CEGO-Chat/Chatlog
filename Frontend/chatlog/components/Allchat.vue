@@ -20,22 +20,15 @@ export default {
       currentPage: 1,
       originalPageCounter: 1,
       initialLoad: true,
-      HighestMessageId: 156,
+      HighestMessageId: 0,
       title: "Live Chat",
     };
-  },
-  async created()
-
-  
+  },  
  
   async mounted() {
-    
-    const highestMessageIdResponse = await useFetch("http://localhost:8080/messages/find-highest-id");
-    console.log(highestMessageIdResponse);
-    this.HighestMessageId = Number(highestMessageIdResponse.data);
-    console.log(this.HighestMessageId);
 
-  
+    await this.fetchHighestId();
+
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
@@ -45,9 +38,6 @@ export default {
       isFlagged: item[4],
       ogUsername: item[5],
     }));
-    
-    this.HighestMessageId = this.messages[this.messages.length - 1].id;
-    console.log(this.HighestMessageId);
     
     this.originalPageCounter = this.currentPage;
 
@@ -135,6 +125,7 @@ export default {
     },
 
     async buttonClear() {
+      await this.fetchHighestId();
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
@@ -154,6 +145,7 @@ export default {
     },
 
     async findMessage() {
+      await this.fetchHighestId();
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
@@ -214,6 +206,15 @@ export default {
         if (scrollBar) {
           scrollBar.scrollTop = messageElement[0].offsetTop - scrollBar.offsetTop;
         }
+      }
+    },
+
+    async fetchHighestId() {
+      try {
+        const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
+        this.HighestMessageId = Number(data.value);
+      } catch (error) {
+        console.error('Error fetching number:', error);
       }
     }
   }
