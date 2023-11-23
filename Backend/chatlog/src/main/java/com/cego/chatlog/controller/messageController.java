@@ -1,5 +1,6 @@
 package com.cego.chatlog.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.CustomerService;
+import com.cego.chatlog.service.websocket.WebSocketSessionManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,10 +28,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MessageController {
 
     @Autowired 
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
   
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
+
+    @Autowired
+    private WebSocketSessionManager sessionManager;
 
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
@@ -57,32 +62,46 @@ public class MessageController {
             return null;
         } 
     }
+
+    // Overload for a single object
+    private String convertObjectToJSON(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            // Log the error and handle it appropriately
+            return null;
+        }
+    }
   
     //Api to post the data that we receive into the database.
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataCustomerMessage) {
-        //user.setUserId(user.getCustomerId());
-        /* User user = new User(); */    
+        try {
+            //Creating a user for the database, because the database stores both a user and a message seperately
+            customerService.createUser(dataCustomerMessage);
 
-        //Creating a user for the database, because the database stores both a user and a message seperately
-        customerService.createUser(dataCustomerMessage);
+            /* user.setCustomerId(dataUserMessage.getCustomerId());
+            user.setUsername(dataUserMessage.getUsername());
+            user.setUserId(dataUserMessage.getCustomerId()); */
+            
+            //Creating the message for the database.
+            Message message = new Message();
+            message.setCustomerId(dataCustomerMessage.getCustomerId());
+            message.setMessageText(dataCustomerMessage.getMessage());
+            message.setDateTime(dataCustomerMessage.getDateTime());
+            message.setIsFlagged(false);
+            message.setOGUsername(dataCustomerMessage.getUsername());
 
-        /* user.setCustomerId(dataUserMessage.getCustomerId());
-        user.setUsername(dataUserMessage.getUsername());
-        user.setUserId(dataUserMessage.getCustomerId()); */
-        
-        //Creating the message for the database.
-        Message message = new Message();
-        message.setCustomerId(dataCustomerMessage.getCustomerId());
-        message.setMessageText(dataCustomerMessage.getMessage());
-        message.setDateTime(dataCustomerMessage.getDateTime());
-        message.setIsFlagged(false);
-        message.setOGUsername(dataCustomerMessage.getUsername());
+            String json = convertObjectToJSON(message);
+            
 
-
-        /* userRepository.save(user); */
-        messageRepository.save(message);
-        return "Saved";
+            sessionManager.emitEvent("newMessage", json);
+            messageRepository.save(message);
+            return "Saved and message sent";
+        } catch (IOException error) {
+            return "Error saving and sending message";
+        }
     }
     @GetMapping("find-highest-id")
     public ResponseEntity<String> getHighestId(){
