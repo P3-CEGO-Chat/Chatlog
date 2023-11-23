@@ -30,7 +30,6 @@ export default {
   async mounted() {
 
     await this.fetchHighestId();
-
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
@@ -158,8 +157,6 @@ export default {
             this.messages = this.messages.concat(prevMessages);
             console.log(this.messages);
             }
-          
-          
         }
         this.initialLoad = false;
       });

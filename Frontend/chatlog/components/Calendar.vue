@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Datepicker v-model="date" 
+    <Datepicker 
+    v-model="date" 
     locale="dk" 
     cancelText="Ryd" 
     selectText="Vælg"
@@ -26,24 +27,59 @@
 </template>
   
 
-  <script setup lang="ts">
-    import { ref, onMounted  } from 'vue';
-    import Datepicker from '@vuepic/vue-datepicker';
+  <script lang="ts">
+    import { ref/*, onMounted*/ } from 'vue';
     import '@vuepic/vue-datepicker/dist/main.css';
     import type { DatePickerInstance } from '@vuepic/vue-datepicker';
    
 
-
-
+    export default {
+      data() {
+        return {
+          date: ref(),
+          datepickerRef: ref<DatePickerInstance>(null),
+          isOpen: false,
+        };
+      },
+      methods: {
+        sendDateTime(startDateISO: string, endDateISO: string) {
+          this.$emit("updateDateTimeArray", [startDateISO, endDateISO]);
+          //console.log(this.dateTimeArray);
+       },
+        onOpen() {
+          this.isOpen = true;
+        },
+        onClose() {
+          this.isOpen = false;
+        },
+       
+       },
+       watch: { 
+        date(newDate) {
+          if (newDate[1] === undefined || newDate[1] === null) {
+            newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate());
+          }
+      
+          if (newDate[0].getTime() === newDate[1].getTime()) {
+            // If the start and end dates are the same, set the end date to be the start date plus some time interval
+            newDate[1] = new Date(newDate[0].getTime() + 1000 * 60 * 60 * 24); // Plus 24 hours
+          }
+          
+          
+          const startDateISO = newDate[0].toISOString();
+          const endDateISO = newDate[1].toISOString();    
+          console.log(`Start Date: ${startDateISO}, End Date: ${endDateISO}`);
+          this.sendDateTime(startDateISO, endDateISO);
+        },
+       },
+       
+     }
+    /*
     const date = ref();
     const datepickerRef = ref<DatePickerInstance>(null);
     let isOpen = false;
 
-    onMounted(() => {
-      const startDate = new Date();
-      const endDate = new Date(new Date().setDate(startDate.getDate() - 7));
-      date.value = [endDate, startDate];
-    });
+    
 
     const onOpen = () => {
       isOpen = true;
@@ -63,9 +99,35 @@
       newDate[1] = new Date(newDate[0].getTime() + 1000 * 60 * 60 * 24); // Plus 24 hours
     }
     
-    console.log(newDate);
-  });
+    
+    const startDateISO = newDate[0].toISOString();
+    const endDateISO = newDate[1].toISOString();    
+    console.log(`Start Date: ${startDateISO}, End Date: ${endDateISO}`);
+    let dateTimeArray = [startDateISO, endDateISO];
+    console.log("here", dateTimeArray);
+    this.$emit("updateDateTimeArray", dateTimeArray);
 
+    
+    
+
+
+  });*/
+ 
+
+</script>
+
+<script setup lang="ts">
+
+    import Datepicker from '@vuepic/vue-datepicker';
+    
+/*
+
+    onMounted(() => {
+      const startDate = new Date();
+      const endDate = new Date(new Date().setDate(startDate.getDate() - 7));
+      date.value = [endDate, startDate];
+    });
+    */
 </script>
 
 <style scoped>

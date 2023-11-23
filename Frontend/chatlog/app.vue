@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
     <div>
-      <Searchbar @updateKeywordArray="updateKeywordArray" />
-      <Filterchat :keywordArray="keywordArray" @updateMessageId="updateMessageId" />
+      <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeArray="updateDateTimeArray" />
+      <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray" @updateMessageId="updateMessageId"/>
     </div>
     <div>
       <Allchat :messageId="messageId">
@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       keywordArray: Array<{ word: string, isUser: boolean }>(),
+      dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>()
       messageId: Number,
     }
   },
@@ -34,6 +35,10 @@ export default {
     updateKeywordArray(newKeywordArray: Array<{ word: string, isUser: boolean }>) {
       this.keywordArray = newKeywordArray;
       console.log('Received updateKeywordArray:', this.keywordArray);
+    },
+    updateDateTimeArray(newDateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>) {
+      this.dateTimeArray = newDateTimeArray;
+      console.log('Received updateDateTimeArray:', this.dateTimeArray);
     },
     updateMessageId(newMessageId: NumberConstructor) {
       this.messageId = newMessageId;

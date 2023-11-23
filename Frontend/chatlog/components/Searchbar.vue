@@ -13,7 +13,8 @@ export default {
       wordObject: {word: "", isUser: false},
       showInfoBox: false,
       infoBoxLeft: '0px',
-      showCalendar: true
+      showCalendar: true,
+      dateTimeArray: Array<{startDateISO: string, endDateISO: string}>() 
     };
   },
   computed: {
@@ -72,7 +73,13 @@ export default {
           this.onEnter();
         }
       }
+    },
+    updateDateTimeArray(newDateTimeArray: Array<{startDateISO: string, endDateISO: string}>) {
+      this.dateTimeArray = newDateTimeArray;
+      console.log('Received updateDateTimeArray:', this.dateTimeArray);
+      this.$emit("updateDateTimeArray", this.dateTimeArray);
     }
+    
   },
 };
 </script>
@@ -107,7 +114,8 @@ export default {
          
   </div>
     <div v-if="showCalendar" class="calendar">
-           <Calendar />
+           <Calendar @updateDateTimeArray= "updateDateTimeArray" />
+          
     </div>
   </div>
   
