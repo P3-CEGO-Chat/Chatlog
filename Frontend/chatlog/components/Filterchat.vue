@@ -72,7 +72,7 @@ export default{
                             ogUsername: item[5],
                             username: item[6],
                         }));
-                    } /*else if (this.keywordArray.length == 0) {
+                    } /* else if (this.keywordArray.length == 0) {
                         const dateTimeFrom = this.dateTimeArray[0].dateTimeFrom;
                         const dateTimeTo =  this.dateTimeArray[1].dateTimeTo;
                         console.log("filter", this.dateTimeArray);
@@ -95,7 +95,7 @@ export default{
                             ogUsername: item[5],
                             username: item[6],
                         }));
-                    }*/  //else statement med null
+                    } */ //else statement med null
 
                 } else {
                     if (this.dateTimeArray.length == 0) {
@@ -142,16 +142,12 @@ export default{
         },
         dateTimeArray: {
         handler: async function(newDateTimeArray, oldDateTimeArray) {
-            console.log("Hello World");
-            const dateTimeFrom = this.dateTimeArray[0].dateTimeFrom;
-            const dateTimeTo =  this.dateTimeArray[1].dateTimeTo;
-            console.log("filter", this.dateTimeArray);
+            console.log("filterChanged", newDateTimeArray[0]);
             const { data } = await useFetch('http://localhost:8080/search/datetime', {
                 query: {
-                    dateTimeFrom: this.dateTimeArray[0].dateTimeFrom,
-                    dateTimeTo: this.dateTimeArray[1].dateTimeTo,
+                    dateTimeFrom: newDateTimeArray[0],
+                    dateTimeTo: newDateTimeArray[1],
                 }
-                
             });
             console.log(this.messages)
             const jsonData: any = data.value as Message[];

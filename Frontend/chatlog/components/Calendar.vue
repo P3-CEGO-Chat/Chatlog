@@ -72,11 +72,7 @@
           this.sendDateTime(startDateISO, endDateISO);
         },
        },
-       mounted() {
-        const startDate = new Date();
-        const endDate = new Date(new Date().setDate(startDate.getDate() - 7));
-        this.date = [endDate, startDate];
-       },
+       
      }
     /*
     const date = ref();
