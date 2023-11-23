@@ -270,6 +270,14 @@ export default {
             <div class="CustomerId">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
             <div class="Time">{{ new Date(message.dateTime).toLocaleString() }}</div>
+            <div v-if="message.isFlagged" class="flagged"> 
+                <div class="icon">
+                <Icon name="material-symbols:warning-outline-rounded" class="icon"/>
+                    <div class="flaggedText">
+                        Flagged reason
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
