@@ -24,6 +24,7 @@ export default {
       initialLoad: true,
       HighestMessageId: 0,
       title: "Live Chat",
+      chatLive: true,
     };
   },  
  
@@ -54,6 +55,7 @@ export default {
     }
 
     socket.onmessage = (event) => {
+      if (this.chatLive === true) {
       console.log(`[message] Data received from server: ${event.data}`);
       const parsedData = JSON.parse(event.data);
       if (parsedData.event === "newMessage") {
@@ -77,7 +79,7 @@ export default {
           this.scrollTobottom();
         });
       }
-
+    }
     }
 
     socket.onerror = function(error) {
@@ -96,7 +98,9 @@ export default {
 
   watch: {
     async messageId() {
-      this.findMessage();
+      if (this.messageId != 0) {
+        this.findMessage();
+      }
     },
   },
 
@@ -105,11 +109,13 @@ export default {
       const target = event.target as Element;
       const scrollTopBeforeLoad = target.scrollTop;
       const scrollHeightBeforeLoad = target.scrollHeight;
+      const temp = Math.ceil(this.HighestMessageId/25);
 
       // Check if the user has scrolled to the top of the scrollbar
-      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
+      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
         // Fetch more messages
         this.currentPage++;
+        console.log(this.HighestMessageId);
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
@@ -167,6 +173,7 @@ export default {
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
+      this.chatLive = true;
       const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
       this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -176,22 +183,35 @@ export default {
         isFlagged: item[4],
         ogUsername: item[5],
       }));
+      this.$emit('resetMessageId', 0);
+
       this.$nextTick(() => {
-        this.scrollTobottom();
+        this.scrollTobottom(); 
         this.title = `Live Chat`;
       });
+      
     },
 
     async findMessage() {
+      this.chatLive = false;
       await this.fetchHighestId();
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
       this.findTheCurrentPage();
       if (this.currentPage === 1) {
-        this.buttonClear();
-        return;
+        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
+        const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
+          id: item[0],
+          customerId: item[1],
+          text: item[2],
+          dateTime: item[3],
+          isFlagged: item[4],
+          ogUsername: item[5],
+        }));
+        this.messages = newMessages;
       }
+      else{
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -202,7 +222,8 @@ export default {
         ogUsername: item[5],
       }));
       this.messages = messageIdInterval;
-      this.title = `Chat historie`;
+    }
+      this.title = `Chat historik`;
       console.log(this.messages);
       this.$nextTick(() => {
         this.scrollToMessage();
@@ -225,13 +246,6 @@ export default {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
         scrollBar.scrollTop = scrollBar.scrollHeight;
-      }
-    },
-
-    scrollToMiddle() {
-      const scrollBar = this.$el.querySelector('.scrollBar');
-      if (scrollBar) {
-        scrollBar.scrollTop = (scrollBar.scrollHeight - scrollBar.clientHeight) / 2;
       }
     },
 

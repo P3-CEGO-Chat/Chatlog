@@ -39,8 +39,8 @@ public class MessageController {
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
         try {
-            int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
-            int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
+            int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId))-1;
+            int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId))-1;
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
             
@@ -118,10 +118,14 @@ public class MessageController {
             int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
             int endId = startId + 24;
 
+        
             if(startId < 24){
                 startId = 1;
                 endId = highestId%25+25;
             }
+            
+            System.out.println(startId);
+            System.out.println(endId);
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 
