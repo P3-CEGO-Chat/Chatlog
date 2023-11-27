@@ -98,7 +98,9 @@ export default {
 
   watch: {
     async messageId() {
-      this.findMessage();
+      if (this.messageId != 0) {
+        this.findMessage();
+      }
     },
   },
 
@@ -181,10 +183,13 @@ export default {
         isFlagged: item[4],
         ogUsername: item[5],
       }));
+      this.$emit('resetMessageId', 0);
+
       this.$nextTick(() => {
-        this.scrollTobottom();
+        this.scrollTobottom(); 
         this.title = `Live Chat`;
       });
+      
     },
 
     async findMessage() {
@@ -228,13 +233,6 @@ export default {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
         scrollBar.scrollTop = scrollBar.scrollHeight;
-      }
-    },
-
-    scrollToMiddle() {
-      const scrollBar = this.$el.querySelector('.scrollBar');
-      if (scrollBar) {
-        scrollBar.scrollTop = (scrollBar.scrollHeight - scrollBar.clientHeight) / 2;
       }
     },
 

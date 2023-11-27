@@ -5,7 +5,8 @@
       <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray" @updateMessageId="updateMessageId"/>
     </div>
     <div>
-      <Allchat :messageId="messageId">
+      
+      <Allchat :messageId="messageId" @resetMessageId="resetMessageId">
         ikke dav
       </Allchat>
     </div>
@@ -17,18 +18,20 @@
 import('~/assets/css/main.css')
 import Searchbar from './components/Searchbar.vue';
 import Filterchat from './components/Filterchat.vue';
+import Allchat from './components/Allchat.vue';
 
 export default {
   name: 'App',
   components: {
     Searchbar,
-    Filterchat
+    Filterchat,
+    Allchat    
   },
   data() {
     return {
       keywordArray: Array<{ word: string, isUser: boolean }>(),
       dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>(),
-      messageId: Number,
+      messageId: 0 as number,
     }
   },
   methods: {
@@ -40,9 +43,13 @@ export default {
       this.dateTimeArray = newDateTimeArray;
       console.log('Received updateDateTimeArray:', this.dateTimeArray);
     },
-    updateMessageId(newMessageId: NumberConstructor) {
-      this.messageId = newMessageId;
+    updateMessageId(newMessageId : number) {
+      this.messageId = newMessageId as number;
       console.log('Received updateMessageId:', this.messageId);
+    },
+    resetMessageId() {
+      this.messageId = 0;
+      console.log('Received resetMessageId:', this.messageId);
     }
   },
 };
