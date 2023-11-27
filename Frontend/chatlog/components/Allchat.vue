@@ -199,7 +199,19 @@ export default {
       //find a specific message and update it
       this.messages = [];
       this.findTheCurrentPage();
-      
+      if (this.currentPage === 1) {
+        const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
+        const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
+          id: item[0],
+          customerId: item[1],
+          text: item[2],
+          dateTime: item[3],
+          isFlagged: item[4],
+          ogUsername: item[5],
+        }));
+        this.messages = newMessages;
+      }
+      else{
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -210,6 +222,7 @@ export default {
         ogUsername: item[5],
       }));
       this.messages = messageIdInterval;
+    }
       this.title = `Chat historik`;
       console.log(this.messages);
       this.$nextTick(() => {
