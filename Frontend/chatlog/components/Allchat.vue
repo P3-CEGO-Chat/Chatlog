@@ -24,6 +24,7 @@ export default {
       initialLoad: true,
       HighestMessageId: 0,
       title: "Live Chat",
+      chatLive: true,
     };
   },  
  
@@ -54,6 +55,7 @@ export default {
     }
 
     socket.onmessage = (event) => {
+      if (this.chatLive === true) {
       console.log(`[message] Data received from server: ${event.data}`);
       const parsedData = JSON.parse(event.data);
       if (parsedData.event === "newMessage") {
@@ -77,7 +79,7 @@ export default {
           this.scrollTobottom();
         });
       }
-
+    }
     }
 
     socket.onerror = function(error) {
@@ -105,9 +107,11 @@ export default {
       const target = event.target as Element;
       const scrollTopBeforeLoad = target.scrollTop;
       const scrollHeightBeforeLoad = target.scrollHeight;
+      const temp = Math.ceil(this.HighestMessageId/25);
 
       // Check if the user has scrolled to the top of the scrollbar
-      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0) {
+      if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
+        
         // Fetch more messages
         this.currentPage++;
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
@@ -167,6 +171,7 @@ export default {
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
+      this.chatLive = true;
       const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
       this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -183,15 +188,16 @@ export default {
     },
 
     async findMessage() {
+      this.chatLive = false;
       await this.fetchHighestId();
       this.initialLoad = true;
       //find a specific message and update it
       this.messages = [];
       this.findTheCurrentPage();
-      if (this.currentPage === 1) {
-        this.buttonClear();
-        return;
-      }
+      
+      
+      
+      
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
@@ -202,7 +208,7 @@ export default {
         ogUsername: item[5],
       }));
       this.messages = messageIdInterval;
-      this.title = `Chat historie`;
+      this.title = `Chat historik`;
       console.log(this.messages);
       this.$nextTick(() => {
         this.scrollToMessage();

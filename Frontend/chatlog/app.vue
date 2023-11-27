@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       keywordArray: Array<{ word: string, isUser: boolean }>(),
-      dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>()
+      dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>(),
       messageId: Number,
     }
   },

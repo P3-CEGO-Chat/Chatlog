@@ -42,7 +42,7 @@ public class MessageRepoImpl implements MessageRepoCustom {
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 fullTextSearch.append(" AND chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
             }
-            
+            System.out.println("hello" + fullTextSearch.toString());
             String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
 
             Query query = entityManager.createNativeQuery(finalQuery, Object[].class);
