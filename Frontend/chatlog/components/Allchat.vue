@@ -4,6 +4,7 @@
 
 <script lang="ts">
 
+import { da } from 'date-fns/locale';
 import io from 'socket.io-client';
 
 interface Message {
@@ -249,8 +250,8 @@ export default {
 
     async fetchHighestId() {
       try {
-        const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
-        this.HighestMessageId = Number(data.value);
+        const data = await $fetch(`http://localhost:8080/messages/find-highest-id`)
+        this.HighestMessageId = Number(data);
       } catch (error) {
         console.error('Error fetching number:', error);
       }
