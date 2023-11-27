@@ -199,7 +199,7 @@ export default {
       //find a specific message and update it
       this.messages = [];
       this.findTheCurrentPage();
-
+      
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
