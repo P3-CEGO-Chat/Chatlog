@@ -36,8 +36,8 @@ export default {
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
       customerId: item[1],
-      text: item[3],
-      dateTime: item[2],
+      text: item[2],
+      dateTime: item[3],
       isFlagged: item[4],
       ogUsername: item[5],
     }));
@@ -119,8 +119,8 @@ export default {
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
           customerId: item[1],
-          text: item[3],
-          dateTime: item[2],
+          text: item[2],
+          dateTime: item[3],
           isFlagged: item[4],
           ogUsername: item[5],
         }));
@@ -151,8 +151,8 @@ export default {
             const prevMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
               id: item[0],
               customerId: item[1],
-              text: item[3],
-              dateTime: item[2],
+              text: item[2],
+              dateTime: item[3],
               isFlagged: item[4],
               ogUsername: item[5],
             }));
@@ -177,8 +177,8 @@ export default {
       this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],
-        text: item[3],
-        dateTime: item[2],
+        text: item[2],
+        dateTime: item[3],
         isFlagged: item[4],
         ogUsername: item[5],
       }));
@@ -203,8 +203,8 @@ export default {
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],
-        text: item[3],
-        dateTime: item[2],
+        text: item[2],
+        dateTime: item[3],
         isFlagged: item[4],
         ogUsername: item[5],
       }));
