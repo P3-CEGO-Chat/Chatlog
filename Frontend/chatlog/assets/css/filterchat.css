@@ -47,6 +47,7 @@
     visibility: visible;
     transform-origin: 50% 0%;
     animation: in-right 300ms ease 0ms 1 forwards;
+    z-index: 10;
 }
 
 @keyframes in-right {
