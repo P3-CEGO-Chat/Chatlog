@@ -39,8 +39,8 @@ public class MessageController {
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
         try {
-            int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId))-1;
-            int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId))-1;
+            int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
+            int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
     
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
             
@@ -115,14 +115,20 @@ public class MessageController {
         try {
 
             Integer highestId = messageRepository.findHighestMessageId();
-            int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
+            //int endId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
+            //int startId = endId - 24;
+            
+            int temppage = (int) Math.ceil(((double)highestId - Integer.parseInt(messageId) + 1) / 25);
+            int startId = highestId - (temppage*25) + 1;
             int endId = startId + 24;
-
-        
+            
+            System.out.println(temppage);
+            /* 
             if(startId < 24){
                 startId = 1;
                 endId = highestId%25+25;
             }
+            */
             
             System.out.println(startId);
             System.out.println(endId);
