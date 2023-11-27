@@ -111,9 +111,9 @@ export default {
 
       // Check if the user has scrolled to the top of the scrollbar
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
-        
         // Fetch more messages
         this.currentPage++;
+        console.log(this.HighestMessageId);
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
@@ -194,10 +194,7 @@ export default {
       //find a specific message and update it
       this.messages = [];
       this.findTheCurrentPage();
-      
-      
-      
-      
+
       const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
       const messageIdInterval = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
