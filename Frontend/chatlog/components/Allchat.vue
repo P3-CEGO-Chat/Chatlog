@@ -64,7 +64,7 @@ export default {
 
         // Create a new message object from parsedData.data
         const newMessage = {
-            id: parsedData.data.id,
+            id: -1,
             customerId: parsedData.data.customerId,
             text: parsedData.data.messageText,
             dateTime: parsedData.data.dateTime,
@@ -183,7 +183,7 @@ export default {
         isFlagged: item[4],
         ogUsername: item[5],
       }));
-      this.$emit('resetMessageId', 0);
+      this.$emit('resetMessageId');
 
       this.$nextTick(() => {
         this.scrollTobottom(); 
@@ -209,6 +209,7 @@ export default {
           isFlagged: item[4],
           ogUsername: item[5],
         }));
+        console.log(this.currentPage); 
         this.messages = newMessages;
       }
       else{
@@ -235,10 +236,11 @@ export default {
       lowIntervalId = Math.floor(lowIntervalId / 25);
       let NumberOfPages = Math.ceil(this.HighestMessageId / 25);
       this.currentPage = NumberOfPages - lowIntervalId; */
-      this.currentPage = Math.ceil((this.HighestMessageId-this.messageId)/ 25);
+      this.currentPage = Math.ceil((this.HighestMessageId-this.messageId+1)/ 25);
+      
 
       this.originalPageCounter = this.currentPage;
-      
+      console.log(this.messageId);
       console.log(`Current page: ${this.currentPage}`);
     },
 

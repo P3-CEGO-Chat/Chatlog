@@ -50,7 +50,7 @@ export default {
       console.log('Received updateMessageId:', this.messageId);
     },
     resetMessageId() {
-      this.messageId = 0;
+      this.messageId = 0 as number;
       console.log('Received resetMessageId:', this.messageId);
     }
   },
