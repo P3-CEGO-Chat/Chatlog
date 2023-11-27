@@ -13,14 +13,17 @@
                 type: String,
                 default: "Test notifcation text"
             },
+            activated: {
+                type: Boolean,
+                default: false
+            }
         },
-
-
     }
+
 </script>
 
 <template>
-    <div class="notification">
+    <div class="notification" v-if="activated">
         <div class="notification-icon">
             <img :src="icon" alt="notification-icon">
         </div>
