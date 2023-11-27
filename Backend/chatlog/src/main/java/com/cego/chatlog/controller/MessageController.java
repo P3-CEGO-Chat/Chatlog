@@ -118,21 +118,12 @@ public class MessageController {
             int startId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
             int endId = startId + 24;
 
-            //100
-
-            //105 - 129
+        
             if(startId < 24){
                 startId = 1;
                 endId = highestId%25+25;
             }
-            //108
-            // start 108
-            // end 
-            if(startId == highestId){
-                startId = highestId - highestId%25;
-                endId = highestId;
             
-            }
             System.out.println(startId);
             System.out.println(endId);
     
