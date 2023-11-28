@@ -24,27 +24,10 @@ export default {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
             messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
-            dateTimeFrom: "",
-            dateTimeTo: "",
             notiVisible: false,
         };
     },
-    methods: {
-        sendMessageId(messageId: Number) {
-            this.$emit("updateMessageId", messageId);
-        },
 
-        notificationHandler(customerId: String) {
-            this.notiVisible = true;
-            if (this.notiVisible) {
-                console.log("Her" + customerId.toString());
-                navigator.clipboard.writeText(customerId.toString());
-            }
-            setTimeout(() => {
-                this.notiVisible = false;
-            }, 3000);
-        },
-    },
     props: {
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean }[]>,
@@ -77,7 +60,7 @@ export default {
 
     methods: {
         async fetchData() {
-
+            
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
                 console.log("i got here");
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
@@ -107,6 +90,17 @@ export default {
 
         sendMessageId(messageId: Number) {
             this.$emit("updateMessageId", messageId);
+        },
+
+        notificationHandler(customerId: String) {
+            this.notiVisible = true;
+            if (this.notiVisible) {
+                console.log("Her" + customerId.toString());
+                navigator.clipboard.writeText(customerId.toString());
+            }
+            setTimeout(() => {
+                this.notiVisible = false;
+            }, 3000);
         },
     },
 }
