@@ -115,6 +115,7 @@ export default {
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
         // Fetch more messages
         this.currentPage++;
+        this.chatLive = false;
         console.log(this.HighestMessageId);
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
@@ -278,7 +279,7 @@ export default {
 <template>
   <div class="container">
     <div class="messageWindow">
-      <div class="header">{{ title }}<button class="clearButton" @click="buttonClear">Live Chat</button></div>
+      <div class="header">{{ title }}</div>
       <div class="scrollBar" @scroll="checkScroll">
         <div class="messageBox" v-for="message in messages" :key="message.id" :ref="`message-${message.id}`"
           :class="{ 'highlightedMessage': message.id === messageId }">
@@ -296,7 +297,9 @@ export default {
             </div>
           </div>
         </div>
+        
       </div>
+      <button class="clearButton" v-if = "!chatLive" @click="buttonClear">Rul til bunden</button>
     </div>
   </div>
 </template>
