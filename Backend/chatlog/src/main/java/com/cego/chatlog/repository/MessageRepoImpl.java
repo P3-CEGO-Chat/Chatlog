@@ -57,12 +57,15 @@ public class MessageRepoImpl implements MessageRepoCustom {
             return resultList;
 
         } else {
+            Query query = null;
             StringBuilder fullTextSearch2 = new StringBuilder();
+            query = entityManager.createNativeQuery(baseQuery, Object[].class);
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 fullTextSearch2.append("chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
+                String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
+                query = entityManager.createNativeQuery(finalQuery, Object[].class);
             }
-            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
-            Query query = entityManager.createNativeQuery(finalQuery, Object[].class);
+            
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
