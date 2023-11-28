@@ -182,11 +182,13 @@ export default {
       });
     },
 
+    // Find the current page
     findTheCurrentPage() {
       this.currentPage = Math.ceil((this.HighestMessageId-this.messageId+1)/ 25);
       this.originalPageCounter = this.currentPage;
     },
 
+    // Scroll to the bottom of the scrollbar
     scrollTobottom() {
       const scrollBar = this.$el.querySelector('.scrollBar');
       if (scrollBar) {
@@ -194,6 +196,7 @@ export default {
       }
     },
 
+    // Scroll to a specific message
     scrollToMessage() {
       const messageRef = `message-${this.messageId}`;
       const messageElement = this.$refs[messageRef] as HTMLElement[];
@@ -206,6 +209,7 @@ export default {
       }
     },
 
+    // Fetch the highest ID
     async fetchHighestId() {
       try {
         const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
@@ -214,6 +218,7 @@ export default {
       }
     },
 
+    // Parse the fetched messages
     parseMessage(data: any){
       const messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
@@ -255,7 +260,7 @@ export default {
         </div>
       </div>
       <!-- Button to clear chat and scroll to bottom -->
-      <button class="clearButton" v-if = "!chatLive" @click="buttonClear">Rul til bunden</button>
+      <button class="clearButton" v-if = "!chatLive" @click="buttonClear">Se nyeste beskeder</button>
     </div>
   </div>
 </template>
