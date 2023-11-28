@@ -6,6 +6,7 @@
 
 import io from 'socket.io-client';
 
+// Define the structure of a message
 interface Message {
   id: number;
   customerId: string;
@@ -17,21 +18,23 @@ interface Message {
 
 export default {
   data() {
+    // Initialize data properties
     return {
-      messages: <Message[]>[],
-      currentPage: 1,
-      originalPageCounter: 1,
-      initialLoad: true,
-      HighestMessageId: 0,
-      title: "Live Chat",
-      chatLive: true,
+      messages: <Message[]>[], // Array to hold chat messages
+      currentPage: 1, // Current page of chat history
+      originalPageCounter: 1, // Counter for original page
+      initialLoad: true, // Flag for initial load
+      HighestMessageId: 0, // ID of the highest message
+      title: "Live Chat", // Title of the chat
+      chatLive: true, // Flag for live chat
     };
   },  
  
   async mounted() {
-
+    // Fetch the highest ID and messages when the component is mounted
     await this.fetchHighestId();
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
+    // Parse the fetched messages and store them in the messages array
     this.messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
       id: item[0],
       customerId: item[1],
@@ -43,25 +46,22 @@ export default {
     
     this.originalPageCounter = this.currentPage;
 
+     // Scroll to the bottom after the next DOM update
     this.$nextTick(() => {
       this.scrollTobottom();
     });
 
-    // socket connection
+    // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
 
     socket.onopen = function(event) {
-      console.log("[open] Connection established");
     }
 
     socket.onmessage = (event) => {
+      // Handle incoming messages if chat is live
       if (this.chatLive === true) {
-      console.log(`[message] Data received from server: ${event.data}`);
       const parsedData = JSON.parse(event.data);
       if (parsedData.event === "newMessage") {
-        console.log("Received new message event");
-        console.log(parsedData.data);
-
         // Create a new message object from parsedData.data
         const newMessage = {
             id: -1,
@@ -75,6 +75,7 @@ export default {
         // Prepend the new message to the messages array
         this.messages = [...this.messages, newMessage];
 
+        // After the next DOM update, scroll to the bottom
         this.$nextTick(() => {
           this.scrollTobottom();
         });
@@ -82,6 +83,7 @@ export default {
     }
     }
 
+    // Handle WebSocket errors
     socket.onerror = function(error) {
       console.error("Socket encountered error:", error, "Closing socket");
       socket.close();
@@ -89,6 +91,7 @@ export default {
 
   },
 
+  // Define props
   props: {
     messageId: {
       type: Number,
@@ -96,6 +99,7 @@ export default {
     },
   },
 
+  // Watch for changes in messageId
   watch: {
     async messageId() {
       if (this.messageId != 0) {
@@ -105,18 +109,18 @@ export default {
   },
 
   methods: {
+
+    // Check the scroll position
     async checkScroll(event: Event) {
       const target = event.target as Element;
       const scrollTopBeforeLoad = target.scrollTop;
       const scrollHeightBeforeLoad = target.scrollHeight;
       const temp = Math.ceil(this.HighestMessageId/25);
 
-      // Check if the user has scrolled to the top of the scrollbar
+      // If the user has scrolled to the top of the scrollbar, fetch more messages
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
-        // Fetch more messages
         this.currentPage++;
         this.chatLive = false;
-        console.log(this.HighestMessageId);
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         const newMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
           id: item[0],
@@ -127,28 +131,24 @@ export default {
           ogUsername: item[5],
         }));
         this.messages = newMessages.concat(this.messages);
-        console.log(this.messages);
       }
 
 
-      // Check if the user has scrolled to the bottom of the scrollbar
+      // After the next DOM update, check if the user has scrolled to the bottom of the scrollbar
       this.$nextTick(async () => {
         const scrollHeightAfterLoad = target.scrollHeight;
         const scrollHeightChange = scrollHeightAfterLoad - scrollHeightBeforeLoad;
         target.scrollTop = scrollTopBeforeLoad + scrollHeightChange;
 
 
-        // Check if the user has scrolled to the bottom of the scrollbar
+        // If the user has scrolled to the bottom of the scrollbar, fetch previous messages
         if (target.scrollTop + target.clientHeight >= scrollHeightAfterLoad - 1) {
-          
-          
           if (!this.initialLoad && this.originalPageCounter != 1) {
             if (this.originalPageCounter === Math.ceil(this.HighestMessageId / 25 )){
               this.originalPageCounter--;
             }
             this.originalPageCounter--;
-            
-            
+
             const { data } = await useFetch(`http://localhost:8080/messages/${this.originalPageCounter}-${this.HighestMessageId}`);
             const prevMessages = JSON.parse(data.value as string).map((item: any[]): Message => ({
               id: item[0],
@@ -160,15 +160,15 @@ export default {
             }));
           
 
-            
+            // Add the previous messages to the end of the messages array
             this.messages = this.messages.concat(prevMessages);
-            console.log(this.messages);
             }
         }
         this.initialLoad = false;
       });
     },
 
+    // Clear the chat and scroll to the bottom
     async buttonClear() {
       await this.fetchHighestId();
       this.messages = [];
@@ -193,6 +193,7 @@ export default {
       
     },
 
+    // Find a specific message
     async findMessage() {
       this.chatLive = false;
       await this.fetchHighestId();
@@ -210,7 +211,6 @@ export default {
           isFlagged: item[4],
           ogUsername: item[5],
         }));
-        console.log(this.currentPage); 
         this.messages = newMessages;
       }
       else{
@@ -226,23 +226,14 @@ export default {
       this.messages = messageIdInterval;
     }
       this.title = `Chat historik`;
-      console.log(this.messages);
       this.$nextTick(() => {
         this.scrollToMessage();
       });
     },
 
     findTheCurrentPage() {
-      /* let lowIntervalId = -(this.messageId % 25) + this.messageId + 1;
-      lowIntervalId = Math.floor(lowIntervalId / 25);
-      let NumberOfPages = Math.ceil(this.HighestMessageId / 25);
-      this.currentPage = NumberOfPages - lowIntervalId; */
       this.currentPage = Math.ceil((this.HighestMessageId-this.messageId+1)/ 25);
-      
-
       this.originalPageCounter = this.currentPage;
-      console.log(this.messageId);
-      console.log(`Current page: ${this.currentPage}`);
     },
 
     scrollTobottom() {
@@ -269,9 +260,19 @@ export default {
         const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
         this.HighestMessageId = Number(data.value);
       } catch (error) {
-        console.error('Error fetching number:', error);
       }
-    }
+    },
+
+/*     parseMessage(data: any){
+      return JSON.parse(data.value as string).map((item: any[]): Message => ({
+      id: item[0],
+      customerId: item[1],
+      text: item[2],
+      dateTime: item[3],
+      isFlagged: item[4],
+      ogUsername: item[5],
+    }));
+    } */
   }
 };
 </script> 
@@ -280,13 +281,16 @@ export default {
   <div class="container">
     <div class="messageWindow">
       <div class="header">{{ title }}</div>
+      <!-- Scroll event listener to check scroll position -->
       <div class="scrollBar" @scroll="checkScroll">
+        <!-- Loop through messages and display them -->
         <div class="messageBox" v-for="message in messages" :key="message.id" :ref="`message-${message.id}`"
           :class="{ 'highlightedMessage': message.id === messageId }">
           <div class="messageHeader">
             <div class="CustomerId">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
             <div class="Time">{{ new Date(message.dateTime).toLocaleString() }}</div>
+            <!-- Display flagged icon if message is flagged -->
             <div v-if="message.isFlagged" class="flagged"> 
                 <div class="icon">
                 <Icon name="material-symbols:warning-outline-rounded" class="icon"/>
@@ -297,8 +301,8 @@ export default {
             </div>
           </div>
         </div>
-        
       </div>
+      <!-- Button to clear chat and scroll to bottom -->
       <button class="clearButton" v-if = "!chatLive" @click="buttonClear">Rul til bunden</button>
     </div>
   </div>
