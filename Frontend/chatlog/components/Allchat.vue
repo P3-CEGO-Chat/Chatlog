@@ -29,8 +29,8 @@ export default {
       chatLive: true, // Flag for live chat
       newMessages: <Message[]>[], // Array to hold new messages
     };
-  },  
- 
+  },
+
   async mounted() {
     // Fetch the highest ID and messages when the component is mounted
     await this.fetchHighestId();
@@ -38,7 +38,7 @@ export default {
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
     this.originalPageCounter = this.currentPage;
-     // Scroll to the bottom after the next DOM update
+    // Scroll to the bottom after the next DOM update
     this.$nextTick(() => {
       this.scrollTobottom();
     });
@@ -46,37 +46,37 @@ export default {
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
 
-    socket.onopen = function(event) {
+    socket.onopen = function (event) {
     }
 
     socket.onmessage = (event) => {
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
-      const parsedData = JSON.parse(event.data);
-      if (parsedData.event === "newMessage") {
-        // Create a new message object from parsedData.data
-        const newMessage = {
+        const parsedData = JSON.parse(event.data);
+        if (parsedData.event === "newMessage") {
+          // Create a new message object from parsedData.data
+          const newMessage = {
             id: -1,
             customerId: parsedData.data.customerId,
             text: parsedData.data.messageText,
             dateTime: parsedData.data.dateTime,
             isFlagged: parsedData.data.isFlagged,
             ogUsername: parsedData.data.ogusername
-        };
+          };
 
-        // Prepend the new message to the messages array
-        this.messages = [...this.messages, newMessage];
+          // Prepend the new message to the messages array
+          this.messages = [...this.messages, newMessage];
 
-        // After the next DOM update, scroll to the bottom
-        this.$nextTick(() => {
-          this.scrollTobottom();
-        });
+          // After the next DOM update, scroll to the bottom
+          this.$nextTick(() => {
+            this.scrollTobottom();
+          });
+        }
       }
-    }
     }
 
     // Handle WebSocket errors
-    socket.onerror = function(error) {
+    socket.onerror = function (error) {
       console.error("Socket encountered error:", error, "Closing socket");
       socket.close();
     }
@@ -107,7 +107,7 @@ export default {
       const target = event.target as Element;
       const scrollTopBeforeLoad = target.scrollTop;
       const scrollHeightBeforeLoad = target.scrollHeight;
-      const temp = Math.ceil(this.HighestMessageId/25);
+      const temp = Math.ceil(this.HighestMessageId / 25);
 
       // If the user has scrolled to the top of the scrollbar, fetch more messages
       if (target.scrollTop === 0 && target.scrollHeight - target.clientHeight > 0 && this.currentPage != temp) {
@@ -127,7 +127,7 @@ export default {
         // If the user has scrolled to the bottom of the scrollbar, fetch previous messages
         if (target.scrollTop + target.clientHeight >= scrollHeightAfterLoad - 1) {
           if (!this.initialLoad && this.originalPageCounter != 1) {
-            if (this.originalPageCounter === Math.ceil(this.HighestMessageId / 25 )){
+            if (this.originalPageCounter === Math.ceil(this.HighestMessageId / 25)) {
               this.originalPageCounter--;
             }
             this.originalPageCounter--;
@@ -137,7 +137,7 @@ export default {
             // Add the previous messages to the end of the messages array
             this.messages = this.messages.concat(this.newMessages);
 
-            }
+          }
         }
         this.initialLoad = false;
       });
@@ -154,10 +154,10 @@ export default {
       this.messages = this.parseMessage(data);
       this.$emit('resetMessageId');
       this.$nextTick(() => {
-        this.scrollTobottom(); 
+        this.scrollTobottom();
         this.title = `Live Chat`;
       });
-      
+
     },
 
     // Find a specific message
@@ -173,10 +173,10 @@ export default {
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
         this.messages = this.parseMessage(data);
       }
-      else{
+      else {
         const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
         this.messages = this.parseMessage(data);
-    }
+      }
       this.$nextTick(() => {
         this.scrollToMessage();
       });
@@ -184,7 +184,7 @@ export default {
 
     // Find the current page
     findTheCurrentPage() {
-      this.currentPage = Math.ceil((this.HighestMessageId-this.messageId+1)/ 25);
+      this.currentPage = Math.ceil((this.HighestMessageId - this.messageId + 1) / 25);
       this.originalPageCounter = this.currentPage;
     },
 
@@ -219,16 +219,16 @@ export default {
     },
 
     // Parse the fetched messages
-    parseMessage(data: any){
+    parseMessage(data: any) {
       const messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
-      id: item[0],
-      customerId: item[1],
-      text: item[2],
-      dateTime: item[3],
-      isFlagged: item[4],
-      ogUsername: item[5],
-    }));
-    return messages;
+        id: item[0],
+        customerId: item[1],
+        text: item[2],
+        dateTime: item[3],
+        isFlagged: item[4],
+        ogUsername: item[5],
+      }));
+      return messages;
     }
   }
 };
@@ -248,19 +248,19 @@ export default {
             <div class="messageContent">{{ message.text }}</div>
             <div class="Time">{{ new Date(message.dateTime).toLocaleString() }}</div>
             <!-- Display flagged icon if message is flagged -->
-            <div v-if="message.isFlagged" class="flagged"> 
-                <div class="icon">
-                <Icon name="material-symbols:warning-outline-rounded" class="icon"/>
-                    <div class="flaggedText">
-                        Flagged reason
-                    </div>
+            <div v-if="message.isFlagged" class="flagged">
+              <div class="icon">
+                <Icon name="material-symbols:warning-outline-rounded" class="icon" />
+                <div class="flaggedText">
+                  Flagged reason
                 </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <!-- Button to clear chat and scroll to bottom -->
-      <button class="clearButton" v-if = "!chatLive" @click="buttonClear">Se nyeste beskeder</button>
+      <button class="clearButton" v-if="!chatLive" @click="buttonClear">Se nyeste beskeder</button>
     </div>
   </div>
 </template>
