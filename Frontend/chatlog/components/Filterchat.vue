@@ -23,10 +23,28 @@ export default {
         return {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
-            messages: <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
+            messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
+            dateTimeFrom: "",
+            dateTimeTo: "",
+            notiVisible: false,
         };
     },
+    methods: {
+        sendMessageId(messageId: Number) {
+            this.$emit("updateMessageId", messageId);
+        },
 
+        notificationHandler(customerId: String) {
+            this.notiVisible = true;
+            if (this.notiVisible) {
+                console.log("Her" + customerId.toString());
+                navigator.clipboard.writeText(customerId.toString());
+            }
+            setTimeout(() => {
+                this.notiVisible = false;
+            }, 3000);
+        },
+    },
     props: {
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean }[]>,
@@ -124,11 +142,12 @@ export default {
                     </div>
 
                     <!-- {message.isFlagged ? <div class="flagged">
-                            {{ message.isFlagged ? "Flagged" : "" }}
-                        </div>} -->
-                    <span>Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
+                        {{ message.isFlagged ? "Flagged" : "" }}
+                    </div>} -->
+                    <span @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>
     </div>
+    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible"/>
 </template>

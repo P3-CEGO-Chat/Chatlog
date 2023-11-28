@@ -7,11 +7,11 @@ import jakarta.persistence.Id;
 public class Message {
     @Id
     private int id;
-    private String dateTime;
-    private String messageText;
     private String customerId;
-    private String ogUsername;
+    private String messageText;
+    private String dateTime;
     private Boolean isFlagged;
+    private String ogUsername;
 
     public int getId() {
         return this.id;
