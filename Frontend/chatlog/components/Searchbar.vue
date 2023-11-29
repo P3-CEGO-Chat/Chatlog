@@ -37,6 +37,9 @@ export default {
     handleKeydown(event: KeyboardEvent) {
       if (this.searchKeyword === '' && (event.key === 'Backspace' || event.key === 'Delete')) {
         this.keywordArray.pop();
+        if (this.keywordArray.length === 0) {
+          this.firstKeywordEntered = false;
+        }
       }
     },
 
@@ -91,34 +94,38 @@ export default {
 
 <template>
   <div :class="['container', firstKeywordEntered ? 'containerExpanded' : '']">
-    <div class="searchBox">
-      <Icon name="heroicons-solid:search" color="#D9D9D9" class="searchIcon" />
+    <div class="topContainer">
+      <div class="searchBox">
+        <Icon name="heroicons-solid:search" color="#D9D9D9" class="searchIcon" />
       
-      <div class="infoBox" :class="{ show: showInfoBox }" :style="{ left: infoBoxLeft }">
-        <span class="infoText">Intet skrevet</span>
+        <div class="infoBox" :class="{ show: showInfoBox }" :style="{ left: infoBoxLeft }">
+          <span class="infoText">Intet skrevet</span>
+       </div>
+
+        <input ref="searchInput" class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"
+          v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown" />
+
+          <div class="infoDiv">
+            <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
+            <span class="infoText">Brug @ foran brugernavn</span>
+          </div>
       </div>
-
-      <input ref="searchInput" class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"
-        v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown" />
-
-         <div class="infoDiv">
-           <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
-           <span class="infoText">Brug @ foran brugernavn</span>
-         </div>
-    </div>
-
-    <div v-if="showCalendar" class="calendar">
-           <Calendar @updateDateTimeArray= "updateDateTimeArray" />
+      
+      <div v-if="showCalendar" class="calendar">
+            <Calendar @updateDateTimeArray= "updateDateTimeArray" />
           
+      </div>
     </div>
 
-    <!-- <div class="keywordContainer">
+    <div class="bottomContainer">
+      <div class="keywordContainer">
         <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)"
           :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
           {{ keyword.word }}
           <Icon name="ri:close-circle-line" color="white"></Icon>
         </div>
-    </div> -->
+      </div>
+    </div>
   </div>
   
 </template>
