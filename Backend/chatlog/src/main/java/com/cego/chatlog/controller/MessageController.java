@@ -145,12 +145,21 @@ public class MessageController {
             int endId = startId + 24;
 
             System.out.println(temppage);
+
             /*
              * if(startId < 24){
              * startId = 1;
              * endId = highestId%25+25;
              * }
              */
+
+            if(startId < 1){
+                startId = 1;
+                endId = highestId%25+25;
+            }   
+           
+            
+            
 
             System.out.println(startId);
             System.out.println(endId);
