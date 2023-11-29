@@ -3,8 +3,9 @@
 </style>
 
 <script lang="ts">
-
+import axios from 'axios';
 import io from 'socket.io-client';
+
 
 // Define the structure of a message
 interface Message {
@@ -50,6 +51,7 @@ export default {
     }
 
     socket.onmessage = (event) => {
+      
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
         const parsedData = JSON.parse(event.data);
@@ -63,16 +65,22 @@ export default {
             isFlagged: parsedData.data.isFlagged,
             ogUsername: parsedData.data.ogusername
           };
-
+          
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
-
+          if (newMessage.isFlagged) {
+            console.log("Preparing to send message to Slack:", newMessage.text);
+            this.postMessageToSlack(newMessage);
+          }
+          
           // After the next DOM update, scroll to the bottom
           this.$nextTick(() => {
             this.scrollTobottom();
           });
         }
       }
+      
+      
     }
 
     // Handle WebSocket errors
@@ -101,6 +109,28 @@ export default {
   },
 
   methods: {
+    async postMessageToSlack(Message: any) {
+      
+      const backendUrl = 'http://localhost:8080/api/sendToSlack'; // Replace with your Spring Boot app's URL
+
+      
+      const message = { text: this.messages[this.messages.length-1].text};
+      message.text = "(Flagged) " + this.messages[this.messages.length-1].ogUsername + ": " + message.text ;
+      
+      
+
+      try {
+        const response = await axios.post(backendUrl, message, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Message posted to Slack via Spring Boot', response.data);
+      } catch (error) {
+        console.error('Error posting message to Slack', error);
+      }
+    },
 
     // Check the scroll position
     async checkScroll(event: Event) {
@@ -146,6 +176,8 @@ export default {
     // Clear the chat and scroll to the bottom
     async buttonClear() {
       await this.fetchHighestId();
+      this.postMessageToSlack("test");
+      
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
@@ -157,6 +189,7 @@ export default {
         this.scrollTobottom();
         this.title = `Live Chat`;
       });
+
 
     },
 
