@@ -136,7 +136,7 @@ export default {
             this.newMessages = this.parseMessage(data);
             // Add the previous messages to the end of the messages array
             this.messages = this.messages.concat(this.newMessages);
-
+            console.log(this.messages);
           }
         }
         this.initialLoad = false;
@@ -168,6 +168,7 @@ export default {
       this.initialLoad = true;
       this.title = `Chat historik`;
       //find a specific message and update it
+      console.log(this.currentPage);
       this.messages = [];
       if (this.currentPage === 1) {
         const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
@@ -177,9 +178,12 @@ export default {
         const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
         this.messages = this.parseMessage(data);
       }
+
+    
       this.$nextTick(() => {
         this.scrollToMessage();
       });
+      console.log(this.messages);
     },
 
     // Find the current page
