@@ -32,7 +32,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.MessageRepository;
@@ -46,9 +45,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @CrossOrigin(origins = "http://localhost:3000")
 public class MessageController {
 
-    @Autowired 
+    @Autowired
     private MessageRepository messageRepository;
-  
+
     @Autowired
     private CustomerService customerService;
 
@@ -60,10 +59,10 @@ public class MessageController {
         try {
             int startId = messageRepository.getStartId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
             int endId = messageRepository.getEndId(Integer.parseInt(pageId), Integer.parseInt(highestMessageId));
-    
+
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
-            
-            //Converting it to JSON, for easier use later.
+
+            // Converting it to JSON, for easier use later.
             String json = convertObjectToJSON(messages);
             return ResponseEntity.ok(json);
         } catch (NumberFormatException error) {
@@ -71,17 +70,16 @@ public class MessageController {
         }
     }
 
-    //Generalized function to convert List<Object[]> to JSON.
+    // Generalized function to convert List<Object[]> to JSON.
     private String convertObjectToJSON(List<Object[]> messages) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(messages);
         } catch (JsonProcessingException error) {
-            
-            return null;
-        } 
-    }
 
+            return null;
+        }
+    }
 
     // Overload for a single object
     private String convertObjectToJSON(Object object) {
@@ -93,19 +91,22 @@ public class MessageController {
             return null;
         }
     }
-  
-    //Api to post the data that we receive into the database.
+
+    // Api to post the data that we receive into the database.
     @PostMapping("/send-message")
-    public @ResponseBody String addNewUserJSON (@RequestBody DataCustomerMessage dataCustomerMessage) {
+    public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
-            //Creating a user for the database, because the database stores both a user and a message seperately
+            // Creating a user for the database, because the database stores both a user and
+            // a message seperately
             customerService.createUser(dataCustomerMessage);
 
-            /* user.setCustomerId(dataUserMessage.getCustomerId());
-            user.setUsername(dataUserMessage.getUsername());
-            user.setUserId(dataUserMessage.getCustomerId()); */
-            
-            //Creating the message for the database.
+            /*
+             * user.setCustomerId(dataUserMessage.getCustomerId());
+             * user.setUsername(dataUserMessage.getUsername());
+             * user.setUserId(dataUserMessage.getCustomerId());
+             */
+
+            // Creating the message for the database.
             Message message = new Message();
             message.setCustomerId(dataCustomerMessage.getCustomerId());
             message.setMessageText(dataCustomerMessage.getMessage());
@@ -114,7 +115,6 @@ public class MessageController {
             message.setOGUsername(dataCustomerMessage.getUsername());
 
             String json = convertObjectToJSON(message);
-            
 
             sessionManager.emitEvent("newMessage", json);
             messageRepository.save(message);
@@ -123,83 +123,44 @@ public class MessageController {
             return "Error saving and sending message";
         }
     }
+
     @GetMapping("find-highest-id")
-    public ResponseEntity<String> getHighestId(){
+    public ResponseEntity<String> getHighestId() {
         Integer highestId = messageRepository.findHighestMessageId();
         return ResponseEntity.ok(highestId.toString());
     }
 
-    //Gets the page for an message with a specific ID.
+    // Gets the page for an message with a specific ID.
     @GetMapping("/message-id/{messageId}")
     public ResponseEntity<String> getMessageById(@PathVariable String messageId) {
         try {
 
             Integer highestId = messageRepository.findHighestMessageId();
-            //int endId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId) + highestId%25;
-            //int startId = endId - 24;
-            
-            int temppage = (int) Math.ceil(((double)highestId - Integer.parseInt(messageId) + 1) / 25);
-            int startId = highestId - (temppage*25) + 1;
+            // int endId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId)
+            // + highestId%25;
+            // int startId = endId - 24;
+
+            int temppage = (int) Math.ceil(((double) highestId - Integer.parseInt(messageId) + 1) / 25);
+            int startId = highestId - (temppage * 25) + 1;
             int endId = startId + 24;
-            
+
             System.out.println(temppage);
-            /* 
-            if(startId < 24){
-                startId = 1;
-                endId = highestId%25+25;
-            }
-            */
-            
+            /*
+             * if(startId < 24){
+             * startId = 1;
+             * endId = highestId%25+25;
+             * }
+             */
+
             System.out.println(startId);
             System.out.println(endId);
-    
+
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 
             String json = convertObjectToJSON(messages);
             return ResponseEntity.ok(json);
         } catch (NumberFormatException error) {
             return ResponseEntity.badRequest().build();
-        }
-    }
-
-    private static final String WEBHOOK_URL = "https://hooks.slack.com/services/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"; // Replace with your actual Webhook URL
-
-    @PostMapping("/post-slack")
-    public @ResponseBody void postSlack(@RequestBody SlackMessage slackMessage) {
-        try {
-            URL url = new URL(WEBHOOK_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setDoOutput(true);
-
-            String payload = "{\"text\":\"" + slackMessage.getText() + "\"}";
-
-            try (OutputStream outputStream = connection.getOutputStream()) {
-                outputStream.write(payload.getBytes("UTF-8"));
-                outputStream.flush();
-            }
-
-            int responseCode = connection.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
-
-            connection.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Define a SlackMessage class for request body
-    public static class SlackMessage {
-        private String text;
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
         }
     }
 }
