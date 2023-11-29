@@ -1,9 +1,13 @@
 package com.cego.chatlog.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +17,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
@@ -62,6 +81,7 @@ public class MessageController {
             return null;
         } 
     }
+
 
     // Overload for a single object
     private String convertObjectToJSON(Object object) {
@@ -139,6 +159,47 @@ public class MessageController {
             return ResponseEntity.ok(json);
         } catch (NumberFormatException error) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private static final String WEBHOOK_URL = "https://hooks.slack.com/services/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"; // Replace with your actual Webhook URL
+
+    @PostMapping("/post-slack")
+    public @ResponseBody void postSlack(@RequestBody SlackMessage slackMessage) {
+        try {
+            URL url = new URL(WEBHOOK_URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-type", "application/json");
+            connection.setDoOutput(true);
+
+            String payload = "{\"text\":\"" + slackMessage.getText() + "\"}";
+
+            try (OutputStream outputStream = connection.getOutputStream()) {
+                outputStream.write(payload.getBytes("UTF-8"));
+                outputStream.flush();
+            }
+
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Define a SlackMessage class for request body
+    public static class SlackMessage {
+        private String text;
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
         }
     }
 }

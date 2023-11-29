@@ -16,6 +16,11 @@ interface Message {
   ogUsername: string;
 }
 
+interface SlackMessage{
+  ogUsername: string;
+  text: string;
+}
+
 export default {
   data() {
     // Initialize data properties
@@ -51,7 +56,7 @@ export default {
 
     socket.onmessage = (event) => {
       // Handle incoming messages if chat is live
-      if (this.chatLive === true) {
+      
         const parsedData = JSON.parse(event.data);
         if (parsedData.event === "newMessage") {
           // Create a new message object from parsedData.data
@@ -64,6 +69,20 @@ export default {
             ogUsername: parsedData.data.ogusername
           };
 
+          
+          useFetch(`http://localhost:8080/messages/post-slack`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              ogUsername: newMessage.ogUsername,
+              text: newMessage.text
+            })
+          });
+        
+
+        if (this.chatLive === true) {
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
 
@@ -102,6 +121,7 @@ export default {
 
   methods: {
 
+  
     // Check the scroll position
     async checkScroll(event: Event) {
       const target = event.target as Element;
@@ -145,6 +165,8 @@ export default {
 
     // Clear the chat and scroll to the bottom
     async buttonClear() {
+      await useFetch('http://localhost:8080/messages/post-slack', { method: 'POST' });
+      
       await this.fetchHighestId();
       this.messages = [];
       this.currentPage = 1;
