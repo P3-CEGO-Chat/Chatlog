@@ -57,4 +57,19 @@ public class FlagController {
             return "deleted " + word + " successfully";
         }
     }
+    @PostMapping("/updateflag")
+    public @ResponseBody ResponseEntity<String> updateFlag(@RequestBody FlagWords updatedFlag) {
+        int id = updatedFlag.getId();
+        if (id <= 0 || !flagWordsService.existsById(id)) { // Assuming IDs are positive
+            return new ResponseEntity<>("Error: Flag with provided ID does not exist.", HttpStatus.BAD_REQUEST);
+        }
+        FlagWords updated = flagWordsService.updateFlag(updatedFlag.getId(), updatedFlag);
+        if (updated != null) {
+            return ResponseEntity.ok("Updated flag word and description successfully");
+        } else {
+            return new ResponseEntity<>("Error: Unable to update the flag.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+   
+    
 }

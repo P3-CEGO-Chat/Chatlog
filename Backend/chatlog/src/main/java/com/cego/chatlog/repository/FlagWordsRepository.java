@@ -12,4 +12,6 @@ public interface FlagWordsRepository extends CrudRepository<FlagWords, Integer> 
 
     // delete by word
     void deleteByWord(String word);
+
+    boolean existsById(int id);
 }

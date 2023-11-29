@@ -43,6 +43,7 @@
     width: 18vw;
     text-align: center;
     border-radius: 5px;
+    overflow-wrap: break-word;
 }
 
 .flagForm {
@@ -64,4 +65,56 @@
     border: 1px solid #6CA5FC;
     padding-left: 1rem;
     outline: none;
+}
+
+.flagForm button {
+    width: 6vw;
+    height: 2.25rem;
+    border-radius: 5px;
+    border: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    background-color: #6CA5FC;
+    cursor: pointer;
+    outline: none;
+}
+.flagForm button:hover {
+    background-color: #4c7be8;
+    transform: scale(1.1);
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem 0.5rem;
+}
+
+.buttonContainer button {
+    width: 6vw;
+    height: 2rem;
+    border-radius: 5px;
+    border: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.editButton {
+    background-color: #6CA5FC;
+}
+
+.removeButton {
+    background-color: #ed0410;
+}
+
+.editButton:hover {
+    background-color: #4c7be8;
+    transform: scale(1.1);
+}
+
+.removeButton:hover {
+    background-color: #c9040b;
+    transform: scale(1.1);
 }

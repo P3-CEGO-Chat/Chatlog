@@ -11,7 +11,10 @@
             return {
                 flags: Array<{ id: number, word: string, description: string }>(),
                 newflags: Array<{ word: string, description: string }>(),
-                newFlag: { word: "", description: "" }
+                newFlag: { word: "", description: "" },
+                modalOpen: false,
+                modal2Open: false,
+                currentModalFlag: { id: 0, word: "", description: "" }
             }
         },
         methods: {
@@ -39,6 +42,12 @@
                             })
                         })
                         
+                        this.flags.push({
+                            id: this.flags.length + 1,
+                            word: this.newFlag.word,
+                            description: this.newFlag.description
+                        });
+                        
                     } catch (error) {
                         console.log("This fails" + error)
                     }
@@ -46,13 +55,57 @@
             },
             async removeFlag(flagword: String) {
                 try {
-                    this.flags = await $fetch(`http://localhost:8080/flags/removeflag?word=${flagword}`, {
-                        method: "GET",
-                    })
+                    await $fetch(`http://localhost:8080/flags/removeflag?word=${flagword}`);
+                    this.flags = this.flags.filter((flag: { word: String }) => flag.word !== flagword)
+                    this.modalOpen = !this.modalOpen;
                 } catch (error) {
                     console.log("This fails" + error)
                 }
-            }  
+            },
+
+            async editFlag(flagId: number, newWord: string, newDescription: string) {
+                console.log("FlagId: ", flagId)
+                try {
+                    await $fetch(`http://localhost:8080/flags/updateflag`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            id: flagId,
+                            word: newWord,
+                            description: newDescription
+                        })
+                    })
+                    /* this.flags = this.flags.filter((flag: { id: number }) => flag.id !== flagId)
+                    this.flags.push({
+                        id: flagId,
+                        word: this.newFlag.word,
+                        description: this.newFlag.description
+                    }); */
+                    this.handleModal2({ id: flagId, word: newWord, description: newDescription });
+                } catch (error) {
+                    console.log("This fails" + error)
+                }
+            },
+
+            detectSpace() {
+                if (this.newFlag.word.includes(" ")) {
+                    // Remove all whitespace from the string
+                    this.newFlag.word = this.newFlag.word.replace(/\s/g, "");
+                }
+            },
+
+            handleModal(flag: { id: number, word: string, description: string }) {
+                this.currentModalFlag = flag;
+                this.modalOpen = !this.modalOpen;
+            },
+
+            handleModal2(flag: { id: number, word: string, description: string }) {
+                this.currentModalFlag = flag;
+                this.modal2Open = !this.modal2Open;
+            },
+            
         },
         async mounted() {
          await this.fetchAllFlags();
@@ -65,20 +118,28 @@
 
 <template>
     <div class="layoutFlag">
+        
         <div class="container">
             <div class="title">
                 <h1>Flags</h1>
                 <p>Flags page</p>
             </div>
             <div class="flagForm">
-                <input type="text" v-model="newFlag.word" placeholder="Flag" required />
-                <input type="text" v-model="newFlag.description" placeholder="Description" />
-                <button @click="postFlag()">Add flag</button>
+                <input type="text" v-model="newFlag.word" placeholder="Flag" required v-on:input="detectSpace" />
+                <input type="text" v-model="newFlag.description" placeholder="Begrundelse" />
+                <button @click="postFlag()">Tilføj flag</button>
             </div>
             <div class="flags">
-                <div class="flag" @click="removeFlag(flag.word)" v-for="flag in flags" :key="flag.id">
+                <div class="flag"  v-for="flag in flags" :key="flag.id">
+                    <Modal @handleModal="handleModal" @removeFlag="removeFlag" RightButtonEmit="handleModal" LeftButtonEmit="removeFlag" ModalText="Ønsker du at slette dette ord?" :activated="modalOpen" :ModalPicked="[currentModalFlag]"  />
+                    <Modal @handleModal="handleModal2" @editFlag="editFlag" RightButtonEmit="handleModal" LeftButtonEmit="editFlag" ModalText="Rediger herunder" :activated="modal2Open" :ModalPicked="[currentModalFlag]"  />
+                    
                     <h3>{{ flag.word }}</h3>
                     <p>{{ flag.description }}</p>
+                    <div class="buttonContainer">
+                        <button class="editButton" @click="handleModal2(flag)">Rediger</button>
+                        <button class="removeButton" @click="handleModal(flag)">Fjern</button>
+                    </div>
                 </div>
             </div>
         </div>

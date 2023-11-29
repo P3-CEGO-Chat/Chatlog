@@ -22,6 +22,26 @@ public class FlagWordsService {
         return flagWordsRepository.existsByWord(word);
     }
 
+    public boolean existsById(int id) {
+        return flagWordsRepository.existsById(id);
+    }
+    public FlagWords findById(int id) {
+        return flagWordsRepository.findById(id).orElse(null);
+    }
+
+    public FlagWords updateFlag(int id, FlagWords updatedFlag) {
+        FlagWords existingFlag = findById(id);
+        if (existingFlag != null) {
+            existingFlag.setWord(updatedFlag.getWord());
+            existingFlag.setDiscription(updatedFlag.getDescription());
+
+            flagWordsRepository.save(updatedFlag);
+            return existingFlag;
+        }
+
+        return null;
+    }
+
     public void save(FlagWords flagWord) {
         flagWordsRepository.save(flagWord);
     }
