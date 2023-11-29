@@ -25,6 +25,9 @@ export default {
             ObjectArray: [],
             messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
             notiVisible: false,
+            title: "Venter på søgning",
+            TempTimeStart: {},
+            TempTimeEnd: {},
         };
     },
 
@@ -45,6 +48,7 @@ export default {
                 // This function will be called when `keywordArray` changes
                 console.log('keywordArray changed', newVal, oldVal);
                 this.fetchData();
+                this.title = "Søger efter: ";
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -85,6 +89,7 @@ export default {
                 }));
             } else {
                 this.messages = [];
+                this.title = "Venter på søgning";
             }
         },
 
@@ -111,7 +116,7 @@ export default {
         <div class="SearchField">
             <div class="SearchTex">
 
-                Viser resultat for: "{{ keywordArray.map(keyword => keyword.word).join(', ') }}"
+                {{title}} {{ keywordArray.map(keyword => keyword.word).join(', ') }}
             </div>
             <div class="scrollBar">
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
