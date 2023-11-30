@@ -1,0 +1,120 @@
+.layoutFlag{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 95vh;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    display: flex;
+    background-color: #FFFFFF;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 94vw;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.title h1 {
+    margin-bottom: 0;
+}
+
+
+.flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+    width: 94vw;
+}
+
+.flag {
+    display: flex;  
+    justify-content: center;
+    background-color: #FFFFFF;
+    flex-direction: column;
+    width: 18vw;
+    text-align: center;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+}
+
+.flagForm {
+    display: flex;
+    background-color: #FFFFFF;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 94vw;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.flagForm input {
+    width: 20vw;
+    height: 2rem;
+    border-radius: 5px;
+    border: 1px solid #6CA5FC;
+    padding-left: 1rem;
+    outline: none;
+}
+
+.flagForm button {
+    width: 6vw;
+    height: 2.25rem;
+    border-radius: 5px;
+    border: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    background-color: #6CA5FC;
+    cursor: pointer;
+    outline: none;
+}
+.flagForm button:hover {
+    background-color: #4c7be8;
+    transform: scale(1.1);
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem 0.5rem;
+}
+
+.buttonContainer button {
+    width: 6vw;
+    height: 2rem;
+    border-radius: 5px;
+    border: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.editButton {
+    background-color: #6CA5FC;
+}
+
+.removeButton {
+    background-color: #ed0410;
+}
+
+.editButton:hover {
+    background-color: #4c7be8;
+    transform: scale(1.1);
+}
+
+.removeButton:hover {
+    background-color: #c9040b;
+    transform: scale(1.1);
+}

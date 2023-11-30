@@ -4,8 +4,6 @@
 
 <script lang="ts">
 import axios from 'axios';
-import io from 'socket.io-client';
-
 
 // Define the structure of a message
 interface Message {
@@ -247,8 +245,8 @@ export default {
     // Fetch the highest ID
     async fetchHighestId() {
       try {
-        const { data } = await useFetch(`http://localhost:8080/messages/find-highest-id`); // Replace with your backend URL
-        this.HighestMessageId = Number(data.value);
+        const data = await $fetch(`http://localhost:8080/messages/find-highest-id`)
+        this.HighestMessageId = Number(data);
       } catch (error) {
       }
     },

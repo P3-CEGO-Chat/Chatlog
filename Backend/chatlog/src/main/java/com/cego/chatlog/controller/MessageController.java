@@ -34,9 +34,11 @@ import java.net.URL;
 
 import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.Message;
+import com.cego.chatlog.repository.FlagWordsRepository;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.CustomerService;
 import com.cego.chatlog.service.websocket.WebSocketSessionManager;
+import com.cego.chatlog.util.Flagger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,6 +55,9 @@ public class MessageController {
 
     @Autowired
     private WebSocketSessionManager sessionManager;
+
+    @Autowired
+    private FlagWordsRepository flagWordsRepository;
 
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
@@ -96,8 +101,8 @@ public class MessageController {
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
-            // Creating a user for the database, because the database stores both a user and
-            // a message seperately
+            boolean isFlagged = Flagger.flagChecker(dataCustomerMessage);
+            //Creating a user for the database, because the database stores both a user and a message seperately
             customerService.createUser(dataCustomerMessage);
 
             /*
@@ -111,7 +116,7 @@ public class MessageController {
             message.setCustomerId(dataCustomerMessage.getCustomerId());
             message.setMessageText(dataCustomerMessage.getMessage());
             message.setDateTime(dataCustomerMessage.getDateTime());
-            message.setIsFlagged(false);
+            message.setIsFlagged(isFlagged);
             message.setOGUsername(dataCustomerMessage.getUsername());
 
             String json = convertObjectToJSON(message);
