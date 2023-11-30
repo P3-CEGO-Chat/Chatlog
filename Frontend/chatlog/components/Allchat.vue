@@ -176,8 +176,6 @@ export default {
     // Clear the chat and scroll to the bottom
     async buttonClear() {
       await this.fetchHighestId();
-      this.postMessageToSlack("test");
-      
       this.messages = [];
       this.currentPage = 1;
       this.originalPageCounter = this.currentPage;
