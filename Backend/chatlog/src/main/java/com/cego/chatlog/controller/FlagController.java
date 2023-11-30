@@ -45,6 +45,11 @@ public class FlagController {
     @GetMapping("/getflags")
     public @ResponseBody Iterable<FlagWords> getAllFlags() {
         // This returns a JSON with the users
+        System.out.println("Getting all flags" + flagWordsService.findAll());
+        for (FlagWords flag : flagWordsService.findAll()) {
+            System.out.println("Kig her" + flag.getWord());
+        }
+
         return flagWordsService.findAll();
     }
 

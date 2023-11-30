@@ -1,15 +1,22 @@
 package com.cego.chatlog.util;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.cego.chatlog.entity.DataCustomerMessage;
+import com.cego.chatlog.entity.FlagWords;
+import com.cego.chatlog.service.FlagWordsService;
 
 public class Flagger {
-    public static Boolean flagChecker(DataCustomerMessage dataCustomerMessage) {
+
+    @Autowired
+    private static FlagWordsService flagWordsService;
+
+    public static Boolean flagChecker(List<String> flaggedList ,DataCustomerMessage dataCustomerMessage) {
         String message = dataCustomerMessage.getMessage();
-        System.out.println("Flagging message: " + message);
 
-        String[] words = {"fuck", "husleje"};
-
-        for (String word: words) {
+        for (String word: flaggedList) {
             if (message.contains(word)) {
                 return true;
             }

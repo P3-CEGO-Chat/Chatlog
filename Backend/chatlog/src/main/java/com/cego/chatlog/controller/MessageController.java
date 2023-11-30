@@ -3,6 +3,7 @@ package com.cego.chatlog.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.cego.chatlog.entity.DataCustomerMessage;
+import com.cego.chatlog.entity.FlagWords;
 import com.cego.chatlog.entity.Message;
 import com.cego.chatlog.repository.FlagWordsRepository;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.CustomerService;
+import com.cego.chatlog.service.FlagWordsService;
 import com.cego.chatlog.service.websocket.WebSocketSessionManager;
 import com.cego.chatlog.util.Flagger;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -58,6 +61,9 @@ public class MessageController {
 
     @Autowired
     private FlagWordsRepository flagWordsRepository;
+
+    @Autowired
+    private FlagWordsService flagWordsService;
 
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
@@ -101,7 +107,11 @@ public class MessageController {
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
-            boolean isFlagged = Flagger.flagChecker(dataCustomerMessage);
+            List<String> flaggedList = new ArrayList<String>();
+            for (FlagWords flagWords : flagWordsService.findAll()){
+                flaggedList.add(flagWords.getWord());
+            }
+            boolean isFlagged = Flagger.flagChecker(flaggedList ,dataCustomerMessage);
             //Creating a user for the database, because the database stores both a user and a message seperately
             customerService.createUser(dataCustomerMessage);
 
