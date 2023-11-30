@@ -26,13 +26,13 @@ public class FlagController {
     FlagWordsService flagWordsService;
 
     @PostMapping("/addflag")
-    public @ResponseBody String addNewFlag(@RequestBody FlagWords flagWord) {
+    public @ResponseBody ResponseEntity<String> addNewFlag(@RequestBody FlagWords flagWord) {
 
         if (flagWordsService.existsByWord(flagWord.getWord())) {
-            return "Error: Flag word already exists.";
+            return new ResponseEntity<>("Error: Flag word already exists.", HttpStatus.BAD_REQUEST);
         }
         flagWordsService.save(flagWord);
-        return "Added flag word and description successfully";
+        return ResponseEntity.ok("Added flag word and description successfully");
     }
 
     // Exception handler for SQL duplicate entry
@@ -49,12 +49,12 @@ public class FlagController {
     }
 
     @GetMapping("/removeflag")
-    public @ResponseBody String removeFlag(@RequestParam(value = "word") String word) {
+    public @ResponseBody ResponseEntity<String> removeFlag(@RequestParam(value = "word") String word) {
         if (!flagWordsService.existsByWord(word)) {
-            return "Error: Flag word doesnt exist.";
+            return new ResponseEntity<>("Error: Flag word doesnt exist.", HttpStatus.BAD_REQUEST);
         } else {
             flagWordsService.deleteByWord(word);
-            return "deleted " + word + " successfully";
+            return ResponseEntity.ok("deleted " + word + " successfully");
         }
     }
     @PostMapping("/updateflag")
