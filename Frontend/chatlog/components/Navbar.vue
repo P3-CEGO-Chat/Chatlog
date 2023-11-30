@@ -13,7 +13,8 @@
         },
         methods: {
             isCurrentPage(route: string) {
-                this.title = this.$route.path === '/' ? 'SpilNu' : route.charAt(1).toUpperCase() + route.slice(2);
+                this.title = this.$route.path === '/' ? 'SpilNu' : 
+                this.$route.path === '/flags' ? 'flag ord' : route.charAt(1).toUpperCase() + route.slice(2);
                 return this.$route.path === route;
             },
         },
@@ -40,7 +41,7 @@
                 <hr/>
             </NuxtLink>
             <NuxtLink to="/flags" class="link" :disabled="isCurrentPage('/flags')">
-                Flags
+                Flag ord
                 <hr/>
             </NuxtLink>
         </div>

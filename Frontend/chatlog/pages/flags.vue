@@ -130,8 +130,8 @@
         
         <div class="container">
             <div class="title">
-                <h1>Flags</h1>
-                <p>Flags page</p>
+                <h1>Flag ord</h1>
+                <p>Her kan du tilføje, redigere og slette flag ord.</p>
             </div>
             <div class="flagForm">
                 <input type="text" v-model="newFlag.word" placeholder="Flag" required v-on:input="detectSpace" />
