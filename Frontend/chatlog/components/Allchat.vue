@@ -126,6 +126,11 @@ export default {
       }
     },
 
+    async resetMessageId() {
+      this.$emit('resetMessageId');
+      console.log('Received resetMessageId:', this.messageId);
+    },
+
     // Check the scroll position
     async checkScroll(event: Event) {
       const target = event.target as Element;
@@ -270,8 +275,12 @@ export default {
       <!-- Scroll event listener to check scroll position -->
       <div class="scrollBar" @scroll="checkScroll">
         <!-- Loop through messages and display them -->
-        <div class="messageBox" v-for="message in messages" :key="message.id" :ref="`message-${message.id}`"
-          :class="{ 'highlightedMessage': message.id === messageId }">
+        <div class="messageBox" 
+        v-for="message in messages" 
+        :key="message.id" 
+        :ref="`message-${message.id}`"
+        :class="{ 'highlightedMessage': message.id === messageId }"
+        @click="$emit('resetMessageId')">
           <div class="messageHeader">
             <div class="CustomerId">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
