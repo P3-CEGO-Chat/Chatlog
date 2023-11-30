@@ -8,19 +8,21 @@
   }
 
 .messageWindow{
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 90vh;
     width: 100%;    
     border-radius: 5px;
     padding: 0.5rem;
     box-sizing: border-box;
+    position: relative; /* new */
 } 
 
 .messageBox{
     margin-bottom: 5px;
     border-radius: 5px;
 }
-
 
 .messageBox:nth-child(even){
     background-color: #d9d9d9;
@@ -65,46 +67,59 @@
     font-size: 2rem;
     font-weight: bold;
     color: #333;
-    background-color: #f0f0f0;
+    background-color: #d9d9d9;
     padding: 1rem;
     border-radius: 5px;
     margin-bottom: 1rem;    
+    font-family: "Exo 2","Helvetica Neue",helvetica,arial,sans-serif;
 }
 
 .scrollBar{
     overflow-y: scroll;
     height: 80vh;
     padding-right: 0.5rem;
+    box-sizing: border-box;
 }
 
 .highlightedMessage:nth-child(even), .highlightedMessage:nth-child(odd) {
-    background-color: yellow;
-    border: 1px solid black;
-    padding: 5px;
-    margin: 5px;
+    background-color: #6CA5FC; 
+    color: #FFFFFF;
   }
+
+  @keyframes floatUp {
+    0% {
+        transform: translate(-50%, 100%);
+    }
+    100% {
+        transform: translate(-50%, 10%);
+    }
+}
 
 .clearButton{
     margin: 0.5rem;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 5px;
     background-color: #f0f0f0;
-    border: 1px solid #6CA5FC;
+    border: 2px solid #6CA5FC;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
     color: #333;
-    text-align: center;
-    text-decoration: none;
     display: inline-block;
     transition-duration: 0.4s;
+    height: auto;
+
     position: absolute;
-    right: 3.1rem;
-    top: 2.2rem;
+    bottom: 4%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    animation: floatUp 1s ease-out 0s;
+    animation-fill-mode: forwards;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.7);
 }
 
 .clearButton:hover{
-    background-color: #333;
+    background-color: #6ca5fc;
     color: #f0f0f0;
 }
 
