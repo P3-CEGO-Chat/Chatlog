@@ -65,7 +65,7 @@
 }
 
 .rightButton {
-    background-color: #ed0410;
+    background-color: #e07fa3;
 }
 
 .leftButton:hover {
@@ -74,7 +74,7 @@
 }
 
 .rightButton:hover {
-    background-color: #c9040b;
+    background-color: #b04c7c;
     transform: scale(1.1);
 }
 
