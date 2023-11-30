@@ -68,6 +68,15 @@ export default {
           this.firstKeywordEntered = true;
         }
       }
+      this.keywordArray.sort((a,b) => {
+        if (a.word.startsWith("@") && !b.word.startsWith("@")) {
+          return -1;
+        } else if (!a.word.startsWith("@") && b.word.startsWith("@")) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
             
       this.searchKeyword = "";
       this.updateKeywords();
