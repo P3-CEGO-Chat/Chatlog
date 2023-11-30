@@ -96,6 +96,11 @@ export default {
         sendMessageId(messageId: Number) {
             this.$emit("updateMessageId", messageId);
         },
+        formatDateTime(datetime) {
+            const dat = new Date(datetime);
+            return `${dat.getDate()}/${dat.getMonth() + 1}/${dat.getFullYear()}` +
+                ` ${dat.getHours()}:${dat.getMinutes()}`;
+        },
 
         notificationHandler(customerId: String) {
             this.notiVisible = true;
@@ -108,6 +113,15 @@ export default {
             }, 3000);
         },
     },
+    computed: {
+        formattedDateTimeArray() {
+            return this.dateTimeArray.map(datetime => {
+                const date = new Date(datetime);
+                return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
+                    ` ${date.getHours()}:${date.getMinutes()}`;
+            })
+        }
+},
 }
 </script>
 
@@ -116,7 +130,7 @@ export default {
         <div class="SearchField">
             <div class="SearchTex">
 
-                {{title}} {{ keywordArray.map(keyword => keyword.word).join(', ') }}
+                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
             </div>
             <div class="scrollBar">
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
