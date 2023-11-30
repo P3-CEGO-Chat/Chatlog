@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.cego.chatlog.entity.FlagWords;
+import java.util.List;
+
 
 @Repository
 public interface FlagWordsRepository extends CrudRepository<FlagWords, Integer> {
@@ -14,4 +16,6 @@ public interface FlagWordsRepository extends CrudRepository<FlagWords, Integer> 
     void deleteByWord(String word);
 
     boolean existsById(int id);
+
+    List<FlagWords> findByWord(String word);
 }
