@@ -60,7 +60,7 @@
 </script>
 
 <template>
-    <div class="container" v-if="activated">
+    <div class="modalContainer" v-if="activated">
         <div class="modal">
             <div class="modal-text">
                 <h3>{{ ModalText }}</h3>

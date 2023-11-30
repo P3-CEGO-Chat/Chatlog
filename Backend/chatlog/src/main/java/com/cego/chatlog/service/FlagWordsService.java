@@ -1,5 +1,7 @@
 package com.cego.chatlog.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +31,20 @@ public class FlagWordsService {
         return flagWordsRepository.findById(id).orElse(null);
     }
 
+    public List<FlagWords> findByWord(String word) {
+        return flagWordsRepository.findByWord(word);
+    }
+
     public FlagWords updateFlag(int id, FlagWords updatedFlag) {
         FlagWords existingFlag = findById(id);
+
         if (existingFlag != null) {
-            existingFlag.setWord(updatedFlag.getWord());
-            existingFlag.setDiscription(updatedFlag.getDescription());
+            if (existingFlag.getWord() != updatedFlag.getWord()) {
+                existingFlag.setWord(updatedFlag.getWord());
+            }
+            if (existingFlag.getDescription() != updatedFlag.getWord()) {
+                existingFlag.setDiscription(updatedFlag.getDescription());
+            }
 
             flagWordsRepository.save(updatedFlag);
             return existingFlag;
@@ -42,8 +53,8 @@ public class FlagWordsService {
         return null;
     }
 
-    public void save(FlagWords flagWord) {
-        flagWordsRepository.save(flagWord);
+    public FlagWords save(FlagWords flagWord) {
+        return flagWordsRepository.save(flagWord);
     }
 
     public Iterable<FlagWords> findAll() {

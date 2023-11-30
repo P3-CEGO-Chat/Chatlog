@@ -1,11 +1,11 @@
-.container {
+.modalContainer {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
     z-index: 9998;
     position: absolute;
     width: 100vw;
     height: 100vh;
-    top: 0;
+    top: -9vh;
     left: 0;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .rightButton {
-    background-color: #ed0410;
+    background-color: #e07fa3;
 }
 
 .leftButton:hover {
@@ -74,7 +74,7 @@
 }
 
 .rightButton:hover {
-    background-color: #c9040b;
+    background-color: #b04c7c;
     transform: scale(1.1);
 }
 

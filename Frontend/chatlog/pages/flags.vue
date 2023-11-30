@@ -3,7 +3,11 @@
 </style>
 
 <script lang="ts">
-    import('~/assets/css/main.css')
+
+    interface addFlagResponse {
+        success: string;
+        id: number;
+    }
 
     export default {
         name: 'Flags',
@@ -31,7 +35,7 @@
                     return;
                 } else {
                     try {
-                        await $fetch(`http://localhost:8080/flags/addflag`, {
+                        const response: addFlagResponse = await $fetch(`http://localhost:8080/flags/addflag`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -42,12 +46,17 @@
                             })
                         })
                         
+                        console.log(response.id);
+
                         this.flags.push({
-                            id: this.flags.length + 1,
+                            id: response.id,
                             word: this.newFlag.word,
                             description: this.newFlag.description
                         });
                         
+                        this.newFlag.word = "";
+                        this.newFlag.description = "";
+
                     } catch (error) {
                         console.log("This fails" + error)
                     }
@@ -121,8 +130,8 @@
         
         <div class="container">
             <div class="title">
-                <h1>Flags</h1>
-                <p>Flags page</p>
+                <h1>Flag ord</h1>
+                <p>Her kan du tilføje, redigere og slette flag ord.</p>
             </div>
             <div class="flagForm">
                 <input type="text" v-model="newFlag.word" placeholder="Flag" required v-on:input="detectSpace" />

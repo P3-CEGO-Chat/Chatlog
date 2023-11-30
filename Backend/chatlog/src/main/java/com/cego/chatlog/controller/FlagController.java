@@ -1,5 +1,9 @@
 package com.cego.chatlog.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cego.chatlog.entity.FlagWords;
 import com.cego.chatlog.service.FlagWordsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/flags")
@@ -26,13 +32,31 @@ public class FlagController {
     FlagWordsService flagWordsService;
 
     @PostMapping("/addflag")
-    public @ResponseBody String addNewFlag(@RequestBody FlagWords flagWord) {
+    public @ResponseBody ResponseEntity<String> addNewFlag(@RequestBody FlagWords flagWord) {
 
         if (flagWordsService.existsByWord(flagWord.getWord())) {
-            return "Error: Flag word already exists.";
+            return new ResponseEntity<>("Error: Flag word already exists.", HttpStatus.BAD_REQUEST);
         }
         flagWordsService.save(flagWord);
-        return "Added flag word and description successfully";
+
+        List<FlagWords> findFlagWords = flagWordsService.findByWord(flagWord.getWord());
+
+        Number id = findFlagWords.get(0).getId();
+
+        Map<String, String> jsonData = new HashMap<>();
+        jsonData.put("success", "Added flag word and description successfully");
+        jsonData.put("id", id.toString());
+
+        // Convert the Map to JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(jsonData);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity<>("Error: Failed to process JSON data.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity.ok(json);
     }
 
     // Exception handler for SQL duplicate entry
@@ -49,12 +73,12 @@ public class FlagController {
     }
 
     @GetMapping("/removeflag")
-    public @ResponseBody String removeFlag(@RequestParam(value = "word") String word) {
+    public @ResponseBody ResponseEntity<String> removeFlag(@RequestParam(value = "word") String word) {
         if (!flagWordsService.existsByWord(word)) {
-            return "Error: Flag word doesnt exist.";
+            return new ResponseEntity<>("Error: Flag word doesnt exist.", HttpStatus.BAD_REQUEST);
         } else {
             flagWordsService.deleteByWord(word);
-            return "deleted " + word + " successfully";
+            return ResponseEntity.ok("deleted " + word + " successfully");
         }
     }
     @PostMapping("/updateflag")
