@@ -5,7 +5,7 @@
         <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray" @updateMessageId="updateMessageId"/>
       </div>
       <div>
-        <Allchat :messageId="messageId">
+        <Allchat :messageId="messageId" @resetMessageId="resetMessageId">
           ikke dav
         </Allchat>
       </div>
@@ -31,7 +31,7 @@
       return {
         keywordArray: Array<{ word: string, isUser: boolean }>(),
         dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>(), 
-        messageId: Number,
+        messageId: 0 as number,
       }
     },
     methods: {
@@ -43,9 +43,14 @@
         this.dateTimeArray = newDateTimeArray;
         console.log('Received updateDateTimeArray:', this.dateTimeArray);
       },
-      updateMessageId(newMessageId: NumberConstructor) {
-        this.messageId = newMessageId;
+      updateMessageId(newMessageId: number) {
+        this.messageId = newMessageId as number;
         console.log('Received updateMessageId:', this.messageId);
+
+      },
+      resetMessageId() {
+        this.messageId = 0 as number;
+        console.log('Received resetMessageId:', this.messageId);
       }
     },
   };

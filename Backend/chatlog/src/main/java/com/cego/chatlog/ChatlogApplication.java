@@ -11,3 +11,4 @@ public class ChatlogApplication  {
 		SpringApplication.run(ChatlogApplication.class, args);
 	}
 }
+	
