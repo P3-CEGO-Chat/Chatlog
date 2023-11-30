@@ -130,7 +130,7 @@ export default {
         <div class="SearchField">
             <div class="SearchTex">
 
-                Viser resultat for dato og tid: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
             </div>
             <div class="scrollBar">
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
