@@ -3,7 +3,6 @@
 </style>
 
 <script lang="ts">
-import axios from 'axios';
 
 // Define the structure of a message
 interface Message {
@@ -66,7 +65,7 @@ export default {
           
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
-          if (newMessage.isFlagged) {
+          if (!newMessage.isFlagged) {
             console.log("Preparing to send message to Slack:", newMessage.text);
             this.postMessageToSlack(newMessage);
           }
@@ -109,22 +108,19 @@ export default {
   methods: {
     async postMessageToSlack(Message: any) {
       
-      const backendUrl = 'http://localhost:8080/api/sendToSlack'; // Replace with your Spring Boot app's URL
-
-      
       const message = { text: this.messages[this.messages.length-1].text};
       message.text = "(Flagged) " + this.messages[this.messages.length-1].ogUsername + ": " + message.text ;
-      
-      
 
       try {
-        const response = await axios.post(backendUrl, message, {
+        const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-        });
+          body: JSON.stringify(message),
+        })
 
-        console.log('Message posted to Slack via Spring Boot', response.data);
+        console.log('Message posted to Slack via Spring Boot', response);
       } catch (error) {
         console.error('Error posting message to Slack', error);
       }
