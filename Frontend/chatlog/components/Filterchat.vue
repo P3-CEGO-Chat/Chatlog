@@ -69,7 +69,6 @@ export default {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
-                
                 // fetch data from backend
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
@@ -77,7 +76,7 @@ export default {
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
-                        customerId: this.keywordArray.length !== 0 ? this.keywordArray[customerIdIndex].word : "",
+                        customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
                     }
                 });
                 const jsonData: any = data.value as Message[];
