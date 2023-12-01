@@ -18,7 +18,7 @@ public class MessageRepoImpl implements MessageRepoCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username) {
+    public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username, String costumerId) {
         String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.customer.current_username LIKE :username ORDER BY chatlog.message.id";
         StringBuilder fullTextSearch = new StringBuilder();
         if (keywords.size() != 0) { 
@@ -30,7 +30,7 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 fullTextSearch.append(i);
                 fullTextSearch.append(" IN NATURAL LANGUAGE MODE)");
                 if (i < keywords.size() - 1) {
-                    fullTextSearch.append(" OR ");
+                    fullTextSearch.append(" AND ");
                 }
             }
             if (keywords.size() > 1) {
@@ -39,8 +39,9 @@ public class MessageRepoImpl implements MessageRepoCustom {
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 fullTextSearch.append(" AND chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
             }
-            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
 
+            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
+            //WHERE chatlog.customer.current_username LIKE :username
             Query query = entityManager.createNativeQuery(finalQuery, Object[].class);
             for (int i = 0; i < keywords.size(); i++) {
                 query.setParameter("keyword" + i, keywords.get(i));
@@ -49,9 +50,14 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
             }
-            
-            query.setParameter("username", username + "%");
-
+            if (costumerId != "" && costumerId != null) {
+                finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
+                query = entityManager.createNativeQuery(finalQuery, Object[].class);
+                query.setParameter("customerId", costumerId);
+            } else {
+                query.setParameter("username", username + "%");
+            }
+            System.out.println("Kig her " + finalQuery);
             @SuppressWarnings("unchecked")
             List<Object[]> resultList = (List<Object[]>) query.getResultList();
             return resultList;

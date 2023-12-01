@@ -18,7 +18,8 @@
                 newFlag: { word: "", description: "" },
                 modalOpen: false,
                 modal2Open: false,
-                currentModalFlag: { id: 0, word: "", description: "" }
+                currentModalFlag: { id: 0, word: "", description: "" },
+                notiVisible: false,
             }
         },
         methods: {
@@ -114,6 +115,15 @@
                 this.currentModalFlag = flag;
                 this.modal2Open = !this.modal2Open;
             },
+            notificationHandler(customerId: String) {
+                this.notiVisible = true;
+                if (this.notiVisible) {
+                    console.log("Her" + customerId.toString());
+                }
+                setTimeout(() => {
+                    this.notiVisible = false;
+                }, 3000);
+            },
             
         },
         async mounted() {
@@ -153,4 +163,5 @@
             </div>
         </div>
     </div>
+    <Notification icon="/Tick.svg" notificationText="Nortification State" :activated="true"/>
 </template>

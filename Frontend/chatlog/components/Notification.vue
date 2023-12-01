@@ -16,14 +16,25 @@
             activated: {
                 type: Boolean,
                 default: false
-            }
+            },
+            alert: {
+                type: Boolean,
+                default: true
+            },
         },
+        computed: {
+            notificationClass() {
+                return {
+                    "alert": this.alert
+                }
+            }
+        }
     }
 
 </script>
 
 <template>
-    <div class="notification" v-if="activated">
+    <div class="notification" v-if="activated" :class="notificationClass">
         <div class="notification-icon">
             <img :src="icon" alt="notification-icon">
         </div>

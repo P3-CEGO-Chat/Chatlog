@@ -33,8 +33,8 @@ export default {
 
     props: {
         keywordArray: {
-            type: Array as PropType<{ word: string, isUser: boolean }[]>,
-            default: () => [] as { word: string, isUser: boolean }[]
+            type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
+            default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
         dateTimeArray: {
             type: Array as PropType<{ dateTimeFrom: string, dateTimeTo: string }[]>,
@@ -68,6 +68,7 @@ export default {
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
                 console.log("i got here");
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
+                const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
@@ -75,6 +76,7 @@ export default {
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
+                        costumerId: this.keywordArray.length !== 0 ? this.keywordArray[customerIdIndex].word : null,
                     }
                 });
                 const jsonData: any = data.value as Message[];
@@ -162,5 +164,5 @@ export default {
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible"/>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notiVisible"/>
 </template>

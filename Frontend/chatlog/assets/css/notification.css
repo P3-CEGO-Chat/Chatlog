@@ -8,10 +8,14 @@
     padding: 0.5rem;
     display: flex;
     height: 50px;
-    width: 200px;
+    width: 250px;
     box-shadow: black 0px 0px 5px;
     font-family: sans-serif;
     animation: popup 3s ease-in-out;
+}
+
+.alert {
+  background-color: #b04c7c;
 }
 
 @keyframes popup {
