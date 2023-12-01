@@ -279,8 +279,7 @@ export default {
         v-for="message in messages" 
         :key="message.id" 
         :ref="`message-${message.id}`"
-        :class="{ 'highlightedMessage': message.id === messageId }"
-        @click="$emit('resetMessageId')">
+        :class="{ 'highlightedMessage': message.id === messageId }">
           <div class="messageHeader">
             <div class="CustomerId">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
