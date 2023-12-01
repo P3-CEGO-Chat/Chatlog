@@ -57,13 +57,18 @@
     gap: 1rem;
 }
 
-.flagForm input {
+.input {
     width: 20vw;
     height: 2rem;
     border-radius: 5px;
     border: 1px solid #6CA5FC;
     padding-left: 1rem;
     outline: none;
+}
+
+.error {
+    border: 1px solid #e50b0f;
+    transform: scale(1.05);
 }
 
 .flagForm button {

@@ -107,7 +107,6 @@ export default {
         notificationHandler(customerId: String) {
             this.notiVisible = true;
             if (this.notiVisible) {
-                console.log("Her" + customerId.toString());
                 navigator.clipboard.writeText(customerId.toString());
             }
             setTimeout(() => {
