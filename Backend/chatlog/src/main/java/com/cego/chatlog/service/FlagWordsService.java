@@ -61,3 +61,5 @@ public class FlagWordsService {
         return flagWordsRepository.findAll();
     }
 }   
+
+
