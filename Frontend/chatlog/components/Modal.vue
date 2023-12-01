@@ -67,8 +67,8 @@
             </div>
             <div v-if="LeftButtonEmit == 'editFlag'" class="editFlag">
                 <div class="inputFields">
-                    <span>Flag ord</span>
-                    <input type="text" v-model="ModalPicked[0].word" placeholder="Flag" required v-on:input="detectSpace" />
+                    <span>Foruroligende ord</span>
+                    <input type="text" v-model="ModalPicked[0].word" placeholder="Foruroligende ord" required v-on:input="detectSpace" />
                     <span>Begrundelse</span>
                     <input type="text" v-model="ModalPicked[0].description" placeholder="Begrundelse" />
                 </div>

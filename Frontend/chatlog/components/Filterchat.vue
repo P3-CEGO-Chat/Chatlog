@@ -28,6 +28,7 @@ export default {
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
+            messageReverseClass: "",
         };
     },
 
@@ -59,10 +60,20 @@ export default {
                 this.fetchData();
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
-        }
+        },
+        messages: {
+            handler() {
+                // This function will be called when `messages` changes
+                if (this.messages.length === 1) {
+                    
+                }
+            },
+            deep: true // This ensures that the watcher will detect changes in the objects inside the array
+        },
     },
 
     methods: {
+
         async fetchData() {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
@@ -118,6 +129,20 @@ export default {
                 this.notiVisible = false;
             }, 3000);
         },
+
+        messageHighestChecker(messageId: Number) {
+            let highestId = 0;
+            for (const message of this.messages) {
+                if (message.id > highestId) {
+                    highestId = message.id;
+                }
+            }
+            if (messageId === highestId) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
 
     // compute the formatted datetime array
@@ -129,7 +154,8 @@ export default {
                     ` ${date.getHours()}:${date.getMinutes()}`;
             })
         }
-},
+    },
+    
 }
 </script>
 
@@ -160,11 +186,7 @@ export default {
                             </div>
                         </div>
                     </div>
-
-                    <!-- {message.isFlagged ? <div class="flagged">
-                        {{ message.isFlagged ? "Flagged" : "" }}
-                    </div>} -->
-                    <span @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>

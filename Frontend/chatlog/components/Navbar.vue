@@ -40,8 +40,8 @@
                 Lyckost
                 <hr/>
             </NuxtLink>
-            <NuxtLink to="/flags" class="link" :disabled="isCurrentPage('/flags')">
-                Flag ord
+            <NuxtLink to="/foruroligende-ord" class="link" :disabled="isCurrentPage('/foruroligende-ord')">
+                Foruroligende ord
                 <hr/>
             </NuxtLink>
         </div>

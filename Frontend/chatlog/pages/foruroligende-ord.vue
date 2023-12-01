@@ -1,5 +1,5 @@
 <style scoped>
-@import url("assets/css/flags.css");
+@import url("assets/css/foruroligendeOrd.css");
 </style>
 
 <script lang="ts">
@@ -14,7 +14,7 @@
     }
 
     export default {
-        name: 'Flags',
+        name: 'ForuroligendeOrd',
         data() {
             return {
                 flags: Array<{ id: number, word: string, description: string }>(),
@@ -152,13 +152,13 @@
         
         <div class="container">
             <div class="title">
-                <h1>Flag ord</h1>
-                <p>Her kan du tilføje, redigere og slette flag ord.</p>
+                <h1>Foruroligende Ord</h1>
+                <p>Her kan du tilføje, redigere og slette foruroligende ord.</p>
             </div>
             <div class="flagForm">
-                <input type="text" v-model="newFlag.word" placeholder="Flag" required class="input" :class="emptyFlagInput ? 'error': ''" v-on:input="detectSpace" />
+                <input type="text" v-model="newFlag.word" placeholder="Foruroligende ord" required class="input" :class="emptyFlagInput ? 'error': ''" v-on:input="detectSpace" />
                 <input type="text" v-model="newFlag.description" class="input" placeholder="Begrundelse" />
-                <button @click="postFlag()">Tilføj flag</button>
+                <button @click="postFlag()">Tilføj Foruroligende ord</button>
             </div>
             <div class="flags">
                 <div class="flag"  v-for="flag in flags" :key="flag.id">
