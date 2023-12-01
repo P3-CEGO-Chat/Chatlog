@@ -33,8 +33,8 @@ export default {
 
     props: {
         keywordArray: {
-            type: Array as PropType<{ word: string, isUser: boolean }[]>,
-            default: () => [] as { word: string, isUser: boolean }[]
+            type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
+            default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
         dateTimeArray: {
             type: Array as PropType<{ dateTimeFrom: string, dateTimeTo: string }[]>,
@@ -67,7 +67,9 @@ export default {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
-                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
+                const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
+                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
+                
                 // fetch data from backend
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
@@ -75,6 +77,7 @@ export default {
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
+                        customerId: this.keywordArray.length !== 0 ? this.keywordArray[customerIdIndex].word : "",
                     }
                 });
                 const jsonData: any = data.value as Message[];
@@ -110,7 +113,6 @@ export default {
         notificationHandler(customerId: String) {
             this.notiVisible = true;
             if (this.notiVisible) {
-                console.log("Her" + customerId.toString());
                 navigator.clipboard.writeText(customerId.toString());
             }
             setTimeout(() => {
@@ -168,5 +170,5 @@ export default {
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible"/>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notiVisible"/>
 </template>

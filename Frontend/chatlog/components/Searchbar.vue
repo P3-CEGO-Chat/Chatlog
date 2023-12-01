@@ -8,10 +8,10 @@ import Calendar from './Calendar.vue';
 export default {
   data() {
     return {
-      searchKeyword: '', 
-      keywordArray: Array<{ word: string, isUser: boolean }>(), // New data property
-      wordObject: { word: "", isUser: false },
-      showInfoBox: false, 
+      searchKeyword: '',
+      keywordArray: Array<{ word: string, isUser: boolean, isCustomerId: boolean }>(), // New data property
+      wordObject: {word: "", isUser: false, isCustomerId: false},
+      showInfoBox: false,
       infoBoxLeft: '0px',
       showCalendar: true,
       dateTimeArray: Array<{ startDateISO: string, endDateISO: string }>(),
@@ -32,6 +32,7 @@ export default {
 
     updateKeywords() {
       this.$emit("updateKeywordArray", this.keywordArray);
+      console.log("Searchbar" + this.keywordArray);
     },
 
     // if the user presses backspace or delete, remove the last keyword
@@ -58,9 +59,11 @@ export default {
       }
       // Check if the keyword is a user or a keyword
       if (this.searchKeyword[0] === "@") {
-        this.wordObject = { "word": this.searchKeyword, "isUser": true };
+        this.wordObject = { "word": this.searchKeyword, "isUser": true, "isCustomerId": false };
+      } else if (this.searchKeyword.startsWith("SN") && ["0", "1", "2", "3", "4"].includes(this.searchKeyword[2])) {
+        this.wordObject = { "word": this.searchKeyword, "isUser": false, "isCustomerId": true };
       } else {
-        this.wordObject = { "word": this.searchKeyword, "isUser": false };
+        this.wordObject = { "word": this.searchKeyword, "isUser": false, "isCustomerId": false };
       }
       const newKeywordLowercase = this.wordObject.word.toLowerCase();
       const keywordExists = this.keywordArray.some(keyword => keyword.word.toLowerCase() === newKeywordLowercase);
@@ -139,7 +142,7 @@ export default {
     <div class="bottomContainer">
       <div class="keywordContainer">
         <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)"
-          :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : '#FFB84B' }">
+          :style="{ backgroundColor: keyword.isUser ? '#6CA5FC' : keyword.isCustomerId ? '#4ed378' : '#FFB84B' }">
           {{ keyword.word }}
           <Icon name="ri:close-circle-line" color="white"></Icon>
         </div>

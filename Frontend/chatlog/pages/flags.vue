@@ -9,6 +9,10 @@
         id: number;
     }
 
+    interface addFlagResponseError {
+        error: string;
+    }
+
     export default {
         name: 'Flags',
         data() {
@@ -18,7 +22,9 @@
                 newFlag: { word: "", description: "" },
                 modalOpen: false,
                 modal2Open: false,
-                currentModalFlag: { id: 0, word: "", description: "" }
+                currentModalFlag: { id: 0, word: "", description: "" },
+                notificationData: { visible: false, text: "", alert: false },
+                emptyFlagInput: false,
             }
         },
         methods: {
@@ -31,7 +37,7 @@
             },
             async postFlag() {
                 if (this.newFlag.word == "") {
-                    alert("Please enter a flag");
+                    this.notificationHandler("Indtast venligst et flag", true);
                     return;
                 } else {
                     try {
@@ -45,8 +51,6 @@
                                 description: this.newFlag.description
                             })
                         })
-                        
-                        console.log(response.id);
 
                         this.flags.push({
                             id: response.id,
@@ -56,9 +60,10 @@
                         
                         this.newFlag.word = "";
                         this.newFlag.description = "";
-
+                        this.notificationHandler("Flag tilføjet", false);
                     } catch (error) {
-                        console.log("This fails" + error)
+                        this.notificationHandler("Flag eksisterer allerede", true);
+
                     }
                 }
             },
@@ -67,6 +72,7 @@
                     await $fetch(`http://localhost:8080/flags/removeflag?word=${flagword}`);
                     this.flags = this.flags.filter((flag: { word: String }) => flag.word !== flagword)
                     this.modalOpen = !this.modalOpen;
+                    this.notificationHandler("Flag fjernet", false);
                 } catch (error) {
                     console.log("This fails" + error)
                 }
@@ -86,13 +92,8 @@
                             description: newDescription
                         })
                     })
-                    /* this.flags = this.flags.filter((flag: { id: number }) => flag.id !== flagId)
-                    this.flags.push({
-                        id: flagId,
-                        word: this.newFlag.word,
-                        description: this.newFlag.description
-                    }); */
                     this.handleModal2({ id: flagId, word: newWord, description: newDescription });
+                    this.notificationHandler("Flag redigeret", false);
                 } catch (error) {
                     console.log("This fails" + error)
                 }
@@ -114,13 +115,34 @@
                 this.currentModalFlag = flag;
                 this.modal2Open = !this.modal2Open;
             },
-            
+            notificationHandler(text: string, alert: boolean) {
+                this.notificationData = { visible: true, text: text, alert: alert}
+                if (alert) {
+                    this.emptyFlagInput = true;
+                }
+                setTimeout(() => {
+                    this.notificationData = { visible: false, text: "", alert: false}
+                    if (alert) {
+                        this.emptyFlagInput = false;
+                    }
+                }, 3000);
+            },
         },
         async mounted() {
          await this.fetchAllFlags();
          this.flags.forEach(flag => {
              console.log(flag.word)
          });
+        }, watch: {
+            /* 'newFlag.word' () {
+                console.log("newFlag.word changed", this.newFlag.word);
+                if (this.newFlag.word == "") {
+                    console.log("emptyFlagInput")
+                    this.emptyFlagInput = true;
+                } else {
+                    this.emptyFlagInput = false;
+                };
+            }  */
         }
     }
 </script>
@@ -134,8 +156,8 @@
                 <p>Her kan du tilføje, redigere og slette flag ord.</p>
             </div>
             <div class="flagForm">
-                <input type="text" v-model="newFlag.word" placeholder="Flag" required v-on:input="detectSpace" />
-                <input type="text" v-model="newFlag.description" placeholder="Begrundelse" />
+                <input type="text" v-model="newFlag.word" placeholder="Flag" required class="input" :class="emptyFlagInput ? 'error': ''" v-on:input="detectSpace" />
+                <input type="text" v-model="newFlag.description" class="input" placeholder="Begrundelse" />
                 <button @click="postFlag()">Tilføj flag</button>
             </div>
             <div class="flags">
@@ -153,4 +175,5 @@
             </div>
         </div>
     </div>
+    <Notification :icon="notificationData.alert ? '/Alert.svg' : '/Tick.svg'" :notificationText="notificationData.text" :activated="notificationData.visible" :alert="notificationData.alert"/>
 </template>

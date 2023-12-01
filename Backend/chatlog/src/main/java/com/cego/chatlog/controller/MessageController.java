@@ -115,12 +115,6 @@ public class MessageController {
             //Creating a user for the database, because the database stores both a user and a message seperately
             customerService.createUser(dataCustomerMessage);
 
-            /*
-             * user.setCustomerId(dataUserMessage.getCustomerId());
-             * user.setUsername(dataUserMessage.getUsername());
-             * user.setUserId(dataUserMessage.getCustomerId());
-             */
-
             // Creating the message for the database.
             Message message = new Message();
             message.setCustomerId(dataCustomerMessage.getCustomerId());
