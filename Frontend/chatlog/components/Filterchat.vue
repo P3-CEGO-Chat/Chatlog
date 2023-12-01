@@ -23,11 +23,12 @@ export default {
         return {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
-            messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
+            messages: <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
             notiVisible: false,
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
+            isFlagged: false,
         };
     },
 
@@ -59,7 +60,20 @@ export default {
                 this.fetchData();
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
-        }
+        },
+        isFlagged: {
+            handler(newVal, oldVal) {
+                console.log('isFlagged changed', newVal, oldVal);
+
+                if (newVal) {
+                    // Checkbox is checked, perform your acti
+                    this.findFlaggedMessages();
+                } else {
+                    // Checkbox is unchecked, perform your action here
+                }
+            },
+            deep: true // This ensures that the watcher will detect changes in the objects inside the array
+        },
     },
 
     methods: {
@@ -117,18 +131,37 @@ export default {
                 this.notiVisible = false;
             }, 3000);
         },
-    },
 
-    // compute the formatted datetime array
-    computed: {
-        formattedDateTimeArray() {
-            return this.dateTimeArray.map(datetime => {
-                const date = new Date(datetime);
-                return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
-                    ` ${date.getHours()}:${date.getMinutes()}`;
-            })
-        }
+
+        async findFlaggedMessages() {
+            const { data } = await useFetch(`http://localhost:8080/messages/find-flagged-messages`);
+            const jsonData: any = data.value as Message[];
+                this.messages = jsonData.map((item: any[]): Message => ({
+                    id: item[0],
+                    customerId: item[1],
+                    text: item[2],
+                    dateTime: item[3],
+                    isFlagged: item[4],
+                    ogUsername: item[5],
+                    username: item[6],
+                }));
+
+        console.log(this.messages); // Logs flagged messages to the console
+        return this.messages;
+    },
 },
+
+// compute the formatted datetime array
+computed: {
+    formattedDateTimeArray() {
+        return this.dateTimeArray.map(datetime => {
+            const date = new Date(datetime);
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
+                ` ${date.getHours()}:${date.getMinutes()}`;
+        })
+    }
+},
+
 }
 </script>
 
@@ -136,8 +169,14 @@ export default {
     <div class="container">
         <div class="SearchField">
             <div class="SearchTex">
-                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) +
+                    ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                <div class="flaggedCheckBox">
+                    <input type="checkbox" id="flaggedCheckBox" name="flaggedCheckName" v-model="isFlagged">
+                    <label for="vehicle1"> Flagged</label>
+                </div>
             </div>
+
             <div class="scrollBar">
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
                     @click="sendMessageId(message.id)">
@@ -161,12 +200,13 @@ export default {
                     </div>
 
                     <!-- {message.isFlagged ? <div class="flagged">
-                        {{ message.isFlagged ? "Flagged" : "" }}
-                    </div>} -->
-                    <span @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
+                                        {{ message.isFlagged ? "Flagged" : "" }}
+                                    </div>} -->
+                    <span @click="notificationHandler(message.customerId)">Customer Id: {{ message.customerId }},<br>OG
+                        Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible"/>
+    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible" />
 </template>

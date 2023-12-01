@@ -65,6 +65,14 @@ public class MessageController {
     @Autowired
     private FlagWordsService flagWordsService;
 
+    @GetMapping("/find-flagged-messages")
+    public ResponseEntity<String> getFlaggedMessages() {
+        List<Object[]> flaggedMessages = messageRepository.findFlaggedMessages();
+        String json = convertObjectToJSON(flaggedMessages);
+        System.out.println(json);   
+        return ResponseEntity.ok(json);
+    }
+
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
         try {
@@ -144,6 +152,8 @@ public class MessageController {
         Integer highestId = messageRepository.findHighestMessageId();
         return ResponseEntity.ok(highestId.toString());
     }
+    
+    
 
     // Gets the page for an message with a specific ID.
     @GetMapping("/message-id/{messageId}")
