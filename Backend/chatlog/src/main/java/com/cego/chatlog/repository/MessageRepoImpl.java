@@ -18,10 +18,10 @@ public class MessageRepoImpl implements MessageRepoCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username, String costumerId) {
+    public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username, String customerId) {
         String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.customer.current_username LIKE :username ORDER BY chatlog.message.id";
         StringBuilder fullTextSearch = new StringBuilder();
-        if (keywords.size() != 0) { 
+        if (keywords.size() != 0) {
             if (keywords.size() > 1) {
                 fullTextSearch.append("(");
             }
@@ -40,8 +40,8 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 fullTextSearch.append(" AND chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
             }
 
-            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND ");
-            //WHERE chatlog.customer.current_username LIKE :username
+            String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch.toString() + " AND");
+            
             Query query = entityManager.createNativeQuery(finalQuery, Object[].class);
             for (int i = 0; i < keywords.size(); i++) {
                 query.setParameter("keyword" + i, keywords.get(i));
@@ -50,14 +50,21 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
             }
-            if (costumerId != "" && costumerId != null) {
+            if (customerId != "" && customerId != null) {
                 finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
                 query = entityManager.createNativeQuery(finalQuery, Object[].class);
-                query.setParameter("customerId", costumerId);
+                query.setParameter("customerId", customerId);
+                for (int i = 0; i < keywords.size(); i++) {
+                    query.setParameter("keyword" + i, keywords.get(i));
+                }     
+                if (dateTimeFrom != "" && dateTimeTo != "") {
+                    query.setParameter("dateTimeFrom", dateTimeFrom);
+                    query.setParameter("dateTimeTo", dateTimeTo);
+                }
             } else {
                 query.setParameter("username", username + "%");
             }
-            System.out.println("Kig her " + finalQuery);
+            
             @SuppressWarnings("unchecked")
             List<Object[]> resultList = (List<Object[]>) query.getResultList();
             return resultList;
@@ -70,13 +77,27 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 fullTextSearch2.append("chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
                 String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
                 query = entityManager.createNativeQuery(finalQuery, Object[].class);
+                if (customerId != "" && customerId != null) {
+                    finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
+                    query = entityManager.createNativeQuery(finalQuery, Object[].class);
+                    query.setParameter("customerId", customerId);
+                } else {
+                    query.setParameter("username", username + "%");
+                }
             }
             
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
             }
-            query.setParameter("username", username + "%");
+            if (customerId != "" && customerId != null) {
+                    baseQuery = baseQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
+                    query = entityManager.createNativeQuery(baseQuery, Object[].class);
+                    query.setParameter("customerId", customerId);
+                } else {
+                    query.setParameter("username", username + "%");
+                }
+            
 
             @SuppressWarnings("unchecked")
             List<Object[]> resultList = (List<Object[]>) query.getResultList();
