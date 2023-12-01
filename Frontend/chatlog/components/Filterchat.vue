@@ -64,11 +64,11 @@ export default {
 
     methods: {
         async fetchData() {
-            
+            // This function will be called when `keywordArray` or `dateTimeArray` changes
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
-                console.log("i got here");
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
+                // fetch data from backend
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
                         keywords: arrayWithoutUsername.length === 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','),
@@ -88,20 +88,25 @@ export default {
                     username: item[6],
                 }));
             } else {
+                // reset messages
                 this.messages = [];
                 this.title = "Venter på søgning";
             }
         },
 
+        // update messageId in parent component
         sendMessageId(messageId: Number) {
             this.$emit("updateMessageId", messageId);
         },
+
+        // format datetime
         formatDateTime(datetime) {
             const dat = new Date(datetime);
             return `${dat.getDate()}/${dat.getMonth() + 1}/${dat.getFullYear()}` +
                 ` ${dat.getHours()}:${dat.getMinutes()}`;
         },
 
+        // notification handler
         notificationHandler(customerId: String) {
             this.notiVisible = true;
             if (this.notiVisible) {
@@ -113,6 +118,8 @@ export default {
             }, 3000);
         },
     },
+
+    // compute the formatted datetime array
     computed: {
         formattedDateTimeArray() {
             return this.dateTimeArray.map(datetime => {
@@ -129,7 +136,6 @@ export default {
     <div class="container">
         <div class="SearchField">
             <div class="SearchTex">
-
                 Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
             </div>
             <div class="scrollBar">
