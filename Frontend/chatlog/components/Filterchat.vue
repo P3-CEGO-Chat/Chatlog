@@ -66,17 +66,16 @@ export default {
         async fetchData() {
             
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
-                console.log("i got here");
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
-                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
+                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
                         keywords: arrayWithoutUsername.length === 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','),
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
-                        costumerId: this.keywordArray.length !== 0 ? this.keywordArray[customerIdIndex].word : null,
+                        customerId: this.keywordArray.length !== 0 ? this.keywordArray[customerIdIndex].word : "",
                     }
                 });
                 const jsonData: any = data.value as Message[];

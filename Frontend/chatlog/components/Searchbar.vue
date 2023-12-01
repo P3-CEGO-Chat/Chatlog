@@ -32,6 +32,7 @@ export default {
 
     updateKeywords() {
       this.$emit("updateKeywordArray", this.keywordArray);
+      console.log("Searchbar" + this.keywordArray);
     },
 
     handleKeydown(event: KeyboardEvent) {
