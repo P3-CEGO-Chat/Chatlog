@@ -30,13 +30,14 @@ export default {
             TempTimeEnd: {},
             isFlagged: false,
             checked: false,
+            messageReverseClass: "",
         };
     },
 
     props: {
         keywordArray: {
-            type: Array as PropType<{ word: string, isUser: boolean }[]>,
-            default: () => [] as { word: string, isUser: boolean }[]
+            type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
+            default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
         dateTimeArray: {
             type: Array as PropType<{ dateTimeFrom: string, dateTimeTo: string }[]>,
@@ -71,6 +72,10 @@ export default {
                     this.findFlaggedMessages();
                 } else {
                     // Checkbox is unchecked, perform your action here
+        messages: {
+            handler() {
+                // This function will be called when `messages` changes
+                if (this.messages.length === 1) {
                 }
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
@@ -83,11 +88,13 @@ export default {
     },
 
     methods: {
+
         async fetchData() {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
             if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
-                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex); // remove username from array
+                const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
+                const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
                 // fetch data from backend
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
@@ -95,6 +102,7 @@ export default {
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
+                        customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
                     }
                 });
                 const jsonData: any = data.value as Message[];
@@ -130,14 +138,12 @@ export default {
         notificationHandler(customerId: String) {
             this.notiVisible = true;
             if (this.notiVisible) {
-                console.log("Her" + customerId.toString());
                 navigator.clipboard.writeText(customerId.toString());
             }
             setTimeout(() => {
                 this.notiVisible = false;
             }, 3000);
         },
-
 
         async findFlaggedMessages() {
             const { data } = await useFetch(`http://localhost:8080/messages/find-flagged-messages`);
@@ -154,20 +160,35 @@ export default {
 
         console.log(this.messages); // Logs flagged messages to the console
         return this.messages;
+
+        messageHighestChecker(messageId: Number) {
+            let highestId = 0;
+            if (this.messages.length <= 1) {
+                return false;
+            }
+            for (const message of this.messages) {
+                if (message.id > highestId) {
+                    highestId = message.id;
+                }
+            }
+            if (messageId === highestId) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     },
 },
-
-// compute the formatted datetime array
-computed: {
-    formattedDateTimeArray() {
-        return this.dateTimeArray.map(datetime => {
-            const date = new Date(datetime);
-            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
-                ` ${date.getHours()}:${date.getMinutes()}`;
-        })
-    }
-},
-
+    // compute the formatted datetime array
+    computed: {
+        formattedDateTimeArray() {
+            return this.dateTimeArray.map(datetime => {
+                const date = new Date(datetime);
+                return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
+                    ` ${date.getHours()}:${date.getMinutes()}`;
+            })
+        }
+    },
 }
 </script>
 
@@ -204,15 +225,15 @@ computed: {
                             </div>
                         </div>
                     </div>
-
                     <!-- {message.isFlagged ? <div class="flagged">
                                         {{ message.isFlagged ? "Flagged" : "" }}
                                     </div>} -->
                     <span @click="notificationHandler(message.customerId)">Customer Id: {{ message.customerId }},<br>OG
                         Username: {{ message.ogUsername }}</span>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="CustomerId copied" :activated="notiVisible" />
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notiVisible"/>
 </template>

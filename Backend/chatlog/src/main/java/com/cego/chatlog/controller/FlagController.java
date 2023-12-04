@@ -33,7 +33,7 @@ public class FlagController {
 
     @PostMapping("/addflag")
     public @ResponseBody ResponseEntity<String> addNewFlag(@RequestBody FlagWords flagWord) {
-
+        Map<String, String> jsonData = new HashMap<>();
         if (flagWordsService.existsByWord(flagWord.getWord())) {
             return new ResponseEntity<>("Error: Flag word already exists.", HttpStatus.BAD_REQUEST);
         }
@@ -43,7 +43,6 @@ public class FlagController {
 
         Number id = findFlagWords.get(0).getId();
 
-        Map<String, String> jsonData = new HashMap<>();
         jsonData.put("success", "Added flag word and description successfully");
         jsonData.put("id", id.toString());
 

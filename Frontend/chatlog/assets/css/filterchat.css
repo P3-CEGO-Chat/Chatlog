@@ -5,7 +5,8 @@
     justify-content: space-between;
     font-family: sans-serif;
     border-radius: 5px;
-    height: 81.5vh;
+    height: 100%;
+    overflow: hidden;
 }
 .SearchField{
     border-radius: 5px;
@@ -45,6 +46,11 @@
     right: 0;
     box-shadow: black 0px 0px 5px;
     transform: rotate3d(1,0,0, 90deg);
+    z-index: 1;
+}
+
+.highestId {
+    bottom: 0;
 }
 
 .searchedMessage:hover span {
@@ -101,7 +107,7 @@
 
 .scrollBar{
     overflow-y: scroll;
-    max-height: calc(87vh - 150px);
+    max-height: calc(100% - 4rem);
     padding-right: 0.5rem;
 }
 .flagged{
