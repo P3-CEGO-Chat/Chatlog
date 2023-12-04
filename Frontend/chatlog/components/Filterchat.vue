@@ -97,6 +97,7 @@ export default {
         checked:{
             handler(newVal) {
                 console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+                this.fetchData();
             }
         }
     },
@@ -117,6 +118,7 @@ export default {
                         dateTimeFrom: this.hasDateTimeData ? this.dateTimeObject.dateTimeFrom : null,
                         dateTimeTo: this.hasDateTimeData ? this.dateTimeObject.dateTimeTo : null,
                         customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
+                        isFlagged: this.checked === true ? true : false,
                     }
                 });
                 const jsonData: any = data.value as Message[];
