@@ -11,6 +11,7 @@
                 title: '',
             };
         },
+
         methods: {
             isCurrentPage(route: string) {
                 this.title = this.$route.path === '/' ? 'SpilNu' : 
@@ -19,7 +20,6 @@
             },
         },
     }
-
 </script>
 
 <template>
