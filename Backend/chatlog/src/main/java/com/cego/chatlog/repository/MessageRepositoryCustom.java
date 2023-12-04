@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface MessageRepoCustom {
+public interface MessageRepositoryCustom {
     List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username, String customerId);
 
     List<Object[]> dateTime(String dateTimeFrom, String dateTimeTo);

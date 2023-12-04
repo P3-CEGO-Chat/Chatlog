@@ -15,7 +15,7 @@ public class CustomerService {
     private CustomerRepository userRepository;
     
     //Creating a user and saving it in the Database
-    public void createUser(DataCustomerMessage dataUserMessage) {
+    public void createUpdateUser(DataCustomerMessage dataUserMessage) {
         Customer user = new Customer();
         user.setId(dataUserMessage.getCustomerId());
         user.setCurrentUsername(dataUserMessage.getUsername());

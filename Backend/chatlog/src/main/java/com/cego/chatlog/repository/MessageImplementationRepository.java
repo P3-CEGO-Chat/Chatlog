@@ -11,7 +11,7 @@ import jakarta.persistence.Query;
 
 
 @Repository
-public class MessageRepoImpl implements MessageRepoCustom {
+public class MessageImplementationRepository implements MessageRepositoryCustom {
 
 
     @PersistenceContext

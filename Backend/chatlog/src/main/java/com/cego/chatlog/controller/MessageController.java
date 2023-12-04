@@ -98,7 +98,7 @@ public class MessageController {
             }
             boolean isFlagged = Flagger.flagChecker(flaggedList ,dataCustomerMessage);
             //Creating a user for the database, because the database stores both a user and a message seperately
-            customerService.createUser(dataCustomerMessage);
+            customerService.createUpdateUser(dataCustomerMessage);
 
             // Creating the message for the database.
             Message message = new Message();

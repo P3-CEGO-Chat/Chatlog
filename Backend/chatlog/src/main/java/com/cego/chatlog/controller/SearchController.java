@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cego.chatlog.repository.MessageRepoCustom;
+import com.cego.chatlog.repository.MessageRepositoryCustom;
 import com.cego.chatlog.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +24,7 @@ public class SearchController {
     MessageRepository messageRepository;
     
     @Autowired
-    MessageRepoCustom messageRepoCustom;
+    MessageRepositoryCustom messageRepoCustom;
 
     //API to search for a specific string, and returning all messages containing this keyword.
     @GetMapping("/")
