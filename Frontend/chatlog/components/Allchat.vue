@@ -10,8 +10,15 @@ interface Message {
   customerId: string;
   dateTime: string;
   text: string;
-  isFlagged: boolean;
+  isFlagged: number;
   ogUsername: string;
+  description?: string;
+}
+
+interface flagWord {
+    id: number;
+    word: string;
+    description: string;
 }
 
 export default {
@@ -35,6 +42,7 @@ export default {
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
+
     this.originalPageCounter = this.currentPage;
     // Scroll to the bottom after the next DOM update
     this.$nextTick(() => {
@@ -102,6 +110,21 @@ export default {
         this.findMessage();
       }
     },
+
+    messages: {
+      handler() {
+        console.log("messages changed");
+        this.getFlaggedData().then((data) => {
+          for (const message of this.messages) {
+              for (const flagWord of data) {
+                  if (message.isFlagged == flagWord.id) {
+                      message.description = flagWord.description;
+                  }
+              }
+          }
+        });
+      },
+    }
   },
 
   methods: {
@@ -256,7 +279,31 @@ export default {
         ogUsername: item[5],
       }));
       return messages;
-    }
+    },
+
+    async getFlaggedData() {
+      const { data } = await useFetch(`http://localhost:8080/flags/getflags`);
+      const jsonData: flagWord[] = data.value as flagWord[];
+      return jsonData;
+    },
+
+    // check if the message is the highest id
+    messageHighestChecker(messageId: Number) {
+      let highestId = 0;
+      if (this.messages.length <= 1) {
+          return false;
+      }
+      for (const message of this.messages) {
+          if (message.id > highestId) {
+              highestId = message.id;
+          }
+      }
+      if (messageId === highestId) {
+          return true;
+      } else {
+          return false;
+      }
+    },
   }
 }
 </script> 
@@ -281,8 +328,8 @@ export default {
             <div v-if="message.isFlagged" class="flagged">
               <div class="icon">
                 <Icon name="material-symbols:warning-outline-rounded" class="icon" />
-                <div class="flaggedText">
-                  Flagged reason
+                <div :class="messageHighestChecker(message.id) ? 'flaggedText highestIdFlagged' : 'flaggedText'">
+                  {{ message.description ? message.description : "Ukendt grund" }}
                 </div>
               </div>
             </div>

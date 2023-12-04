@@ -10,11 +10,17 @@ interface Message {
     customerId: string;
     dateTime: string;
     text: string;
-    isFlagged: boolean;
+    isFlagged: number;
     ogUsername: string;
     username: string;
+    description?: string;
 }
 
+interface flagWord {
+    id: number;
+    word: string;
+    description: string;
+}
 
 export default {
     emits: ["updateMessageId"],
@@ -30,6 +36,7 @@ export default {
             isFlagged: false,
             checked: false,
             messageReverseClass: "",
+            flagWord: {} as flagWord,
         };
     },
 
@@ -50,6 +57,17 @@ export default {
                 // This function will be called when `keywordArray` changes
                 this.fetchData();
                 this.title = "Søger efter: ";
+                console.log("hey")
+
+                this.getFlaggedData().then((data) => {
+                    for (const message of this.messages) {
+                        for (const flagWord of data) {
+                            if (message.isFlagged == flagWord.id) {
+                                message.description = flagWord.description;
+                            }
+                        }
+                    }
+                });
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -73,8 +91,6 @@ export default {
         messages: {
             handler() {
                 // This function will be called when `messages` changes
-                if (this.messages.length === 1) {
-                }
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -159,6 +175,7 @@ export default {
         return this.messages;
         },
 
+        // check if the message is the highest id
         messageHighestChecker(messageId: Number) {
             let highestId = 0;
             if (this.messages.length <= 1) {
@@ -175,6 +192,13 @@ export default {
                 return false;
             }
         },
+
+        async getFlaggedData() {
+            const { data } = await useFetch(`http://localhost:8080/flags/getflags`);
+            const jsonData: flagWord[] = data.value as flagWord[];
+            return jsonData;
+        }
+
     },
     // compute the formatted datetime array
     computed: {
@@ -220,16 +244,11 @@ export default {
                     <div v-if="message.isFlagged" class="flagged">
                         <div class="icon">
                             <Icon name="material-symbols:warning-outline-rounded" class="icon" />
-                            <div class="flaggedText">
-                                Flagged reason
+                            <div :class="messageHighestChecker(message.id) ? 'flaggedText highestIdFlagged' : 'flaggedText'">
+                                {{ message.description ? message.description : 'Ukendt grund' }}
                             </div>
                         </div>
                     </div>
-                    <!-- {message.isFlagged ? <div class="flagged">
-                                        {{ message.isFlagged ? "Flagged" : "" }}
-                                    </div>} -->
-                    <span @click="notificationHandler(message.customerId)">Customer Id: {{ message.customerId }},<br>OG
-                        Username: {{ message.ogUsername }}</span>
                     <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>

@@ -153,17 +153,10 @@
     word-wrap: break-word;
 }
 
-/* Tooltip arrow */
-.icon .flaggedText::after {
-    content: " ";
-    position: absolute;
-    left: 2.5rem;
-    top: -0.5rem;
-    transform: translateX(-50%) rotate(180deg);
-    margin-left: 1rem;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #6CA5FC transparent transparent transparent;
+.highestIdFlagged {
+    top: revert;
+    bottom: 0;
+    right: 105%;
 }
 
 /* Show tooltip on hover */
