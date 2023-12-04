@@ -29,6 +29,7 @@ export default {
             TempTimeStart: {},
             TempTimeEnd: {},
             isFlagged: false,
+            checked: false,
         };
     },
 
@@ -74,6 +75,11 @@ export default {
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
+        checked:{
+            handler(newVal, oldVal) {
+            console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+        }
+    }
     },
 
     methods: {
@@ -172,8 +178,8 @@ computed: {
                 Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) +
                     ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
                 <div class="flaggedCheckBox">
-                    <input type="checkbox" id="flaggedCheckBox" name="flaggedCheckName" v-model="isFlagged">
-                    <label for="vehicle1"> Flagged</label>
+                    <input type="checkbox" id="checkbox" v-model="checked">
+                    <label for="checkbox">Flagged</label>
                 </div>
             </div>
 
