@@ -72,6 +72,9 @@ export default {
                     this.findFlaggedMessages();
                 } else {
                     // Checkbox is unchecked, perform your action here
+                }
+            }
+        },
         messages: {
             handler() {
                 // This function will be called when `messages` changes
@@ -83,8 +86,8 @@ export default {
         checked:{
             handler(newVal, oldVal) {
             console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+            }
         }
-    }
     },
 
     methods: {
@@ -160,6 +163,7 @@ export default {
 
         console.log(this.messages); // Logs flagged messages to the console
         return this.messages;
+        },
 
         messageHighestChecker(messageId: Number) {
             let highestId = 0;
@@ -178,7 +182,6 @@ export default {
             }
         },
     },
-},
     // compute the formatted datetime array
     computed: {
         formattedDateTimeArray() {
@@ -189,7 +192,7 @@ export default {
             })
         }
     },
-}
+    }
 </script>
 
 <template>
