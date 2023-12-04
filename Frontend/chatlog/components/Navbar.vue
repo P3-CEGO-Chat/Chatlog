@@ -8,14 +8,34 @@
     export default {
         data() {
             return {
-                title: '',
+                title: 'SpilNu',
             };
         },
 
+        mounted() {
+            this.setTitle();
+        },
+
+        watch: {
+            $route() {
+                this.setTitle();
+            },
+        },
+
         methods: {
+            setTitle() {
+                if (process.server) {
+                    // Server side rendering
+                    this.title = this.$route.path === '/' ? 'SpilNu' : 
+                        this.$route.path === '/flags' ? 'flag ord' : this.$route.path.slice(1);
+                } else {
+                    // Client side rendering
+                    this.title = this.$route.path === '/' ? 'SpilNu' : 
+                        this.$route.path === '/flags' ? 'flag ord' : this.$route.path.charAt(1).toUpperCase() + this.$route.path.slice(2);
+                }
+            },
+
             isCurrentPage(route: string) {
-                this.title = this.$route.path === '/' ? 'SpilNu' : 
-                this.$route.path === '/flags' ? 'flag ord' : route.charAt(1).toUpperCase() + route.slice(2);
                 return this.$route.path === route;
             },
         },

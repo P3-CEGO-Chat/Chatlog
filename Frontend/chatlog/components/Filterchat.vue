@@ -17,6 +17,7 @@ interface Message {
 
 
 export default {
+    emits: ["updateMessageId"],
     data() {
         return {
             keyword: "" as string | unknown, // explicitly define the type of keyword
