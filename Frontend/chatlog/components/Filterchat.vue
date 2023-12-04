@@ -132,6 +132,9 @@ export default {
 
         messageHighestChecker(messageId: Number) {
             let highestId = 0;
+            if (this.messages.length <= 1) {
+                return false;
+            }
             for (const message of this.messages) {
                 if (message.id > highestId) {
                     highestId = message.id;
