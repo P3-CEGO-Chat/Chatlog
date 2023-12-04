@@ -24,7 +24,7 @@ public class SearchController {
     MessageRepository messageRepository;
     
     @Autowired
-    MessageRepositoryCustom messageRepoCustom;
+    MessageRepositoryCustom messageRepositoryCustom;
 
     //API to search for a specific string, and returning all messages containing this keyword.
     @GetMapping("/")
@@ -37,12 +37,12 @@ public class SearchController {
 
     @GetMapping("/fulltext")
     public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId) {
-        return messageRepoCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId);
+        return messageRepositoryCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId);
     }
 
     @GetMapping("/datetime")
     public @ResponseBody List<Object[]> dateTimeSearch(@RequestParam String dateTimeFrom, @RequestParam String dateTimeTo) {
-        return messageRepoCustom.dateTime(dateTimeFrom, dateTimeTo);
+        return messageRepositoryCustom.dateTime(dateTimeFrom, dateTimeTo);
     }
 
     //Generalized function to convert List<Object[]> to JSON.
