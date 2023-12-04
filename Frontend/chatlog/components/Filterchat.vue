@@ -3,9 +3,7 @@
 </style>
 
 <script lang="ts">
-import type { AsyncData } from '#app';
 import type { PropType } from 'vue';
-
 
 interface Message {
     id: number;

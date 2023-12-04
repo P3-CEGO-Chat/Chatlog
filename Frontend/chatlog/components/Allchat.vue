@@ -265,7 +265,7 @@ export default {
       return messages;
     }
   }
-};
+}
 </script> 
 
 <template>
