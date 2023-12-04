@@ -37,9 +37,9 @@ export default {
             type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
             default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
-        dateTimeArray: {
-            type: Array as PropType<{ dateTimeFrom: string, dateTimeTo: string }[]>,
-            default: () => [] as { dateTimeFrom: string, dateTimeTo: string }[]
+        dateTimeObject: {
+            type: Object as PropType<{ dateTimeFrom: string, dateTimeTo: string }>,
+            default: () => ({ dateTimeFrom: "", dateTimeTo: "" })
         },
     },
 
@@ -53,10 +53,10 @@ export default {
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
-        dateTimeArray: {
+        dateTimeObject: {
             handler(newVal, oldVal) {
                 // This function will be called when `dateTimeArray` changes
-                console.log('dateTimeArray changed', newVal, oldVal);
+                console.log('dateTimeObject changed', newVal, oldVal);
                 this.fetchData();
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
@@ -92,17 +92,18 @@ export default {
 
         async fetchData() {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
-            if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
+            if (this.keywordArray.length > 0 || this.hasDateTimeData) {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
                 // fetch data from backend
+                console.log("kig her: ", this.dateTimeObject)
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
                         keywords: arrayWithoutUsername.length === 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','),
                         username: usernameIndex !== -1 ? this.keywordArray[usernameIndex].word.slice(1) : "",
-                        dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
-                        dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
+                        dateTimeFrom: this.hasDateTimeData ? this.dateTimeObject.dateTimeFrom : null,
+                        dateTimeTo: this.hasDateTimeData ? this.dateTimeObject.dateTimeTo : null,
                         customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
                     }
                 });
@@ -129,7 +130,7 @@ export default {
         },
 
         // format datetime
-        formatDateTime(datetime) {
+        formatDateTime(datetime: string) {
             const dat = new Date(datetime);
             return `${dat.getDate()}/${dat.getMonth() + 1}/${dat.getFullYear()}` +
                 ` ${dat.getHours()}:${dat.getMinutes()}`;
@@ -182,12 +183,16 @@ export default {
     },
     // compute the formatted datetime array
     computed: {
-        formattedDateTimeArray() {
+        /* formattedDateTimeArray() {
             return this.dateTimeArray.map(datetime => {
                 const date = new Date(datetime);
                 return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
                     ` ${date.getHours()}:${date.getMinutes()}`;
             })
+        }, */
+        // check if the dateTimeObject has any data
+        hasDateTimeData() {
+            return Object.keys(this.dateTimeObject).length > 0;
         }
     },
     }
@@ -197,8 +202,7 @@ export default {
     <div class="container">
         <div class="SearchField">
             <div class="SearchTex">
-                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) +
-                    ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                Viser resultat for tidsrummet: "{{ dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo ? formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) : '' }}"
                 <div class="flaggedCheckBox">
                     <input type="checkbox" id="checkbox" v-model="checked">
                     <label for="checkbox">Flagged</label>
