@@ -27,7 +27,6 @@ export default {
 
     updateKeywords() {
       this.$emit("updateKeywordArray", this.keywordArray);
-      console.log("Searchbar" + this.keywordArray);
     },
 
     // if the user presses backspace or delete, remove the last keyword
@@ -103,7 +102,6 @@ export default {
     // update the dateTimeArray
     updateDateTimeObject(newDateTimeObject: { dateTimeFrom: string, dateTimeTo: string }) {
       this.dateTimeObject = newDateTimeObject;
-      console.log('Received updateDateTimeObject:', this.dateTimeObject);
       this.$emit("updateDateTimeObject", this.dateTimeObject);
     }
   },

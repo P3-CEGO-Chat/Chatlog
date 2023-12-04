@@ -32,7 +32,7 @@
                 try {
                     this.flags = await $fetch(`http://localhost:8080/flags/getflags`)
                 } catch (error) {
-                    console.log("Hallo mfer" + error)
+                    console.error(error)
                 }
             },
             async postFlag() {
@@ -74,12 +74,11 @@
                     this.modalOpen = !this.modalOpen;
                     this.notificationHandler("Flag fjernet", false);
                 } catch (error) {
-                    console.log("This fails" + error)
+                    console.error(error)
                 }
             },
 
             async editFlag(flagId: number, newWord: string, newDescription: string) {
-                console.log("FlagId: ", flagId)
                 try {
                     await $fetch(`http://localhost:8080/flags/updateflag`, {
                         method: "POST",
@@ -95,7 +94,7 @@
                     this.handleModal2({ id: flagId, word: newWord, description: newDescription });
                     this.notificationHandler("Flag redigeret", false);
                 } catch (error) {
-                    console.log("This fails" + error)
+                    console.error(error)
                 }
             },
 
@@ -130,19 +129,6 @@
         },
         async mounted() {
          await this.fetchAllFlags();
-         this.flags.forEach(flag => {
-             console.log(flag.word)
-         });
-        }, watch: {
-            /* 'newFlag.word' () {
-                console.log("newFlag.word changed", this.newFlag.word);
-                if (this.newFlag.word == "") {
-                    console.log("emptyFlagInput")
-                    this.emptyFlagInput = true;
-                } else {
-                    this.emptyFlagInput = false;
-                };
-            }  */
         }
     }
 </script>

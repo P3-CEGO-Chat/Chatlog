@@ -60,7 +60,6 @@
                     // Remove all whitespace from the string
                     this.ModalPicked[0].word = this.ModalPicked[0].word.replace(/\s/g, "");
                 }
-                console.log(this.ModalPicked);
             },
         }
     }

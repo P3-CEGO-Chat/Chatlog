@@ -47,7 +47,6 @@ public class MessageController {
     public ResponseEntity<String> getFlaggedMessages() {
         List<Object[]> flaggedMessages = messageRepository.findFlaggedMessages();
         String json = convertObjectToJSON(flaggedMessages);
-        System.out.println(json);   
         return ResponseEntity.ok(json);
     }
 
@@ -138,15 +137,10 @@ public class MessageController {
             int startId = highestId - (temppage * 25) + 1;
             int endId = startId + 24;
 
-            System.out.println(temppage);
-
             if(startId < 1){
                 startId = 1;
                 endId = highestId%25+25;
-            }   
-
-            System.out.println(startId);
-            System.out.println(endId);
+            }
 
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 

@@ -46,26 +46,22 @@ export default {
 
     watch: {
         keywordArray: {
-            handler(newVal, oldVal) {
+            handler() {
                 // This function will be called when `keywordArray` changes
-                console.log('keywordArray changed', newVal, oldVal);
                 this.fetchData();
                 this.title = "Søger efter: ";
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         dateTimeObject: {
-            handler(newVal, oldVal) {
-                // This function will be called when `dateTimeArray` changes
-                console.log('dateTimeObject changed', newVal, oldVal);
+            handler() {
+                // This function will be called when `dateTimeObject` changes
                 this.fetchData();
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         isFlagged: {
-            handler(newVal, oldVal) {
-                console.log('isFlagged changed', newVal, oldVal);
-
+            handler(newVal) {
                 if (newVal) {
                     // Checkbox is checked, perform your acti
                     this.findFlaggedMessages();
@@ -83,8 +79,8 @@ export default {
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         checked:{
-            handler(newVal, oldVal) {
-            console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+            handler(newVal) {
+                console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
             }
         }
     },
@@ -98,7 +94,6 @@ export default {
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
                 // fetch data from backend
-                console.log("kig her: ", this.dateTimeObject)
                 const { data } = await useFetch('http://localhost:8080/search/fulltext', {
                     query: {
                         keywords: arrayWithoutUsername.length === 0 ? "" : arrayWithoutUsername.map(item => item.word).join(','),
@@ -161,7 +156,6 @@ export default {
                     username: item[6],
                 }));
 
-        console.log(this.messages); // Logs flagged messages to the console
         return this.messages;
         },
 

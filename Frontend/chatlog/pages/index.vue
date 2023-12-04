@@ -37,20 +37,15 @@
     methods: {
       updateKeywordArray(newKeywordArray: Array<{ word: string, isUser: boolean, isCustomerId: boolean }>) {
         this.keywordArray = newKeywordArray;
-        console.log('Received updateKeywordArray:', this.keywordArray);
       },
       updateDateTimeObject(newDateTimeObject: {dateTimeFrom: string, dateTimeTo: string}) {
         this.dateTimeObject = newDateTimeObject;
-        console.log('Received updateDateTimeObject:', this.dateTimeObject);
       },
       updateMessageId(newMessageId: number) {
         this.messageId = newMessageId as number;
-        console.log('Received updateMessageId:', this.messageId);
-
       },
       resetMessageId() {
         this.messageId = 0 as number;
-        console.log('Received resetMessageId:', this.messageId);
       }
     },
   };
