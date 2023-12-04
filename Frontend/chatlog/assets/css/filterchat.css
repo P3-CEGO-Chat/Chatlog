@@ -43,7 +43,7 @@
     border-radius: 5px;
     position: absolute;
     color: #FFFFFF;
-    right: 0;
+    right: 10%;
     box-shadow: black 0px 0px 5px;
     transform: rotate3d(1,0,0, 90deg);
     z-index: 1;
@@ -57,7 +57,6 @@
     visibility: visible;
     transform-origin: 50% 0%;
     animation: in-right 300ms ease 0ms 1 forwards;
-    z-index: 10;
     position: absolute;
 }
 
@@ -134,6 +133,12 @@
     right: 0;
     font-size: 1rem;
     color: #FFFFFF;
+    box-shadow: black 0px 0px 5px;
+}
+
+.highestIdFlagged {
+    top: revert;
+    bottom: 0;
 }
 
 .icon{

@@ -93,6 +93,4 @@ public class FlagController {
             return new ResponseEntity<>("Error: Unable to update the flag.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-   
-    
 }
