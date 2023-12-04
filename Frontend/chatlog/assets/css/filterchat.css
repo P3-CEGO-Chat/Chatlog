@@ -20,6 +20,9 @@
     padding: 1rem;
     text-align: center;
     margin-bottom: 0.5rem;
+    position: relative;
+    display: flex;
+    
 }
 
 .searchedMessage{
@@ -151,4 +154,9 @@
 .icon:hover .flaggedText {
     display: block;
     z-index: 2;
+}
+
+.flaggedCheckBox{
+    position : absolute;
+    left: 87%;
 }

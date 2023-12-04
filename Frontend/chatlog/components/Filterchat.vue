@@ -23,11 +23,13 @@ export default {
         return {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
-            messages : <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
+            messages: <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
             notiVisible: false,
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
+            isFlagged: false,
+            checked: false,
             messageReverseClass: "",
         };
     },
@@ -61,15 +63,28 @@ export default {
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
+        isFlagged: {
+            handler(newVal, oldVal) {
+                console.log('isFlagged changed', newVal, oldVal);
+
+                if (newVal) {
+                    // Checkbox is checked, perform your acti
+                    this.findFlaggedMessages();
+                } else {
+                    // Checkbox is unchecked, perform your action here
         messages: {
             handler() {
                 // This function will be called when `messages` changes
                 if (this.messages.length === 1) {
-                    
                 }
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
+        checked:{
+            handler(newVal, oldVal) {
+            console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+        }
+    }
     },
 
     methods: {
@@ -130,6 +145,22 @@ export default {
             }, 3000);
         },
 
+        async findFlaggedMessages() {
+            const { data } = await useFetch(`http://localhost:8080/messages/find-flagged-messages`);
+            const jsonData: any = data.value as Message[];
+                this.messages = jsonData.map((item: any[]): Message => ({
+                    id: item[0],
+                    customerId: item[1],
+                    text: item[2],
+                    dateTime: item[3],
+                    isFlagged: item[4],
+                    ogUsername: item[5],
+                    username: item[6],
+                }));
+
+        console.log(this.messages); // Logs flagged messages to the console
+        return this.messages;
+
         messageHighestChecker(messageId: Number) {
             let highestId = 0;
             if (this.messages.length <= 1) {
@@ -147,7 +178,7 @@ export default {
             }
         },
     },
-
+},
     // compute the formatted datetime array
     computed: {
         formattedDateTimeArray() {
@@ -158,7 +189,6 @@ export default {
             })
         }
     },
-    
 }
 </script>
 
@@ -166,8 +196,14 @@ export default {
     <div class="container">
         <div class="SearchField">
             <div class="SearchTex">
-                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) + ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                Viser resultat for tidsrummet: "{{ dateTimeArray[0] && dateTimeArray[1] ? formatDateTime(dateTimeArray[0]) +
+                    ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
+                <div class="flaggedCheckBox">
+                    <input type="checkbox" id="checkbox" v-model="checked">
+                    <label for="checkbox">Flagged</label>
+                </div>
             </div>
+
             <div class="scrollBar">
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
                     @click="sendMessageId(message.id)">
@@ -189,6 +225,11 @@ export default {
                             </div>
                         </div>
                     </div>
+                    <!-- {message.isFlagged ? <div class="flagged">
+                                        {{ message.isFlagged ? "Flagged" : "" }}
+                                    </div>} -->
+                    <span @click="notificationHandler(message.customerId)">Customer Id: {{ message.customerId }},<br>OG
+                        Username: {{ message.ogUsername }}</span>
                     <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
                 </div>
             </div>

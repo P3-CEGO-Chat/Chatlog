@@ -39,5 +39,9 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Query(value="SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE MATCH(chatlog.message.message_text) AGAINST(:keyword% IN NATURAL LANGUAGE MODE) AND chatlog.user.username LIKE :keyword2% ORDER BY chatlog.message.message_id", nativeQuery = true)
     List<Object[]> findSearchFullText(@Param("keyword") String keyword, @Param("keyword2") String keyword2);
 
+    //SQL Search to find all messages with value 1 in isFlagged
+    @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.is_flagged = 1 ORDER BY chatlog.message.id", nativeQuery = true)
+    List<Object[]> findFlaggedMessages();
+
     
 }
