@@ -85,7 +85,8 @@ export default {
         },
         checked:{
             handler(newVal, oldVal) {
-            console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+                console.log("Chacked changes" + this.checked);
+                this.fetchData();
             }
         }
     },
@@ -94,7 +95,7 @@ export default {
 
         async fetchData() {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
-            if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0) {
+            if (this.keywordArray.length > 0 || this.dateTimeArray.length > 0 || this.checked === true) {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
@@ -106,6 +107,7 @@ export default {
                         dateTimeFrom: this.dateTimeArray.length !== 0 ? this.dateTimeArray[0] : null,
                         dateTimeTo: this.dateTimeArray.length !== 0 ? this.dateTimeArray[1] : null,
                         customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
+                        isFlagged: this.checked === true ? true : false,
                     }
                 });
                 const jsonData: any = data.value as Message[];
@@ -190,7 +192,11 @@ export default {
                 return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
                     ` ${date.getHours()}:${date.getMinutes()}`;
             })
-        }
+        },
+
+        checkedAsInt() {
+            return this.checked ? 1 : 0;
+        },
     },
     }
 </script>

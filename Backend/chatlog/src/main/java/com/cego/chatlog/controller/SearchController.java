@@ -36,8 +36,8 @@ public class SearchController {
     }
 
     @GetMapping("/fulltext")
-    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId) {
-        return messageRepoCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId);
+    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId, @RequestParam boolean isFlagged) {
+        return messageRepoCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId, isFlagged);
     }
 
     @GetMapping("/datetime")

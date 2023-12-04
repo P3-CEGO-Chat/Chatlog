@@ -1,10 +1,16 @@
 package com.cego.chatlog.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,10 +20,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import com.cego.chatlog.entity.DataCustomerMessage;
 import com.cego.chatlog.entity.FlagWords;
 import com.cego.chatlog.entity.Message;
+import com.cego.chatlog.repository.FlagWordsRepository;
 import com.cego.chatlog.repository.MessageRepository;
 import com.cego.chatlog.service.CustomerService;
 import com.cego.chatlog.service.FlagWordsService;
@@ -39,6 +60,9 @@ public class MessageController {
 
     @Autowired
     private WebSocketSessionManager sessionManager;
+
+    @Autowired
+    private FlagWordsRepository flagWordsRepository;
 
     @Autowired
     private FlagWordsService flagWordsService;
@@ -93,13 +117,19 @@ public class MessageController {
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
-            List<String> flaggedList = new ArrayList<String>();
+            Map<String, Integer> flaggedMap = new HashMap<>();
             for (FlagWords flagWords : flagWordsService.findAll()){
-                flaggedList.add(flagWords.getWord());
+                flaggedMap.put(flagWords.getWord(), flagWords.getId());
             }
-            boolean isFlagged = Flagger.flagChecker(flaggedList ,dataCustomerMessage);
+            int isFlagged = Flagger.flagChecker(flaggedMap ,dataCustomerMessage);
             //Creating a user for the database, because the database stores both a user and a message seperately
             customerService.createUser(dataCustomerMessage);
+
+            /*
+             * user.setCustomerId(dataUserMessage.getCustomerId());
+             * user.setUsername(dataUserMessage.getUsername());
+             * user.setUserId(dataUserMessage.getCustomerId());
+             */
 
             // Creating the message for the database.
             Message message = new Message();
@@ -133,6 +163,9 @@ public class MessageController {
         try {
 
             Integer highestId = messageRepository.findHighestMessageId();
+            // int endId = -(Integer.parseInt(messageId) % 25) + Integer.parseInt(messageId)
+            // + highestId%25;
+            // int startId = endId - 24;
 
             int temppage = (int) Math.ceil(((double) highestId - Integer.parseInt(messageId) + 1) / 25);
             int startId = highestId - (temppage * 25) + 1;
@@ -140,10 +173,20 @@ public class MessageController {
 
             System.out.println(temppage);
 
+            /*
+             * if(startId < 24){
+             * startId = 1;
+             * endId = highestId%25+25;
+             * }
+             */
+
             if(startId < 1){
                 startId = 1;
                 endId = highestId%25+25;
             }   
+           
+            
+            
 
             System.out.println(startId);
             System.out.println(endId);
