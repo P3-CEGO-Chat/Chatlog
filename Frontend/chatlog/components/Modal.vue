@@ -10,6 +10,7 @@
                 type: String,
                 default: "Test text"
             },
+            
             ModalPicked: {
                 type: Array<{ id: number, word: string, description: string }>,
                 default: "Test"
@@ -19,27 +20,33 @@
                 type: String,
                 default: "Yes"
             },
+
             LeftButtonEmit: {
                 type: String,
                 default: ""
             },
+
             RightButtonEmit: {
                 type: String,
                 default: ""
             },
+
             RightButtonText: {
                 type: String,
                 default: "No"
             },
+
             activated: {
                 type: Boolean,
                 default: false
             }
         },
+
         methods: {
             rightButtonEmit() {
                 this.$emit(`${this.RightButtonEmit}`);
             },
+
             leftButtonEmit() {
                 if (this.LeftButtonEmit == "removeFlag") {
                     this.$emit(`${this.LeftButtonEmit}`, this.ModalPicked[0].word);
@@ -47,6 +54,7 @@
                     this.$emit(`${this.LeftButtonEmit}`, this.ModalPicked[0].id, this.ModalPicked[0].word, this.ModalPicked[0].description);
                 }
             },
+
             detectSpace() {
                 if (this.ModalPicked[0].word.includes(" ")) {
                     // Remove all whitespace from the string
@@ -56,7 +64,6 @@
             },
         }
     }
-
 </script>
 
 <template>

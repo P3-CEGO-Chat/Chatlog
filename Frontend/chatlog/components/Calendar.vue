@@ -1,16 +1,10 @@
-<template>
-  <div>
-    <Datepicker v-model="date" locale="dk" cancelText="Ryd" selectText="Vælg" :auto-position="false" range
-      no-disabled-range :clearable="true" :month-change-on-scroll="false" ref="datepickerRef" @open="onOpen"
-      @closed="onClose">
-      <template #trigger>
-        <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="2.5em">
-        </Icon>
-      </template>
-    </Datepicker>
-  </div>
-</template>
-  
+<style scoped>
+@import '~/assets/css/Calendar.css';
+</style>
+
+<script setup lang="ts">
+import Datepicker from '@vuepic/vue-datepicker';
+</script>
 
 <script lang="ts">
 import { ref/*, onMounted*/ } from 'vue';
@@ -26,6 +20,7 @@ export default {
       isOpen: false,
     };
   },
+
   methods: {
     // This function will be called when `keywordArray` changes
     sendDateTime(dateTimeFrom: string, dateTimeTo: string) {
@@ -53,17 +48,18 @@ export default {
       this.sendDateTime(startDateISO, endDateISO);
     },
   },
-
 }
-
 </script>
 
-<script setup lang="ts">
-
-import Datepicker from '@vuepic/vue-datepicker';
-</script>
-
-<style scoped>
-@import '~/assets/css/Calendar.css';
-</style>
-    
+<template>
+  <div>
+    <Datepicker v-model="date" locale="dk" cancelText="Ryd" selectText="Vælg" :auto-position="false" range
+      no-disabled-range :clearable="true" :month-change-on-scroll="false" ref="datepickerRef" @open="onOpen"
+      @closed="onClose">
+      <template #trigger>
+        <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="2.5em">
+        </Icon>
+      </template>
+    </Datepicker>
+  </div>
+</template>

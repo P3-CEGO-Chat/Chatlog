@@ -18,12 +18,7 @@ export default {
       firstKeywordEntered: false,
     };
   },
-  computed: {
-    placeholderText() {
-      return this.keywordArray.length > 0 ? 'Tilføj kriterier' : 'Søg efter brugernavn/kundenummer eller nøgleord';
-    }
-  },
-
+  
   methods: {
     removeKeyword(index: number) {
       this.keywordArray.splice(index, 1);
@@ -57,6 +52,7 @@ export default {
         }, 2000); // 3000 milliseconds = 3 seconds
         return;
       }
+
       // Check if the keyword is a user or a keyword
       if (this.searchKeyword[0] === "@") {
         this.wordObject = { "word": this.searchKeyword, "isUser": true, "isCustomerId": false };
@@ -65,6 +61,7 @@ export default {
       } else {
         this.wordObject = { "word": this.searchKeyword, "isUser": false, "isCustomerId": false };
       }
+
       const newKeywordLowercase = this.wordObject.word.toLowerCase();
       const keywordExists = this.keywordArray.some(keyword => keyword.word.toLowerCase() === newKeywordLowercase);
       
@@ -109,9 +106,14 @@ export default {
       console.log('Received updateDateTimeObject:', this.dateTimeObject);
       this.$emit("updateDateTimeObject", this.dateTimeObject);
     }
-
   },
-};
+  
+  computed: {
+    placeholderText() {
+      return this.keywordArray.length > 0 ? 'Tilføj kriterier' : 'Søg efter brugernavn/kundenummer eller nøgleord';
+    }
+  },
+}
 </script>
 
 <template>

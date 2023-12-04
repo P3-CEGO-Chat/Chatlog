@@ -1,5 +1,5 @@
 <style scoped>
-    @import url('~/assets/css/notification.css');
+@import url('~/assets/css/notification.css');
 </style>
 
 <script lang="ts">
@@ -9,19 +9,23 @@
                 type: String,
                 default: "Icon here "
             },
+
             notificationText: {
                 type: String,
                 default: "Test notifcation text"
             },
+
             activated: {
                 type: Boolean,
                 default: false
             },
+            
             alert: {
                 type: Boolean,
                 default: false
             },
         },
+
         computed: {
             notificationClass() {
                 return {
