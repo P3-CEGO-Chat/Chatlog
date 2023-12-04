@@ -14,7 +14,7 @@ export default {
       showInfoBox: false,
       infoBoxLeft: '0px',
       showCalendar: true,
-      dateTimeArray: Array<{ startDateISO: string, endDateISO: string }>(),
+      dateTimeObject: { dateTimeFrom: "", dateTimeTo: "" },
       firstKeywordEntered: false,
     };
   },
@@ -104,10 +104,10 @@ export default {
     },
 
     // update the dateTimeArray
-    updateDateTimeArray(newDateTimeArray: Array<{ startDateISO: string, endDateISO: string }>) {
-      this.dateTimeArray = newDateTimeArray;
-      console.log('Received updateDateTimeArray:', this.dateTimeArray);
-      this.$emit("updateDateTimeArray", this.dateTimeArray);
+    updateDateTimeObject(newDateTimeObject: { dateTimeFrom: string, dateTimeTo: string }) {
+      this.dateTimeObject = newDateTimeObject;
+      console.log('Received updateDateTimeObject:', this.dateTimeObject);
+      this.$emit("updateDateTimeObject", this.dateTimeObject);
     }
 
   },
@@ -134,7 +134,7 @@ export default {
       </div>
 
       <div v-if="showCalendar" class="calendar">
-        <Calendar @updateDateTimeArray="updateDateTimeArray" />
+        <Calendar @updateDateTimeObject="updateDateTimeObject" />
 
       </div>
     </div>

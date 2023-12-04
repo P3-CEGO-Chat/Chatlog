@@ -1,8 +1,8 @@
 <template>
     <div class="layout">
       <div>
-        <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeArray="updateDateTimeArray" />
-        <Filterchat :keywordArray="keywordArray" :dateTimeArray="dateTimeArray" @updateMessageId="updateMessageId"/>
+        <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeObject="updateDateTimeObject" />
+        <Filterchat :keywordArray="keywordArray" :dateTimeObject="dateTimeObject" @updateMessageId="updateMessageId"/>
       </div>
       <div>
         <Allchat :messageId="messageId" @resetMessageId="resetMessageId">
@@ -29,19 +29,19 @@
     },
     data() {
       return {
-        keywordArray: Array<{ word: string, isUser: boolean }>(),
-        dateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>(), 
+        keywordArray: Array<{ word: string, isUser: boolean, isCustomerId: boolean }>(),
+        dateTimeObject: {dateTimeFrom: "", dateTimeTo: ""}, 
         messageId: 0 as number,
       }
     },
     methods: {
-      updateKeywordArray(newKeywordArray: Array<{ word: string, isUser: boolean }>) {
+      updateKeywordArray(newKeywordArray: Array<{ word: string, isUser: boolean, isCustomerId: boolean }>) {
         this.keywordArray = newKeywordArray;
         console.log('Received updateKeywordArray:', this.keywordArray);
       },
-      updateDateTimeArray(newDateTimeArray: Array<{dateTimeFrom: string, dateTimeTo: string}>) {
-        this.dateTimeArray = newDateTimeArray;
-        console.log('Received updateDateTimeArray:', this.dateTimeArray);
+      updateDateTimeObject(newDateTimeObject: {dateTimeFrom: string, dateTimeTo: string}) {
+        this.dateTimeObject = newDateTimeObject;
+        console.log('Received updateDateTimeObject:', this.dateTimeObject);
       },
       updateMessageId(newMessageId: number) {
         this.messageId = newMessageId as number;

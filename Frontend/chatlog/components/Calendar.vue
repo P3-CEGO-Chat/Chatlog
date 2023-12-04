@@ -28,8 +28,8 @@ export default {
   },
   methods: {
     // This function will be called when `keywordArray` changes
-    sendDateTime(startDateISO: string, endDateISO: string) {
-      this.$emit("updateDateTimeArray", [startDateISO, endDateISO]);
+    sendDateTime(dateTimeFrom: string, dateTimeTo: string) {
+      this.$emit("updateDateTimeObject", {dateTimeFrom, dateTimeTo});
     },
 
     onOpen() {
@@ -44,13 +44,10 @@ export default {
   watch: {
     date(newDate) {
       if (newDate[1] === undefined || newDate[1] === null) {
-        newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate());
+        newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 23, 59, 59, 999);
+        newDate[0] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 0, 0, 0, 0);
       }
 
-      if (newDate[0].getTime() === newDate[1].getTime()) {
-        // If the start and end dates are the same, set the end date to be the start date plus some time interval
-        newDate[1] = new Date(newDate[0].getTime() + 1000 * 60 * 60 * 24); // Plus 24 hours
-      }
       const startDateISO = newDate[0].toISOString();
       const endDateISO = newDate[1].toISOString();
       this.sendDateTime(startDateISO, endDateISO);
