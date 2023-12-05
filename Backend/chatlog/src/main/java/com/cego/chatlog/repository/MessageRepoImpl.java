@@ -22,9 +22,11 @@ public class MessageRepoImpl implements MessageRepoCustom {
         String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.customer.current_username LIKE :username ORDER BY chatlog.message.id";
         StringBuilder fullTextSearch = new StringBuilder();
         if (keywords.size() != 0) {
+
             if (keywords.size() > 1) {
                 fullTextSearch.append("(");
             }
+
             for (int i = 0; i < keywords.size(); i++) {
                 fullTextSearch.append("MATCH(chatlog.message.message_text) AGAINST(:keyword");
                 fullTextSearch.append(i);
@@ -33,12 +35,15 @@ public class MessageRepoImpl implements MessageRepoCustom {
                     fullTextSearch.append(" AND ");
                 }
             }
+
             if (keywords.size() > 1) {
                 fullTextSearch.append(")");
             }
+
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 fullTextSearch.append(" AND chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
             }
+
             if (isFlagged == true) {
                 fullTextSearch.append(" AND chatlog.message.is_flagged IS NOT NULL");
             }
@@ -50,22 +55,28 @@ public class MessageRepoImpl implements MessageRepoCustom {
             Query query = entityManager.createNativeQuery(finalQuery, Object[].class);
             for (int i = 0; i < keywords.size(); i++) {
                 query.setParameter("keyword" + i, keywords.get(i));
-            }     
+            }   
+
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
             }
+
             if (customerId != "" && customerId != null) {
+
                 finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
                 query = entityManager.createNativeQuery(finalQuery, Object[].class);
                 query.setParameter("customerId", customerId);
+
                 for (int i = 0; i < keywords.size(); i++) {
                     query.setParameter("keyword" + i, keywords.get(i));
-                }     
+                }   
+
                 if (dateTimeFrom != "" && dateTimeTo != "") {
                     query.setParameter("dateTimeFrom", dateTimeFrom);
                     query.setParameter("dateTimeTo", dateTimeTo);
                 }
+
             } else {
                 query.setParameter("username", username + "%");
             }
@@ -75,15 +86,18 @@ public class MessageRepoImpl implements MessageRepoCustom {
             return resultList;
 
         } else {
+
             Query query = null;
             StringBuilder fullTextSearch2 = new StringBuilder();
             query = entityManager.createNativeQuery(baseQuery, Object[].class);
             
             if (dateTimeFrom != "" && dateTimeTo != "") {
                 fullTextSearch2.append("chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo");
+
                 if (isFlagged == true) {
                     fullTextSearch2.append(" AND chatlog.message.is_flagged IS NOT NULL");
                 }
+
                 String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
                 query = entityManager.createNativeQuery(finalQuery, Object[].class);
                 
@@ -94,28 +108,41 @@ public class MessageRepoImpl implements MessageRepoCustom {
                 } else {
                     query.setParameter("username", username + "%");
                 }
-                System.out.println("Final query" + finalQuery);
-            }
-            
-            if (dateTimeFrom != "" && dateTimeTo != "") {
                 query.setParameter("dateTimeFrom", dateTimeFrom);
                 query.setParameter("dateTimeTo", dateTimeTo);
+
+                System.out.println("Final query" + finalQuery);
+                @SuppressWarnings("unchecked")
+                List<Object[]> resultList = (List<Object[]>) query.getResultList();
+                return resultList;
             }
             
 
             if (customerId != "" && customerId != null) {
+
                 if (isFlagged == true) {
                     fullTextSearch2.append(" chatlog.message.is_flagged IS NOT NULL");
                     String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
                     finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
                     query = entityManager.createNativeQuery(finalQuery, Object[].class);
                     query.setParameter("customerId", customerId);
+                    
+                } else {
+                    String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
+                    finalQuery = finalQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
+                    query = entityManager.createNativeQuery(finalQuery, Object[].class);
+                    query.setParameter("customerId", customerId);
                 }
-                baseQuery = baseQuery.replace("chatlog.customer.current_username LIKE :username", "chatlog.message.customer_id = :customerId");
-                query = entityManager.createNativeQuery(baseQuery, Object[].class);
-                query.setParameter("customerId", customerId);
             } else {
-                query.setParameter("username", username + "%");
+                if (isFlagged == true) {
+                    fullTextSearch2.append(" chatlog.message.is_flagged IS NOT NULL");
+                    String finalQuery = baseQuery.replace("WHERE", "WHERE " + fullTextSearch2.toString() + " AND ");
+                    query = entityManager.createNativeQuery(finalQuery, Object[].class);
+                    query.setParameter("username", username + "%");
+                } else {
+                    query = entityManager.createNativeQuery(baseQuery, Object[].class);
+                    query.setParameter("username", username + "%");
+                }
             }
             
 
