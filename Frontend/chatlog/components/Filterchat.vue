@@ -226,7 +226,7 @@ export default {
                 Viser resultat for tidsrummet: "{{ dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo ? formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) : '' }}"
                 <div class="flaggedCheckBox">
                     <input type="checkbox" id="checkbox" v-model="checked">
-                    <label for="checkbox">Flagged</label>
+                    <label for="checkbox">Foruroligende Ord</label>
                 </div>
             </div>
 
