@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cego.chatlog.repository.MessageRepositoryCustom;
 import com.cego.chatlog.repository.MessageRepository;
+import com.cego.chatlog.repository.MessageRepositoryCustom;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,8 +36,8 @@ public class SearchController {
     }
 
     @GetMapping("/fulltext")
-    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId) {
-        return messageRepositoryCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId);
+    public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId, @RequestParam boolean isFlagged) {
+        return messageRepositoryCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId, isFlagged);
     }
 
     @GetMapping("/datetime")

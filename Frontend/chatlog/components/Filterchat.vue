@@ -95,8 +95,9 @@ export default {
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         checked:{
-            handler(newVal) {
-                console.log(`Checkbox is now: ${newVal ? 'Checked' : 'Unchecked'}`);
+            handler(newVal, oldVal) {
+                console.log("Chacked changes" + this.checked);
+                this.fetchData();
             }
         }
     },
@@ -105,7 +106,7 @@ export default {
 
         async fetchData() {
             // This function will be called when `keywordArray` or `dateTimeArray` changes
-            if (this.keywordArray.length > 0 || this.hasDateTimeData) {
+            if (this.keywordArray.length > 0 || this.hasDateTimeData || this.checked === true) {
                 const usernameIndex = this.keywordArray.findIndex(item => item.isUser);
                 const customerIdIndex = this.keywordArray.findIndex(item => item.isCustomerId);
                 const arrayWithoutUsername = this.keywordArray.filter((item, index) => index !== usernameIndex && index !== customerIdIndex); // remove username from array
@@ -117,6 +118,7 @@ export default {
                         dateTimeFrom: this.hasDateTimeData ? this.dateTimeObject.dateTimeFrom : null,
                         dateTimeTo: this.hasDateTimeData ? this.dateTimeObject.dateTimeTo : null,
                         customerId: customerIdIndex !== -1 ? this.keywordArray[customerIdIndex].word : "",
+                        isFlagged: this.checked === true ? true : false,
                     }
                 });
                 const jsonData: any = data.value as Message[];
@@ -212,7 +214,11 @@ export default {
         // check if the dateTimeObject has any data
         hasDateTimeData() {
             return Object.keys(this.dateTimeObject).length > 0;
-        }
+        },
+
+        checkedAsInt() {
+            return this.checked ? 1 : 0;
+        },
     },
     }
 </script>
@@ -224,7 +230,7 @@ export default {
                 Viser resultat for tidsrummet: "{{ dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo ? formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) : '' }}"
                 <div class="flaggedCheckBox">
                     <input type="checkbox" id="checkbox" v-model="checked">
-                    <label for="checkbox">Flagged</label>
+                    <label for="checkbox">Foruroligende Ord</label>
                 </div>
             </div>
 
