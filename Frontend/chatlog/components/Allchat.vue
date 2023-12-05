@@ -68,7 +68,8 @@ export default {
             text: parsedData.data.messageText,
             dateTime: parsedData.data.dateTime,
             isFlagged: parsedData.data.isFlagged,
-            ogUsername: parsedData.data.ogusername
+            ogUsername: parsedData.data.ogusername,
+            description: parsedData.data.description,
           };
           
           // Prepend the new message to the messages array
@@ -130,8 +131,10 @@ export default {
   methods: {
     async postMessageToSlack(Message: any) {
       
-      const message = { text: this.messages[this.messages.length-1].text};
-      message.text = "(Flagged) " + this.messages[this.messages.length-1].ogUsername + ": " + message.text ;
+      const message = { text: this.messages[this.messages.length-1].text,
+      description: this.messages[this.messages.length-1].description
+      };
+      message.text = "(Flagged) " + this.messages[this.messages.length-1].ogUsername + ": " + message.text + message.description;
 
       try {
         const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
