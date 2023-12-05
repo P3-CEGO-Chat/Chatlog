@@ -13,4 +13,30 @@
     width: 100%;
   }
 
-  
+  .custom-clear, .custom-select {
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-right: 0.5rem;
+    padding: 0.25rem;
+    font-size: 14px;
+
+  }
+
+  .custom-select {
+    background-color: #1876D1;
+    color: #fff;
+    border: none;
+  }
+
+  .custom-clear:hover {
+    background-color: #ccc;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  .custom-select:hover {
+    background-color: #1565C0;
+    cursor: pointer;
+    transform: scale(1.1);
+  }

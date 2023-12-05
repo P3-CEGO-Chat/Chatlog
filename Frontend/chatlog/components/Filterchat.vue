@@ -125,6 +125,7 @@ export default {
                         isFlagged: this.checked === true ? true : false,
                     }
                 });
+
                 const jsonData: any = data.value as Message[];
                 this.messages = jsonData.map((item: any[]): Message => ({
                     id: item[0],
@@ -233,8 +234,8 @@ export default {
             <div class="SearchTex">
                 Viser resultat for tidsrummet: "{{ dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo ? formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) : '' }}"
                 <div class="flaggedCheckBox">
-                    <input type="checkbox" id="checkbox" v-model="checked">
                     <label for="checkbox">Foruroligende Ord</label>
+                    <input type="checkbox" id="checkbox" v-model="checked">
                 </div>
             </div>
 
