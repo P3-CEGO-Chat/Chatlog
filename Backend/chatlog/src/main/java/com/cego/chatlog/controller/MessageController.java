@@ -1,8 +1,9 @@
 package com.cego.chatlog.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -92,11 +93,11 @@ public class MessageController {
     @PostMapping("/send-message")
     public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
-            List<String> flaggedList = new ArrayList<String>();
+            Map<String, Integer> flaggedMap = new HashMap<>();
             for (FlagWords flagWords : flagWordsService.findAll()){
-                flaggedList.add(flagWords.getWord());
+                flaggedMap.put(flagWords.getWord(), flagWords.getId());
             }
-            boolean isFlagged = Flagger.flagChecker(flaggedList ,dataCustomerMessage);
+            int isFlagged = Flagger.flagChecker(flaggedMap ,dataCustomerMessage);
             //Creating a user for the database, because the database stores both a user and a message seperately
             customerService.createUpdateUser(dataCustomerMessage);
 
@@ -124,7 +125,6 @@ public class MessageController {
         return ResponseEntity.ok(highestId.toString());
     }
     
-    
 
     // Gets the page for an message with a specific ID.
     @GetMapping("/message-id/{messageId}")
@@ -132,10 +132,11 @@ public class MessageController {
         try {
 
             Integer highestId = messageRepository.findHighestMessageId();
-
             int temppage = (int) Math.ceil(((double) highestId - Integer.parseInt(messageId) + 1) / 25);
             int startId = highestId - (temppage * 25) + 1;
             int endId = startId + 24;
+
+
 
             if(startId < 1){
                 startId = 1;

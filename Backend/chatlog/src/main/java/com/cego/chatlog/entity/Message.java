@@ -10,7 +10,7 @@ public class Message {
     private String customerId;
     private String messageText;
     private String dateTime;
-    private Boolean isFlagged;
+    private int isFlagged;
     private String ogUsername;
 
     public int getId() {
@@ -53,11 +53,11 @@ public class Message {
         this.ogUsername = ogUsername;
     }
 
-    public Boolean getIsFlagged() {
+    public int getIsFlagged() {
         return this.isFlagged;
     }
 
-    public void setIsFlagged(Boolean isFlagged) {
+    public void setIsFlagged(int isFlagged) {
         this.isFlagged = isFlagged;
     }
 }

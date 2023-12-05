@@ -1,19 +1,20 @@
 package com.cego.chatlog.util;
 
-import java.util.List;
+import java.util.Map;
 
 import com.cego.chatlog.entity.DataCustomerMessage;
 
 public class Flagger {
-    public static Boolean flagChecker(List<String> flaggedList ,DataCustomerMessage dataCustomerMessage) {
+    public static Integer flagChecker(Map<String, Integer> flaggedMap ,DataCustomerMessage dataCustomerMessage) {
         String message = dataCustomerMessage.getMessage();
 
-        for (String word: flaggedList) {
+        for (String word: flaggedMap.keySet()) {
             if (message.contains(word)) {
-                return true;
+
+                return flaggedMap.get(word);
             }
         }
 
-        return false;
+        return null;
     }
 }
