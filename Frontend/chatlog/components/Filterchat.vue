@@ -84,7 +84,7 @@ export default {
                     // Checkbox is checked, perform your acti
                     this.findFlaggedMessages();
                 } else {
-                    // Checkbox is unchecked, perform your action here
+                    // Checkbox is unchecked, perform your action
                 }
             }
         },
@@ -95,9 +95,13 @@ export default {
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         checked:{
-            handler(newVal, oldVal) {
+            handler(newVal) {
                 console.log("Chacked changes" + this.checked);
-                this.fetchData();
+                if (newVal) {
+                    this.fetchData();
+                } else {
+                    this.messages = [];
+                }
             }
         }
     },
