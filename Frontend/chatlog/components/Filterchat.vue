@@ -209,7 +209,7 @@ export default {
                     ' - ' + formatDateTime(dateTimeArray[1]) : '' }}"
                 <div class="flaggedCheckBox">
                     <input type="checkbox" id="checkbox" v-model="checked">
-                    <label for="checkbox">Flagged</label>
+                    <label for="checkbox">Foruroligende Ord</label>
                 </div>
             </div>
 
