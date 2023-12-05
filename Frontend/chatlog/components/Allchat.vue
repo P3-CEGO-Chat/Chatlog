@@ -33,6 +33,7 @@ export default {
       title: "Live Chat", // Title of the chat
       chatLive: true, // Flag for live chat
       newMessages: <Message[]>[], // Array to hold new messages
+      description: "",
     };
   },
 
@@ -127,6 +128,7 @@ export default {
               for (const flagWord of data) {
                   if (message.isFlagged == flagWord.id) {
                       message.description = flagWord.description;
+                      this.description = flagWord.description;
                   }
               }
           }
@@ -140,10 +142,9 @@ export default {
   methods: {
     async postMessageToSlack(Message: any) {
       
-      const message = { text: this.messages[this.messages.length-1].text,
-      description: this.messages[this.messages.length-1].description
-      };
-      message.text = "(Flagged) " + this.messages[this.messages.length-1].ogUsername + ": " + message.text + message.description;
+      const message = { text: this.messages[this.messages.length-1].text};
+      console.log(message);
+      message.text = "(Flagged) " + "Skrevet af " +this.messages[this.messages.length-1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
 
       try {
         const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
