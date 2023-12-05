@@ -75,6 +75,7 @@ export default {
             handler() {
                 // This function will be called when `dateTimeObject` changes
                 this.fetchData();
+
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -95,13 +96,8 @@ export default {
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
         checked:{
-            handler(newVal) {
-                console.log("Chacked changes" + this.checked);
-                if (newVal) {
-                    this.fetchData();
-                } else {
-                    this.messages = [];
-                }
+            handler() {
+                this.fetchData();
             }
         }
     },
@@ -218,6 +214,9 @@ export default {
         }, */
         // check if the dateTimeObject has any data
         hasDateTimeData() {
+            if (this.dateTimeObject.dateTimeFrom == "") {
+                return false;
+            }
             return Object.keys(this.dateTimeObject).length > 0;
         },
 
