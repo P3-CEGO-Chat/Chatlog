@@ -44,10 +44,6 @@ export default {
     this.messages = this.parseMessage(data);
 
     this.originalPageCounter = this.currentPage;
-    // Scroll to the bottom after the next DOM update
-    this.$nextTick(() => {
-      this.scrollTobottom();
-    });
 
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
@@ -74,7 +70,7 @@ export default {
           
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
-          if (!newMessage.isFlagged) {
+          if (newMessage.isFlagged != null) {
             this.postMessageToSlack(newMessage);
           }
           
@@ -94,6 +90,17 @@ export default {
       socket.close();
     }
 
+    // Scroll to the bottom after the next DOM update
+    this.$nextTick(() => {
+      this.scrollTobottom();
+    });
+  },
+  
+  updated() {
+    // Scroll to the bottom after the next DOM update
+    this.$nextTick(() => {
+      this.scrollTobottom();
+    });
   },
 
   // Define props
@@ -126,6 +133,8 @@ export default {
         });
       },
     }
+
+    
   },
 
   methods: {

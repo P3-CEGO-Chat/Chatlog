@@ -29,16 +29,6 @@ export default {
       this.$emit("updateKeywordArray", this.keywordArray);
     },
 
-    // if the user presses backspace or delete, remove the last keyword
-    handleKeydown(event: KeyboardEvent) {
-      if (this.searchKeyword === '' && (event.key === 'Backspace' || event.key === 'Delete')) {
-        this.keywordArray.pop();
-        if (this.keywordArray.length === 0) {
-          this.firstKeywordEntered = false;
-        }
-      }
-    },
-
     // om enter is pressed, add the keyword to the keywordArray
     onEnter() {
       if (this.searchKeyword.trim() === '') {
@@ -125,7 +115,7 @@ export default {
         </div>
 
         <input ref="searchInput" class="searchField" type="text" v-model="searchKeyword" :placeholder="placeholderText"
-          v-on:keyup.enter="onEnter" v-on:input="detectSpace" @keydown="handleKeydown" />
+          v-on:keyup.enter="onEnter" v-on:input="detectSpace" />
 
         <div class="infoDiv">
           <Icon name="humbleicons:info-circle" color="#6CA5FC" class="infoIcon" />
