@@ -69,7 +69,7 @@ export default {
           
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
-          if (!newMessage.isFlagged) {
+          if (newMessage.isFlagged != null) {
             this.postMessageToSlack(newMessage);
           }
           
