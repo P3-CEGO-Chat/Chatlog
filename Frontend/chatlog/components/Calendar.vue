@@ -4,6 +4,17 @@
 
 <script setup lang="ts">
 import Datepicker from '@vuepic/vue-datepicker';
+
+const datepickerRef = ref();
+
+const selectDate = () => {
+  datepickerRef.value.selectDate();
+}
+
+const clearDate = () => {
+  datepickerRef.value.clearValue();
+}
+
 </script>
 
 <script lang="ts">
@@ -34,11 +45,20 @@ export default {
       this.isOpen = false;
     },
 
+    onCleared() {
+      this.date = [new Date(), 0];
+    },
   },
+
 
   watch: {
     date(newDate) {
+      if (newDate[1] === 0) {
+        this.sendDateTime("", "");
+        return;
+      }
       if (newDate[1] === undefined || newDate[1] === null) {
+        console.log("hej")
         newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 23, 59, 59, 999);
         newDate[0] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 0, 0, 0, 0);
       }
@@ -53,12 +73,16 @@ export default {
 
 <template>
   <div>
-    <Datepicker v-model="date" locale="dk" cancelText="Ryd" selectText="Vælg" :auto-position="false" range
-      no-disabled-range :clearable="true" :month-change-on-scroll="false" ref="datepickerRef" @open="onOpen"
+    <Datepicker @cleared="onCleared" v-model="date" locale="dk" cancelText="Ryd" selectText="Vælg" :auto-position="false" range
+      no-disabled-range clearable :month-change-on-scroll="false" ref="datepickerRef" @open="onOpen"
       @closed="onClose">
       <template #trigger>
         <Icon name="heroicons-solid:calendar-days" color="grey" class="calendarIcon" size="2.5em">
         </Icon>
+      </template>
+      <template #action-buttons>
+        <p class="custom-clear" @click="clearDate">Ryd</p>
+        <p class="custom-select" @click="selectDate">Vælg</p>
       </template>
     </Datepicker>
   </div>

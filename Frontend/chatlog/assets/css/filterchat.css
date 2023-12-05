@@ -162,6 +162,13 @@
 }
 
 .flaggedCheckBox{
+    display: flex;
     position : absolute;
-    left: 87%;
+    left: 77%;
+    bottom: 30%;
+    width: 100px;
+}
+
+.flaggedCheckBox label{
+    text-wrap: nowrap;
 }
