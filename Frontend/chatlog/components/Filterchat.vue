@@ -41,10 +41,12 @@ export default {
     },
 
     props: {
+        // This is the array of keywords that will be used to search for messages
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
             default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
+        // This is the object of datetime that will be used to search for messages
         dateTimeObject: {
             type: Object as PropType<{ dateTimeFrom: string, dateTimeTo: string }>,
             default: () => ({ dateTimeFrom: "", dateTimeTo: "" })
