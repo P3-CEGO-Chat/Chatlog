@@ -62,18 +62,20 @@
     transform-origin: 50% 0%;
     animation: in-right 300ms ease 0ms 1 forwards;
     position: absolute;
+    cursor: pointer;
 }
 
 @keyframes in-right {
     from {transform: rotate3d(0,-1,0, 90deg)}
-    to   {transform: rotate3d(0,0,0, 0deg)}}
+    to   {transform: rotate3d(0,0,0, 0deg)}
+}
 
 .CustomerId, .Time {
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
-.CustomerId{
+.username{
     width: 100px;
 }
 

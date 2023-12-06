@@ -29,7 +29,7 @@ export default {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
             messages: <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
-            notiVisible: false,
+            notificationVisible: false,
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
@@ -41,10 +41,12 @@ export default {
     },
 
     props: {
+        // This is the array of keywords that will be used to search for messages
         keywordArray: {
             type: Array as PropType<{ word: string, isUser: boolean, isCustomerId: boolean }[]>,
             default: () => [] as { word: string, isUser: boolean, isCustomerId: boolean }[]
         },
+        // This is the object of datetime that will be used to search for messages
         dateTimeObject: {
             type: Object as PropType<{ dateTimeFrom: string, dateTimeTo: string }>,
             default: () => ({ dateTimeFrom: "", dateTimeTo: "" })
@@ -153,12 +155,12 @@ export default {
 
         // notification handler
         notificationHandler(customerId: String) {
-            this.notiVisible = true;
-            if (this.notiVisible) {
+            this.notificationVisible = true;
+            if (this.notificationVisible) {
                 navigator.clipboard.writeText(customerId.toString());
             }
             setTimeout(() => {
-                this.notiVisible = false;
+                this.notificationVisible = false;
             }, 3000);
         },
 
@@ -268,5 +270,5 @@ export default {
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notiVisible"/>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
 </template>

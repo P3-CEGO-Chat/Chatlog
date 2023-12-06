@@ -334,6 +334,17 @@ export default {
         this.notificationVisible = false;
       }, 3000);
     },
+
+    // notification handler
+    notificationHandler(customerId: String) {
+            this.notificationVisible = true;
+            if (this.notificationVisible) {
+                navigator.clipboard.writeText(customerId.toString());
+            }
+            setTimeout(() => {
+                this.notificationVisible = false;
+            }, 3000);
+        },
   }
 }
 </script> 
@@ -348,7 +359,7 @@ export default {
         <div class="messageBox" v-for="message in messages" :key="message.id" :ref="`message-${message.id}`"
           :class="{ 'highlightedMessage': message.id === messageId }">
           <div class="messageHeader">
-            <div class="CustomerId">{{ message.ogUsername }}:&nbsp</div>
+            <div class="username">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
             <div class="Time">{{ new Date(message.dateTime).toLocaleString() }}</div>
             <!-- Display flagged icon if message is flagged -->
@@ -369,4 +380,5 @@ export default {
     </div>
     <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
   </div>
+  <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
 </template>
