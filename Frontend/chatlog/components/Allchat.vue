@@ -363,12 +363,13 @@ export default {
                 </div>
               </div>
             </div>
-            <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
+            <span :class="messageHighestChecker(message.id) ? 'popup highestId' : 'popup'" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
           </div>
         </div>
       </div>
       <!-- Button to clear chat and scroll to bottom -->
       <button class="clearButton" v-if="!chatLive" @click="buttonClear">Se nyeste beskeder</button>
     </div>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
   </div>
 </template>

@@ -38,7 +38,35 @@
     margin-bottom: 2px;
     padding: 0.5rem;
     font-size: 14px;
+    position: relative;
 }
+
+.popup {
+    background-color: #6CA5FC;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    color: #FFFFFF;
+    right: 10%;
+    box-shadow: black 0px 0px 5px;
+    transform: rotate3d(1,0,0, 90deg);
+    z-index: 1;
+}
+
+.highestId {
+    bottom: 0;
+}
+
+.messageBox:hover .popup {
+    visibility: visible;
+    transform-origin: 50% 0%;
+    animation: in-right 300ms ease 0ms 1 forwards;
+    position: absolute;
+}
+
+@keyframes in-right {
+    from {transform: rotate3d(0,-1,0, 90deg)}
+    to   {transform: rotate3d(0,0,0, 0deg)}}
 
 .CustomerId, .Time {
     word-wrap: break-word;
