@@ -12,6 +12,7 @@ interface Message {
   text: string;
   isFlagged: number;
   ogUsername: string;
+  username: string;
   description?: string;
 }
 
@@ -34,6 +35,7 @@ export default {
       chatLive: true, // Flag for live chat
       newMessages: <Message[]>[], // Array to hold new messages
       description: "",
+      notificationVisible: false,
     };
   },
 
@@ -66,6 +68,7 @@ export default {
             dateTime: parsedData.data.dateTime,
             isFlagged: parsedData.data.isFlagged,
             ogUsername: parsedData.data.ogusername,
+            username: parsedData.data.username,
             description: parsedData.data.description,
           };
           
@@ -292,6 +295,7 @@ export default {
         dateTime: item[3],
         isFlagged: item[4],
         ogUsername: item[5],
+        username: item[6],
       }));
       return messages;
     },
@@ -318,6 +322,17 @@ export default {
       } else {
           return false;
       }
+    },
+
+    // notification handler
+    notificationHandler(customerId: String) {
+      this.notificationVisible = true;
+      if (this.notificationVisible) {
+          navigator.clipboard.writeText(customerId.toString());
+      }
+      setTimeout(() => {
+          this.notificationVisible = false;
+      }, 3000);
     },
   }
 }
@@ -348,6 +363,7 @@ export default {
                 </div>
               </div>
             </div>
+            <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
           </div>
         </div>
       </div>
