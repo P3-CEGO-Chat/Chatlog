@@ -45,8 +45,8 @@ export default {
       // Check if the keyword is a user or a keyword
       if (this.searchKeyword[0] === "@") {
         this.wordObject = { "word": this.searchKeyword, "isUser": true, "isCustomerId": false };
-      } else if (this.searchKeyword.startsWith("SN") && ["0", "1", "2", "3", "4"].includes(this.searchKeyword[2])) {
-        this.wordObject = { "word": this.searchKeyword, "isUser": false, "isCustomerId": true };
+      } else if (this.searchKeyword.toUpperCase().startsWith("SN") && ["0", "1", "2", "3", "4"].includes(this.searchKeyword[2])) {
+        this.wordObject = { "word": this.searchKeyword.toUpperCase(), "isUser": false, "isCustomerId": true };
       } else {
         this.wordObject = { "word": this.searchKeyword, "isUser": false, "isCustomerId": false };
       }

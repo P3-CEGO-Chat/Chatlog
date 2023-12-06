@@ -202,8 +202,12 @@ export default {
             const { data } = await useFetch(`http://localhost:8080/flags/getflags`);
             const jsonData: flagWord[] = data.value as flagWord[];
             return jsonData;
-        }
+        },
 
+        scrollB() {
+            const scrollBar = document.querySelector(".scrollBar");
+            scrollBar?.scrollTo(0, scrollBar.scrollHeight);
+        },
     },
     // compute the formatted datetime array
     computed: {
@@ -261,7 +265,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktuelt brugernavn: {{ message.username }}</span>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
                 </div>
             </div>
         </div>

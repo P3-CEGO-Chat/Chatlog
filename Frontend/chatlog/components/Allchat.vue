@@ -17,9 +17,9 @@ interface Message {
 }
 
 interface flagWord {
-    id: number;
-    word: string;
-    description: string;
+  id: number;
+  word: string;
+  description: string;
 }
 
 export default {
@@ -55,7 +55,7 @@ export default {
     }
 
     socket.onmessage = (event) => {
-      
+
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
         const parsedData = JSON.parse(event.data);
@@ -71,21 +71,21 @@ export default {
             username: parsedData.data.username,
             description: parsedData.data.description,
           };
-          
+
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
           if (newMessage.isFlagged != null) {
             this.postMessageToSlack(newMessage);
           }
-          
+
           // After the next DOM update, scroll to the bottom
           this.$nextTick(() => {
             this.scrollTobottom();
           });
         }
       }
-      
-      
+
+
     }
 
     // Handle WebSocket errors
@@ -99,12 +99,14 @@ export default {
       this.scrollTobottom();
     });
   },
-  
+
   updated() {
     // Scroll to the bottom after the next DOM update
-    this.$nextTick(() => {
-      this.scrollTobottom();
-    });
+    if (this.currentPage === 1 && this.messageId === 0) {
+      this.$nextTick(() => {
+        this.scrollTobottom();
+      });
+    }
   },
 
   // Define props
@@ -128,26 +130,26 @@ export default {
         console.log("messages changed");
         this.getFlaggedData().then((data) => {
           for (const message of this.messages) {
-              for (const flagWord of data) {
-                  if (message.isFlagged == flagWord.id) {
-                      message.description = flagWord.description;
-                      this.description = flagWord.description;
-                  }
+            for (const flagWord of data) {
+              if (message.isFlagged == flagWord.id) {
+                message.description = flagWord.description;
+                this.description = flagWord.description;
               }
+            }
           }
         });
       },
     }
 
-    
+
   },
 
   methods: {
     async postMessageToSlack(Message: any) {
-      
-      const message = { text: this.messages[this.messages.length-1].text};
+
+      const message = { text: this.messages[this.messages.length - 1].text };
       console.log(message);
-      message.text = "(Flagged) " + "Skrevet af " +this.messages[this.messages.length-1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
+      message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
 
       try {
         const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
@@ -241,8 +243,6 @@ export default {
         const { data } = await useFetch(`http://localhost:8080/messages/message-id/${this.messageId}`);
         this.messages = this.parseMessage(data);
       }
-
-    
       this.$nextTick(() => {
         this.scrollToMessage();
       });
@@ -269,9 +269,11 @@ export default {
 
       if (messageElement && messageElement[0]) {
         const scrollBar = this.$el.querySelector('.scrollBar');
-        if (scrollBar) {
-          scrollBar.scrollTop = messageElement[0].offsetTop - scrollBar.offsetTop;
-        }
+        setTimeout(() => {
+          if (scrollBar) {
+            scrollBar.scrollTo(0, messageElement[0].offsetTop - scrollBar.offsetTop - 100, { behavior: 'smooth' });
+          }
+        }, 500);
       }
     },
 
@@ -308,18 +310,29 @@ export default {
     messageHighestChecker(messageId: Number) {
       let highestId = 0;
       if (this.messages.length <= 1) {
-          return false;
+        return false;
       }
       for (const message of this.messages) {
-          if (message.id > highestId) {
-              highestId = message.id;
-          }
+        if (message.id > highestId) {
+          highestId = message.id;
+        }
       }
       if (messageId === highestId) {
-          return true;
+        return true;
       } else {
-          return false;
+        return false;
       }
+    },
+
+    // notification handler
+    notificationHandler(customerId: String) {
+      this.notificationVisible = true;
+      if (this.notificationVisible) {
+        navigator.clipboard.writeText(customerId.toString());
+      }
+      setTimeout(() => {
+        this.notificationVisible = false;
+      }, 3000);
     },
 
     // notification handler
@@ -343,11 +356,8 @@ export default {
       <!-- Scroll event listener to check scroll position -->
       <div class="scrollBar" @scroll="checkScroll">
         <!-- Loop through messages and display them -->
-        <div class="messageBox" 
-        v-for="message in messages" 
-        :key="message.id" 
-        :ref="`message-${message.id}`"
-        :class="{ 'highlightedMessage': message.id === messageId }">
+        <div class="messageBox" v-for="message in messages" :key="message.id" :ref="`message-${message.id}`"
+          :class="{ 'highlightedMessage': message.id === messageId }">
           <div class="messageHeader">
             <div class="username">{{ message.ogUsername }}:&nbsp</div>
             <div class="messageContent">{{ message.text }}</div>
@@ -361,13 +371,14 @@ export default {
                 </div>
               </div>
             </div>
-              <span :class="messageHighestChecker(message.id) ? 'popup highestId' : 'popup'" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktuelt brugernavn: {{ message.username }}</span>
+            <span :class="messageHighestChecker(message.id) ? 'popup highestId' : 'popup'" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
           </div>
         </div>
       </div>
       <!-- Button to clear chat and scroll to bottom -->
       <button class="clearButton" v-if="!chatLive" @click="buttonClear">Se nyeste beskeder</button>
     </div>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
   </div>
   <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
 </template>
