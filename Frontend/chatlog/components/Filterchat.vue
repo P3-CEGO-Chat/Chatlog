@@ -242,7 +242,7 @@ export default {
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
                     @click="sendMessageId(message.id)">
                     <div class="messagesender">
-                        {{ message.username }}:
+                        {{ message.ogUsername }}:
                     </div>
                     <div classe="messageContent">
                         {{ message.text }}
@@ -259,7 +259,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
                 </div>
             </div>
         </div>
