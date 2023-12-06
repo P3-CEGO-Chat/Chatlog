@@ -7,10 +7,10 @@ import Datepicker from '@vuepic/vue-datepicker';
 
 const datepickerRef = ref();
 
+// selectDate and clearDate 
 const selectDate = () => {
   datepickerRef.value.selectDate();
 }
-
 const clearDate = () => {
   datepickerRef.value.clearValue();
 }
@@ -57,8 +57,8 @@ export default {
         this.sendDateTime("", "");
         return;
       }
+      // if newDate[1] is undefined or null, set it to the end of the day and start of the day
       if (newDate[1] === undefined || newDate[1] === null) {
-        console.log("hej")
         newDate[1] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 23, 59, 59, 999);
         newDate[0] = new Date(newDate[0].getFullYear(), newDate[0].getMonth(), newDate[0].getDate(), 0, 0, 0, 0);
       }
