@@ -200,8 +200,12 @@ export default {
             const { data } = await useFetch(`http://localhost:8080/flags/getflags`);
             const jsonData: flagWord[] = data.value as flagWord[];
             return jsonData;
-        }
+        },
 
+        scrollB() {
+            const scrollBar = document.querySelector(".scrollBar");
+            scrollBar?.scrollTo(0, scrollBar.scrollHeight);
+        },
     },
     // compute the formatted datetime array
     computed: {
