@@ -102,11 +102,9 @@ export default {
   
   updated() {
     // Scroll to the bottom after the next DOM update
-    if (this.currentPage === 1) {
-      this.$nextTick(() => {
-        this.scrollTobottom();
-      });
-    }
+    this.$nextTick(() => {
+      this.scrollTobottom();
+    });
   },
 
   // Define props
