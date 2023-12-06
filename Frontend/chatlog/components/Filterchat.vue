@@ -29,7 +29,7 @@ export default {
             keyword: "" as string | unknown, // explicitly define the type of keyword
             ObjectArray: [],
             messages: <Message[]>[],/* Array<{ id: string, customerId: string, text: string, dateTime: string, username: string, userId: string }>() */
-            notiVisible: false,
+            notificationVisible: false,
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
@@ -153,12 +153,12 @@ export default {
 
         // notification handler
         notificationHandler(customerId: String) {
-            this.notiVisible = true;
-            if (this.notiVisible) {
+            this.notificationVisible = true;
+            if (this.notificationVisible) {
                 navigator.clipboard.writeText(customerId.toString());
             }
             setTimeout(() => {
-                this.notiVisible = false;
+                this.notificationVisible = false;
             }, 3000);
         },
 
@@ -242,7 +242,7 @@ export default {
                 <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
                     @click="sendMessageId(message.id)">
                     <div class="messagesender">
-                        {{ message.username }}:
+                        {{ message.ogUsername }}:
                     </div>
                     <div classe="messageContent">
                         {{ message.text }}
@@ -259,10 +259,10 @@ export default {
                             </div>
                         </div>
                     </div>
-                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Customer Id: {{ message.customerId }},<br>OG Username: {{ message.ogUsername }}</span>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktuelt brugernavn: {{ message.username }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notiVisible"/>
+    <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
 </template>
