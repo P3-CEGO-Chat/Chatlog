@@ -334,17 +334,6 @@ export default {
         this.notificationVisible = false;
       }, 3000);
     },
-
-    // notification handler
-    notificationHandler(customerId: String) {
-            this.notificationVisible = true;
-            if (this.notificationVisible) {
-                navigator.clipboard.writeText(customerId.toString());
-            }
-            setTimeout(() => {
-                this.notificationVisible = false;
-            }, 3000);
-        },
   }
 }
 </script> 
