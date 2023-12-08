@@ -203,22 +203,9 @@ export default {
             const jsonData: flagWord[] = data.value as flagWord[];
             return jsonData;
         },
-
-        scrollB() {
-            const scrollBar = document.querySelector(".scrollBar");
-            scrollBar?.scrollTo(0, scrollBar.scrollHeight);
-        },
     },
     // compute the formatted datetime array
     computed: {
-        /* formattedDateTimeArray() {
-            return this.dateTimeArray.map(datetime => {
-                const date = new Date(datetime);
-                return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` +
-                    ` ${date.getHours()}:${date.getMinutes()}`;
-            })
-        }, */
-        // check if the dateTimeObject has any data
         hasDateTimeData() {
             if (this.dateTimeObject.dateTimeFrom == "") {
                 return false;
