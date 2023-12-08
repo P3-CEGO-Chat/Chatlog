@@ -90,7 +90,7 @@ public class MessageController {
     }
 
     // Api to post the data that we receive into the database.
-    @PostMapping("/send-message")
+    @PostMapping("/receive-message")
     public @ResponseBody String addNewUserJSON(@RequestBody DataCustomerMessage dataCustomerMessage) {
         try {
             Map<String, Integer> flaggedMap = new HashMap<>();
@@ -140,7 +140,7 @@ public class MessageController {
 
             if(startId < 1){
                 startId = 1;
-                endId = highestId%25+25;
+                endId = highestId % 25 + 25;
             }
 
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);

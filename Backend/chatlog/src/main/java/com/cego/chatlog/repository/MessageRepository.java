@@ -13,10 +13,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     //SQL Search to find all messages and combining them with the corresponding Username.
     @Query(value = "SELECT chatlog.message.*, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.message.id BETWEEN :startId AND :endId ORDER BY chatlog.message.id", nativeQuery = true)
     List<Object[]> findMessagesByStartEndId(@Param("startId") int startId, @Param("endId") int endId);
-
-    @Query(value = "SELECT max(id) FROM chatlog.message", nativeQuery = true)
-    Integer findMaxMessageId();
-    
     
     default int getEndId(int pageId, int maxMessageId) {
         return Math.max(1, maxMessageId - (pageId - 1) * 25);
@@ -29,15 +25,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     //public List<Object[]> findSearch(@Param("search") List<Object[]> search);
     @Query("SELECT max(m.id) FROM Message m")
     Integer findHighestMessageId();
-    
-    //SQL Search to find all messages containing a specific keyword.
-    @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.message_text LIKE %:keyword% ORDER BY chatlog.message.id", nativeQuery = true)
-    List<Object[]> findSearch(@Param("keyword") String keyword);
-
-
-    //SQL fulltext search to find all messages containing a specific keyword. and find containg a specific username
-    @Query(value="SELECT chatlog.message.message_id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.user.username FROM chatlog.message LEFT JOIN chatlog.user ON chatlog.message.customer_id = chatlog.user.customer_id WHERE MATCH(chatlog.message.message_text) AGAINST(:keyword% IN NATURAL LANGUAGE MODE) AND chatlog.user.username LIKE :keyword2% ORDER BY chatlog.message.message_id", nativeQuery = true)
-    List<Object[]> findSearchFullText(@Param("keyword") String keyword, @Param("keyword2") String keyword2);
 
     //SQL Search to find all messages with value 1 in isFlagged
     @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.is_flagged = 1 ORDER BY chatlog.message.id", nativeQuery = true)

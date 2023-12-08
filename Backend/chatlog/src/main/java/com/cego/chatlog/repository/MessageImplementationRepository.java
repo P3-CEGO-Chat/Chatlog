@@ -109,18 +109,4 @@ public class MessageImplementationRepository implements MessageRepositoryCustom 
         List<Object[]> resultList = (List<Object[]>) query.getResultList();
         return resultList;
     }
-
-
-    @Override 
-    public List<Object[]> dateTime(String dateTimeFrom, String dateTimeTo) {
-        String baseQuery = "SELECT chatlog.message.id, chatlog.message.customer_id, chatlog.message.message_text, chatlog.message.date_time, chatlog.message.is_flagged, chatlog.message.og_username, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id WHERE chatlog.message.date_time BETWEEN :dateTimeFrom AND :dateTimeTo ORDER BY chatlog.message.id";
-        Query query = entityManager.createNativeQuery(baseQuery);
-        query.setParameter("dateTimeFrom", dateTimeFrom);
-        query.setParameter("dateTimeTo", dateTimeTo);
-      
-        @SuppressWarnings("unchecked")
-        List<Object[]> resultList = (List<Object[]>) query.getResultList();
-        return resultList;
-    }
-    
 }
