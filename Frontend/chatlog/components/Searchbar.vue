@@ -137,7 +137,7 @@ export default {
 
       </div>
     </div>
-
+    
     <div class="bottomContainer">
       <div class="keywordContainer">
         <div class="keyword" v-for="(keyword, index) in keywordArray" :key="index" @click="removeKeyword(index)"
