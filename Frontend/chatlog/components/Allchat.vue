@@ -369,5 +369,4 @@ export default {
     </div>
     <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
   </div>
-  <Notification icon="/Tick.svg" notificationText="Kundenummer Kopieret" :activated="notificationVisible"/>
 </template>

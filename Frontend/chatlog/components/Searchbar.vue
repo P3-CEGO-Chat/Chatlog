@@ -64,11 +64,20 @@ export default {
 
       // Sort the keywordArray so that usernames are first
       this.keywordArray.sort((a, b) => {
+        // Keywords with "@" come first
         if (a.word.startsWith("@") && !b.word.startsWith("@")) {
           return -1;
         } else if (!a.word.startsWith("@") && b.word.startsWith("@")) {
           return 1;
-        } else {
+        }
+        // Then keywords that start with "SH" and contain a number from 0 to 4 come after keywords with "@"
+        else if (a.word.startsWith("SN") && ["0", "1", "2", "3", "4"].includes(a.word[2]) && !b.word.startsWith("SN")) {
+          return -1;
+        } else if (b.word.startsWith("SN") && ["0", "1", "2", "3", "4"].includes(b.word[2]) && !a.word.startsWith("SN")) {
+          return 1;
+        }
+        // All other keywords come last
+          else {
           return 0;
         }
       });
