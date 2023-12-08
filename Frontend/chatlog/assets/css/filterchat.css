@@ -76,6 +76,10 @@
     margin-bottom: 0rem;
 }
 
+.searchedMessage:only-child{
+    margin-bottom: 1.5rem;
+}
+
 .searchedMessage:hover{
     background-color: #6CA5FC;
     color: #FFFFFF;
