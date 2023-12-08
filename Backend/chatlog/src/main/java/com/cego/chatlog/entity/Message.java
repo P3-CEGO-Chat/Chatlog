@@ -1,5 +1,9 @@
 package com.cego.chatlog.entity;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,7 +13,8 @@ public class Message {
     private int id;
     private String customerId;
     private String messageText;
-    private String dateTime;
+    @DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
+    private Date dateTime;
     private int isFlagged;
     private String ogUsername;
 
@@ -21,11 +26,11 @@ public class Message {
         this.id = id;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return this.dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 

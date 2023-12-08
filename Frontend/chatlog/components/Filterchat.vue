@@ -60,16 +60,6 @@ export default {
                 this.fetchData();
                 this.title = "Søger efter: ";
                 console.log("hey")
-
-                this.getFlaggedData().then((data) => {
-                    for (const message of this.messages) {
-                        for (const flagWord of data) {
-                            if (message.isFlagged == flagWord.id) {
-                                message.description = flagWord.description;
-                            }
-                        }
-                    }
-                });
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -94,6 +84,16 @@ export default {
         messages: {
             handler() {
                 // This function will be called when `messages` changes
+                this.getFlaggedData().then((data) => {
+                    for (const message of this.messages) {
+                        for (const flagWord of data) {
+                            if (message.isFlagged == flagWord.id) {
+                                message.description = flagWord.description;
+                                console.log(message.description);
+                            }
+                        }
+                    }
+                });
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },

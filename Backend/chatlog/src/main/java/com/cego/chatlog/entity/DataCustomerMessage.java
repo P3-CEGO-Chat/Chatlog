@@ -1,11 +1,12 @@
 package com.cego.chatlog.entity;
 
+import java.util.Date;
 
 public class DataCustomerMessage {
     private String customerId;
     private String username;
     private String message;
-    private String dateTime;
+    private Date dateTime;
 
     public String getCustomerId(){
         return this.customerId;
@@ -31,11 +32,11 @@ public class DataCustomerMessage {
         this.message = message;
     }   
 
-    public String getDateTime(){
+    public Date getDateTime(){
         return this.dateTime;
     }
 
-    public void setDateTime(String dateTime){
+    public void setDateTime(Date dateTime){
         this.dateTime = dateTime;
     }
 }
