@@ -222,38 +222,44 @@ export default {
 
 <template>
     <div class="container">
-        <div class="SearchField">
-            <div class="SearchTex">
-                Viser resultat for tidsrummet: "{{ dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo ? formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) : '' }}"
-                <div class="flaggedCheckBox">
-                    <label for="checkbox">Foruroligende Ord</label>
-                    <input type="checkbox" id="checkbox" v-model="checked">
-                </div>
+        <div class="searchField">
+            <div class="searchText">
+                Viser resultat for tidsrummet: 
+                <span class="dateRange" v-if="dateTimeObject.dateTimeFrom && dateTimeObject.dateTimeTo">
+                    "{{ formatDateTime(dateTimeObject.dateTimeFrom) + ' - ' + formatDateTime(dateTimeObject.dateTimeTo) }}"
+                </span>
+                <span v-else>
+                    ""
+                </span>
             </div>
+            <div class="flaggedCheckBox">
+                <label for="checkbox">Foruroligende Ord</label>
+                <input type="checkbox" id="checkbox" v-model="checked">
+            </div>
+        </div>
 
-            <div class="scrollBar">
-                <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
-                    @click="sendMessageId(message.id)">
-                    <div class="messagesender">
-                        {{ message.ogUsername }}:
-                    </div>
-                    <div classe="messageContent">
-                        {{ message.text }}
-                    </div>
-                    <div class="dateTime">
-                        {{ new Date(message.dateTime).toLocaleString() }}
-                    </div>
+        <div class="scrollBar">
+            <div class="searchedMessage" v-for="(message) in messages" :key="message.id"
+                @click="sendMessageId(message.id)">
+                <div class="messagesender">
+                    {{ message.ogUsername }}:
+                </div>
+                <div classe="messageContent">
+                    {{ message.text }}
+                </div>
+                <div class="dateTime">
+                    {{ new Date(message.dateTime).toLocaleString() }}
+                </div>
 
-                    <div v-if="message.isFlagged" class="flagged">
-                        <div class="icon">
-                            <Icon name="material-symbols:warning-outline-rounded" class="icon" />
-                            <div :class="messageHighestChecker(message.id) ? 'flaggedText highestIdFlagged' : 'flaggedText'">
-                                {{ message.description ? message.description : 'Ukendt grund' }}
-                            </div>
+                <div v-if="message.isFlagged" class="flagged">
+                    <div class="icon">
+                        <Icon name="material-symbols:warning-outline-rounded" class="icon" />
+                        <div :class="messageHighestChecker(message.id) ? 'flaggedText highestIdFlagged' : 'flaggedText'">
+                            {{ message.description ? message.description : 'Ukendt grund' }}
                         </div>
                     </div>
-                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
                 </div>
+                    <span :class="messageHighestChecker(message.id) ? 'highestId' : ''" @click="notificationHandler(message.customerId)" >Kundenummer: {{ message.customerId }},<br>Aktivt brugernavn: {{ message.username }}</span>
             </div>
         </div>
     </div>

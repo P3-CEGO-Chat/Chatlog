@@ -2,26 +2,47 @@
     display: flex;
     background-color: #FFFFFF;
     padding: 0 1rem;
+    padding-bottom: 0.5rem;
     justify-content: space-between;
     font-family: sans-serif;
     border-radius: 5px;
     height: 100%;
+    flex-direction: column;
     overflow: hidden;
 }
-.SearchField{
-    border-radius: 5px;
+.searchField{
+    display: grid;
+    align-items: flex-start;
+    grid-template-columns: 1fr auto;
     width: 100%;
-    padding: 1rem;
+    border: solid 1.5px #6CA5FC;  
+    border-radius: 5px;
+    padding: 0.5rem 0rem;  
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
 }
 
-.SearchTex {
-    border: solid 1.5px #6CA5FC;  
-    border-radius: 5px;  
-    padding: 1rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
+.searchText {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+    padding: 0.5rem;
+}
+
+.dateRange {
+    white-space: pre;
+}
+
+.flaggedCheckBox{
+    display: flex;
+    text-align: right;
+    padding: 0.5rem;
+}
+
+.flaggedCheckBox label{
+    align-items: top;
     
 }
 
@@ -162,16 +183,4 @@
 .icon:hover .flaggedText {
     display: block;
     z-index: 2;
-}
-
-.flaggedCheckBox{
-    display: flex;
-    position : absolute;
-    left: 77%;
-    bottom: 30%;
-    width: 100px;
-}
-
-.flaggedCheckBox label{
-    text-wrap: nowrap;
 }
