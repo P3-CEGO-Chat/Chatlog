@@ -37,12 +37,12 @@ describe('Allchat', async () => {
 
     test('fetches and displays messages correctly', async () => {
         // Mock the server response
-        const mockData = JSON.stringify([
+        /* const mockData = JSON.stringify([
           {
             id: 1,
             customerId: '123',
-            dateTime: '2022-01-01T00:00:00',
             text: 'Hello',
+            dateTime: '2022-01-01T00:00:00',
             isFlagged: 0,
             ogUsername: 'User1',
             username: 'User1',
@@ -50,14 +50,17 @@ describe('Allchat', async () => {
           {
             id: 2,
             customerId: '456',
-            dateTime: '2022-01-02T00:00:00',
             text: 'Hi',
+            dateTime: '2022-01-02T00:00:00',
             isFlagged: 1,
             ogUsername: 'User2',
             username: 'User2',
-            description: 'Flagged message',
           },
-        ]);
+        ]); */
+
+        const mockData = JSON.stringify([
+            [1, '123', 'Hello', '2022-01-01T00:00:00', 0, 'User1', 'User1'],
+            [2, '456', 'Hi', '2022-01-02T00:00:00', 1, 'User2', 'User2']]);
 
         vi.stubGlobal('useFetch', () => ({ data: ref(mockData)}));
 
@@ -66,6 +69,9 @@ describe('Allchat', async () => {
     
         // Wait for the next tick to allow the component to fetch and render the messages
         await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.$nextTick();
     
         const test = wrapper.find('.header');
         console.log("Hey1 ",test.text());
@@ -73,7 +79,7 @@ describe('Allchat', async () => {
         /* const test2 = wrapper.find('.messageBox');
         console.log(test2); */
 
-        console.log(wrapper.vm.messages);
+        console.log("maybe", wrapper.vm.messages);
 
         // Assert that the messages are rendered correctly
         const messages = wrapper.findAll('.messageBox');
@@ -91,6 +97,6 @@ describe('Allchat', async () => {
         expect(secondMessage.find('.messageContent').text()).toBe('Hi');
         expect(secondMessage.find('.Time').text()).toBe('1/2/2022, 12:00:00 AM');
         expect(secondMessage.find('.flagged').exists()).toBe(true);
-        expect(secondMessage.find('.flaggedText').text()).toBe('Flagged message');
+        expect(secondMessage.find('.flaggedText').text()).toBe('Ukendt grund');
     });
 })

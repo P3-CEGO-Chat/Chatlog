@@ -45,7 +45,7 @@ export default {
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
-    console.log(this.messages);
+    console.log("3", this.messages);
 
     this.originalPageCounter = this.currentPage;
 
@@ -289,6 +289,7 @@ export default {
 
     // Parse the fetched messages
     parseMessage(data: any) {
+      console.log("1", JSON.parse(data.value as string));
       const messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],
@@ -298,6 +299,7 @@ export default {
         ogUsername: item[5],
         username: item[6],
       }));
+      console.log("2", messages);
       return messages;
     },
 
