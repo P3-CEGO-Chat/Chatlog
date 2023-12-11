@@ -45,6 +45,7 @@ export default {
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
+    console.log(this.messages);
 
     this.originalPageCounter = this.currentPage;
 
