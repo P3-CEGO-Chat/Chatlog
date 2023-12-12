@@ -27,8 +27,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     Integer findHighestMessageId();
 
     //SQL Search to find all messages with value 1 in isFlagged
-    @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.is_flagged = 1 ORDER BY chatlog.message.id", nativeQuery = true)
-    List<Object[]> findFlaggedMessages();
+    /* @Query(value = "SELECT * FROM chatlog.message WHERE chatlog.message.is_flagged = 1 ORDER BY chatlog.message.id", nativeQuery = true)
+    List<Object[]> findFlaggedMessages(); */
 
     
 }
