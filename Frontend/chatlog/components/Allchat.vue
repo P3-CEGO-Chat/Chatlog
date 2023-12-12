@@ -156,8 +156,6 @@ export default {
     async postMessageToSlack(Message: any) {
 
       const message = { text: this.messages[this.messages.length - 1].text };
-      console.log(message);
-      // http://localhost:3000/?messageid=${this.messageid}
       message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + "Grund: " + this.description + "\n" + `http://localhost:3000/?messageid=${this.messages[this.messages.length - 1].id}`;
 
       try {
