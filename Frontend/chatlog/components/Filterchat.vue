@@ -104,6 +104,13 @@ export default {
         }
     },
 
+    mounted(){
+            if (this.$route.query.messageid) {
+            this.sendMessageId(Number(this.$route.query.messageid));
+            }
+            console.log(this.$route.query.messageid);
+        },
+
     methods: {
 
         async fetchData() {

@@ -36,18 +36,24 @@ export default {
       newMessages: <Message[]>[], // Array to hold new messages
       description: "",
       notificationVisible: false,
+      localMessageId: 0 as Number,
     };
   },
 
   async mounted() {
     // Fetch the highest ID and messages when the component is mounted
     await this.fetchHighestId();
+    if (this.messageId == 0){
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
+    } else
+    {
+      this.findMessage();
+    }
 
     this.originalPageCounter = this.currentPage;
-
+    console.log(this.messageId);
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
 
@@ -61,8 +67,9 @@ export default {
         const parsedData = JSON.parse(event.data);
         if (parsedData.event === "newMessage") {
           // Create a new message object from parsedData.data
+
           const newMessage = {
-            id: -1,
+            id: parsedData.data.id,
             customerId: parsedData.data.customerId,
             text: parsedData.data.messageText,
             dateTime: parsedData.data.dateTime,
@@ -71,7 +78,7 @@ export default {
             username: parsedData.data.username,
             description: parsedData.data.description,
           };
-
+          
           // Prepend the new message to the messages array
           this.messages = [...this.messages, newMessage];
           if (newMessage.isFlagged != null) {
@@ -145,11 +152,13 @@ export default {
   },
 
   methods: {
+
     async postMessageToSlack(Message: any) {
 
       const message = { text: this.messages[this.messages.length - 1].text };
       console.log(message);
-      message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
+      // http://localhost:3000/?messageid=${this.messageid}
+      message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + "Grund: " + this.description + "\n" + `http://localhost:3000/?messageid=${this.messages[this.messages.length - 1].id}`;
 
       try {
         const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
