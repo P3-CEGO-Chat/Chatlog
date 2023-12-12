@@ -1,5 +1,3 @@
-
-import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import Allchat from '../components/Allchat.vue'
@@ -37,27 +35,6 @@ describe('Allchat', async () => {
 
     test('fetches and displays messages correctly', async () => {
         // Mock the server response
-        /* const mockData = JSON.stringify([
-          {
-            id: 1,
-            customerId: '123',
-            text: 'Hello',
-            dateTime: '2022-01-01T00:00:00',
-            isFlagged: 0,
-            ogUsername: 'User1',
-            username: 'User1',
-          },
-          {
-            id: 2,
-            customerId: '456',
-            text: 'Hi',
-            dateTime: '2022-01-02T00:00:00',
-            isFlagged: 1,
-            ogUsername: 'User2',
-            username: 'User2',
-          },
-        ]); */
-
         const mockData = JSON.stringify([
             [1, '123', 'Hello', '2022-01-01T00:00:00', 0, 'User1', 'User1'],
             [2, '456', 'Hi', '2022-01-02T00:00:00', 1, 'User2', 'User2']]);
