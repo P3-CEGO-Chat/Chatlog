@@ -3,7 +3,6 @@
     background-color: #FFFFFF;
     padding: 0 1rem;
     padding-bottom: 0.5rem;
-    justify-content: space-between;
     font-family: sans-serif;
     border-radius: 5px;
     height: 100%;
@@ -133,6 +132,7 @@
     max-height: calc(100% - 4rem);
     padding-right: 0.5rem;
 }
+
 .flagged{
     display: flex;
     justify-content: flex-end;
