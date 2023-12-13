@@ -21,6 +21,7 @@ public class SearchController {
 
     @GetMapping("/fulltext")
     public @ResponseBody List<Object[]> fullTextSearch(@RequestParam List<String> keywords, @RequestParam String dateTimeFrom, @RequestParam String dateTimeTo, @RequestParam String username, @RequestParam String customerId, @RequestParam boolean isFlagged) {
+        System.out.println(keywords + dateTimeFrom + dateTimeTo + username + customerId + isFlagged);
         return messageRepositoryCustom.fullTextSearch(keywords, dateTimeFrom, dateTimeTo, username, customerId, isFlagged);
     }
 }

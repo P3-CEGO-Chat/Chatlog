@@ -21,6 +21,8 @@ public class MessageImplementationRepository implements MessageRepositoryCustom 
     public List<Object[]> fullTextSearch(List<String> keywords, String dateTimeFrom, String dateTimeTo, String username, String customerId, boolean isFlagged) {
         String baseQuery = "SELECT chatlog.message.*, chatlog.customer.current_username FROM chatlog.message LEFT JOIN chatlog.customer ON chatlog.message.customer_id = chatlog.customer.id";
 
+        System.out.println(keywords + dateTimeFrom + dateTimeTo + username + customerId + isFlagged);
+
         StringBuilder queryBuilder = new StringBuilder(baseQuery);
 
         //Checks if the first condition

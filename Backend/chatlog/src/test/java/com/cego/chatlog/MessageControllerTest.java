@@ -35,8 +35,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 
 
-/* @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc */
 @WebMvcTest(MessageController.class)
 public class MessageControllerTest {
 
@@ -92,7 +90,6 @@ public class MessageControllerTest {
         this.mockMvc.perform(get("/messages/1-5"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString(expected)));
-        
     }
 
     @Test 
@@ -156,5 +153,39 @@ public class MessageControllerTest {
             .content(content))
             .andExpect(status().isOk())
             .andExpect(content().string("Saved and message sent"));
+    }
+
+    @Test
+    void shouldGetHighestId() throws Exception {
+        when(messageRepository.findHighestMessageId()).thenReturn(5);
+
+        this.mockMvc.perform(get("/messages/find-highest-id"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("5"));
+    }
+
+    @Test
+    void shouldGetPageByMessage() throws Exception {
+        when(messageRepository.findHighestMessageId()).thenReturn(76);
+
+        List<Object[]> mockMessages = List.of(
+            new Object[] {70, "SN2", "Ja, Hanne! Prøvede det i går, det var ret sjovt.", new Date(1700550600000L), null, "MortenMester", "MortenMester"},
+            new Object[] {71, "SN3", "Er der en strategi for at vinde i blackjack, eller er det bare held?", new Date(1700551200000L), null, "LineLucky", "LineLucky"},
+            new Object[] {72, "SN4", "Line, det handler om at kende grundlæggende strategi og lidt held!", new Date(1700551500000L), null, "JakobJoker", "JakobJoker"},
+            new Object[] {76, "SN10", "Har nogen prøvet live poker her? Er det værd at prøve?", new Date(1700552100000L), null, "SandraSpil", "SandraSpil"}
+        );
+
+        when(messageRepository.findMessagesByStartEndId(52, 76)).thenReturn(mockMessages);
+
+        String expected = "[" +
+            "[70,\"SN2\",\"Ja, Hanne! Prøvede det i går, det var ret sjovt.\",1700550600000,null,\"MortenMester\",\"MortenMester\"]," +
+            "[71,\"SN3\",\"Er der en strategi for at vinde i blackjack, eller er det bare held?\",1700551200000,null,\"LineLucky\",\"LineLucky\"]," +
+            "[72,\"SN4\",\"Line, det handler om at kende grundlæggende strategi og lidt held!\",1700551500000,null,\"JakobJoker\",\"JakobJoker\"]," +
+            "[76,\"SN10\",\"Har nogen prøvet live poker her? Er det værd at prøve?\",1700552100000,null,\"SandraSpil\",\"SandraSpil\"]" +
+        "]";
+
+        this.mockMvc.perform(get("/messages/message-id/71"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString(expected)));
     }
 }
