@@ -86,7 +86,9 @@ public class FlagController {
         if (id <= 0 || !flagWordsService.existsById(id)) { // Assuming IDs are positive
             return new ResponseEntity<>("Error: Flag with provided ID does not exist.", HttpStatus.BAD_REQUEST);
         }
+        System.out.println(updatedFlag.getId() + updatedFlag.getWord() + updatedFlag.getDescription());
         FlagWords updated = flagWordsService.updateFlag(updatedFlag.getId(), updatedFlag);
+        System.out.println(updated);
         if (updated != null) {
             return ResponseEntity.ok("Updated flag word and description successfully");
         } else {

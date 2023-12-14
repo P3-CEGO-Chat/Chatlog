@@ -100,13 +100,13 @@ public class MessageControllerTest {
         FlagWords flagWord1 = new FlagWords();
         flagWord1.setId(1);
         flagWord1.setWord("børneopsparing");
-        flagWord1.setDiscription("foruroligende ord");
+        flagWord1.setDescription("foruroligende ord");
         flagWordsList.add(flagWord1);
 
         FlagWords flagWord2 = new FlagWords();
         flagWord2.setId(2);
         flagWord2.setWord("ludoman");
-        flagWord2.setDiscription("foruroligende ord");
+        flagWord2.setDescription("foruroligende ord");
         flagWordsList.add(flagWord2);
 
         Iterable<FlagWords> mockFlags = flagWordsList;

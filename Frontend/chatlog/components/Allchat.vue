@@ -153,7 +153,7 @@ export default {
       message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
 
       try {
-        const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
+        const response = await $fetch(`http://localhost:8080/api/sendtoslack`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
