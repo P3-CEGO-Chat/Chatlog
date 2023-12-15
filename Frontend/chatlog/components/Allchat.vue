@@ -51,12 +51,9 @@ export default {
 
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
-
-    socket.onopen = function (event) {
-    }
-
+    console.log('WebSocket connection is open:', socket.readyState === WebSocket.OPEN);
     socket.onmessage = (event) => {
-
+      console.log("Received data from websocket: ", event.data);
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
         const parsedData = JSON.parse(event.data);
