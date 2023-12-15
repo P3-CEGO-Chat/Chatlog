@@ -102,15 +102,13 @@ describe('Allchat', async () => {
             // Create a mock WebSocket server
             server = new Server('ws://localhost:8080/websocket');
 
-            // Open a WebSocket connection
+            // Create a mock WebSocket client
             socket = new WebSocket('ws://localhost:8080/websocket');
         });
 
         afterAll(() => {
-            // Close the WebSocket connection
-            if (socket) {
-                socket.close();
-            }
+            // Close the mock WebSocket client
+            socket?.close();
 
             // Clean up the mock WebSocket server
             server.stop();
