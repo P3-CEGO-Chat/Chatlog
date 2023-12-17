@@ -9,10 +9,6 @@
         id: number;
     }
 
-    interface addFlagResponseError {
-        error: string;
-    }
-
     export default {
         name: 'ForuroligendeOrd',
         data() {
@@ -29,6 +25,7 @@
         },
         methods: {
             async fetchAllFlags() {
+                console.log("Fetching flags")
                 try {
                     this.flags = await $fetch(`http://localhost:8080/flags/getflags`)
                 } catch (error) {

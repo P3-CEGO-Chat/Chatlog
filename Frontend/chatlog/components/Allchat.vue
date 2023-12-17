@@ -45,15 +45,12 @@ export default {
     const { data } = await useFetch(`http://localhost:8080/messages/${this.currentPage}-${this.HighestMessageId}`);
     // Parse the fetched messages and store them in the messages array
     this.messages = this.parseMessage(data);
-    console.log("3", this.messages);
 
     this.originalPageCounter = this.currentPage;
 
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
-    console.log('WebSocket connection is open:', socket.readyState === WebSocket.OPEN);
     socket.onmessage = (event) => {
-      console.log("Received data from websocket: ", event.data);
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
         const parsedData = JSON.parse(event.data);
@@ -89,8 +86,10 @@ export default {
     // Handle WebSocket errors
     socket.onerror = function (error) {
       console.error("Socket encountered error:", error, "Closing socket");
+      // Log more details about the error
+      console.error("Error details:", error.isTrusted, error.type, error.currentTarget);
       socket.close();
-    }
+  };
 
     // Scroll to the bottom after the next DOM update
     this.$nextTick(() => {
@@ -125,7 +124,6 @@ export default {
 
     messages: {
       handler() {
-        console.log("messages changed");
         this.getFlaggedData().then((data) => {
           for (const message of this.messages) {
             for (const flagWord of data) {
@@ -146,7 +144,6 @@ export default {
     async postMessageToSlack(Message: any) {
 
       const message = { text: this.messages[this.messages.length - 1].text };
-      console.log(message);
       message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + " Grund: " + this.description;
 
       try {
@@ -286,7 +283,6 @@ export default {
 
     // Parse the fetched messages
     parseMessage(data: any) {
-      console.log("1", JSON.parse(data.value as string));
       const messages = JSON.parse(data.value as string).map((item: any[]): Message => ({
         id: item[0],
         customerId: item[1],
@@ -296,7 +292,6 @@ export default {
         ogUsername: item[5],
         username: item[6],
       }));
-      console.log("2", messages);
       return messages;
     },
 
