@@ -30,7 +30,7 @@ public class FlagWords {
         return this.description;
     }
 
-    public void setDiscription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

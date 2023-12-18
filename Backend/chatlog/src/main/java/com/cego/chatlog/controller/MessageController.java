@@ -44,12 +44,12 @@ public class MessageController {
     @Autowired
     private FlagWordsService flagWordsService;
 
-    @GetMapping("/find-flagged-messages")
+    /* @GetMapping("/find-flagged-messages")
     public ResponseEntity<String> getFlaggedMessages() {
         List<Object[]> flaggedMessages = messageRepository.findFlaggedMessages();
         String json = convertObjectToJSON(flaggedMessages);
         return ResponseEntity.ok(json);
-    }
+    } */
 
     @GetMapping("/{pageId}-{highestMessageId}")
     public ResponseEntity<String> getMessagePage(@PathVariable String pageId, @PathVariable String highestMessageId) {
@@ -132,16 +132,22 @@ public class MessageController {
         try {
 
             Integer highestId = messageRepository.findHighestMessageId();
-            int temppage = (int) Math.ceil(((double) highestId - Integer.parseInt(messageId) + 1) / 25);
+            int temppage = (int) Math.ceil(((double) highestId - Integer.parseInt(messageId) + 1) / 25); // 76 - 71 + 1 = 6 / 25 = 0.24 = 1
             int startId = highestId - (temppage * 25) + 1;
             int endId = startId + 24;
 
+            System.out.println(temppage);
+            System.out.println(startId);
+            System.out.println(endId);
 
 
             if(startId < 1){
                 startId = 1;
                 endId = highestId % 25 + 25;
             }
+
+            System.out.println(startId);
+            System.out.println(endId);
 
             List<Object[]> messages = messageRepository.findMessagesByStartEndId(startId, endId);
 

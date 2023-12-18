@@ -33,7 +33,6 @@ export default {
             title: "Venter på søgning",
             TempTimeStart: {},
             TempTimeEnd: {},
-            isFlagged: false,
             checked: false,
             messageReverseClass: "",
             flagWord: {} as flagWord,
@@ -59,7 +58,6 @@ export default {
                 // This function will be called when `keywordArray` changes
                 this.fetchData();
                 this.title = "Søger efter: ";
-                console.log("hey")
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
@@ -71,16 +69,6 @@ export default {
             },
             deep: true // This ensures that the watcher will detect changes in the objects inside the array
         },
-        isFlagged: {
-            handler(newVal) {
-                if (newVal) {
-                    // Checkbox is checked, perform your acti
-                    this.findFlaggedMessages();
-                } else {
-                    // Checkbox is unchecked, perform your action
-                }
-            }
-        },
         messages: {
             handler() {
                 // This function will be called when `messages` changes
@@ -89,7 +77,6 @@ export default {
                         for (const flagWord of data) {
                             if (message.isFlagged == flagWord.id) {
                                 message.description = flagWord.description;
-                                console.log(message.description);
                             }
                         }
                     }
@@ -171,22 +158,6 @@ export default {
             }, 3000);
         },
 
-        async findFlaggedMessages() {
-            const { data } = await useFetch(`http://localhost:8080/messages/find-flagged-messages`);
-            const jsonData: any = data.value as Message[];
-                this.messages = jsonData.map((item: any[]): Message => ({
-                    id: item[0],
-                    customerId: item[1],
-                    text: item[2],
-                    dateTime: item[3],
-                    isFlagged: item[4],
-                    ogUsername: item[5],
-                    username: item[6],
-                }));
-
-        return this.messages;
-        },
-
         // check if the message is the highest id
         messageHighestChecker(messageId: Number) {
             let highestId = 0;
@@ -251,7 +222,7 @@ export default {
                 <div class="messagesender">
                     {{ message.ogUsername }}:
                 </div>
-                <div classe="messageContent">
+                <div class="messageContent">
                     {{ message.text }}
                 </div>
                 <div class="dateTime">

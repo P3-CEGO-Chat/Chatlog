@@ -43,7 +43,7 @@ public class FlagWordsService {
                 existingFlag.setWord(updatedFlag.getWord());
             }
             if (existingFlag.getDescription() != updatedFlag.getWord()) {
-                existingFlag.setDiscription(updatedFlag.getDescription());
+                existingFlag.setDescription(updatedFlag.getDescription());
             }
 
             flagWordsRepository.save(updatedFlag);

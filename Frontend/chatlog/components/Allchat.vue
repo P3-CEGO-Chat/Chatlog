@@ -56,12 +56,7 @@ export default {
     console.log(this.messageId);
     // Establish a WebSocket connection
     const socket = new WebSocket("ws://localhost:8080/websocket");
-
-    socket.onopen = function (event) {
-    }
-
     socket.onmessage = (event) => {
-
       // Handle incoming messages if chat is live
       if (this.chatLive === true) {
         const parsedData = JSON.parse(event.data);
@@ -98,8 +93,10 @@ export default {
     // Handle WebSocket errors
     socket.onerror = function (error) {
       console.error("Socket encountered error:", error, "Closing socket");
+      // Log more details about the error
+      console.error("Error details:", error.isTrusted, error.type, error.currentTarget);
       socket.close();
-    }
+  };
 
     // Scroll to the bottom after the next DOM update
     this.$nextTick(() => {
@@ -134,7 +131,6 @@ export default {
 
     messages: {
       handler() {
-        console.log("messages changed");
         this.getFlaggedData().then((data) => {
           for (const message of this.messages) {
             for (const flagWord of data) {
@@ -156,10 +152,11 @@ export default {
     async postMessageToSlack(Message: any) {
 
       const message = { text: this.messages[this.messages.length - 1].text };
+
       message.text = "(Flagged) " + "Skrevet af " + this.messages[this.messages.length - 1].ogUsername + ": " + message.text + "\n" + "Grund: " + this.description + "\n" + `http://localhost:3000/?messageid=${this.messages[this.messages.length - 1].id}`;
 
       try {
-        const response = await $fetch(`http://localhost:8080/api/sendToSlack`, {
+        const response = await $fetch(`http://localhost:8080/api/sendtoslack`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
