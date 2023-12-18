@@ -65,7 +65,7 @@ public class MessageControllerTest {
     }
     
     @Test
-    void shouldgetMessagesByPage() throws Exception {
+    void shouldGetMessagesByPage() throws Exception {
         
        List<Object[]> mockMessages = List.of(
             new Object[] {1, "SN1", "Hej alle, er der nogen her der har prøvet det nye slotspil?", new Date(1700550300000L), null, "HanneHeld", "HanneHeld"},

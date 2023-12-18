@@ -1,9 +1,9 @@
 package com.cego.chatlog;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +25,9 @@ public class SlackControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private RestTemplate restTemplateMock;
+
     private final String slackWebhookUrl = "https://hooks.slack.com/services/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";
 
 
@@ -33,7 +36,6 @@ public class SlackControllerTest {
         
         String message = "{ \"text\": \"This is a test message\" }";
 
-        RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
         ResponseEntity<String> responseEntity = ResponseEntity.ok("ok");
 
         when(restTemplateMock.postForEntity(eq(slackWebhookUrl), any(HttpEntity.class), eq(String.class))).thenReturn(responseEntity);

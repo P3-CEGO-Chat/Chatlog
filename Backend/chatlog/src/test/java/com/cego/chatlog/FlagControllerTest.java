@@ -1,5 +1,6 @@
 package com.cego.chatlog;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,15 +44,19 @@ public class FlagControllerTest {
         }
     }
 
-    @Test
-    void shouldAddFlag() throws Exception {
+    FlagWords flagWord;
 
+    @BeforeEach
+    void setUp() {
         // Prepare test data
-        FlagWords flagWord = new FlagWords();
+        flagWord = new FlagWords();
         flagWord.setId(1);
         flagWord.setWord("test");
         flagWord.setDescription("unknown reason");
+    }
 
+    @Test
+    void shouldAddFlag() throws Exception {
 
         when(flagWordsService.existsByWord(flagWord.getWord())).thenReturn(false);
         when(flagWordsService.save(flagWord)).thenReturn(flagWord);
@@ -69,12 +74,6 @@ public class FlagControllerTest {
     @Test
     void shouldNotAddFlag() throws Exception {
 
-        // Prepare test data
-        FlagWords flagWord = new FlagWords();
-        flagWord.setId(1);
-        flagWord.setWord("test");
-        flagWord.setDescription("unknown reason");
-
         when(flagWordsService.existsByWord(flagWord.getWord())).thenReturn(true);
         
         String expected = "Error: Flag word already exists.";
@@ -89,12 +88,8 @@ public class FlagControllerTest {
     @Test
     void shouldGetFlags() throws Exception {
             
-            // Prepare test data
-            FlagWords flagWord = new FlagWords();
+            // Prepare additional test data
             FlagWords flagWord2 = new FlagWords();
-            flagWord.setId(1);
-            flagWord.setWord("test");
-            flagWord.setDescription("unknown reason");
             flagWord2.setId(2);
             flagWord2.setWord("test2");
             flagWord2.setDescription("unknown reason2");
@@ -112,12 +107,6 @@ public class FlagControllerTest {
 
     @Test
     void shouldRemoveFlag() throws Exception {
-            
-            // Prepare test data
-            FlagWords flagWord = new FlagWords();
-            flagWord.setId(1);
-            flagWord.setWord("test");
-            flagWord.setDescription("unknown reason");
     
             when(flagWordsService.existsByWord(flagWord.getWord())).thenReturn(true);
 
@@ -134,12 +123,6 @@ public class FlagControllerTest {
 
     @Test
     void shouldNotRemoveFlag() throws Exception {
-            
-            // Prepare test data
-            FlagWords flagWord = new FlagWords();
-            flagWord.setId(1);
-            flagWord.setWord("test");
-            flagWord.setDescription("unknown reason");
     
             when(flagWordsService.existsByWord(flagWord.getWord())).thenReturn(false);
     
@@ -154,11 +137,6 @@ public class FlagControllerTest {
 
     @Test
     void shouldUpdateFlag() throws Exception {
-        // Prepare test data
-        FlagWords flagWord = new FlagWords();
-        flagWord.setId(1);
-        flagWord.setWord("test");
-        flagWord.setDescription("unknown reason");
 
         when(flagWordsService.existsById(flagWord.getId())).thenReturn(true);
         when(flagWordsService.updateFlag(eq(flagWord.getId()), any(FlagWords.class))).thenReturn(flagWord);
@@ -175,11 +153,6 @@ public class FlagControllerTest {
 
     @Test
     void shouldNotUpdateFlag() throws Exception {
-        // Prepare test data
-        FlagWords flagWord = new FlagWords();
-        flagWord.setId(1);
-        flagWord.setWord("test");
-        flagWord.setDescription("unknown reason");
 
         when(flagWordsService.existsById(flagWord.getId())).thenReturn(false);
 
