@@ -91,7 +91,7 @@ export default {
         }
     },
 
-    mounted(){
+    mounted() {
             if (this.$route.query.messageid) {
             this.sendMessageId(Number(this.$route.query.messageid));
             }

@@ -255,7 +255,7 @@ describe('Allchat', async () => {
             // wait 1 seconds for the websocket to send the message
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            const message = { text: "(Flagged) " + "Skrevet af user1: Test message" + "\n" + " Grund: "};
+            const message = { text: "(Flagged) " + "Skrevet af user1: Test message" + "\nGrund: \n" + "http://localhost:3000/?messageid=undefined"};
 
             expect(_fetch).toHaveBeenCalledTimes(1);
             expect(_fetch).toHaveBeenCalledWith(`http://localhost:8080/api/sendtoslack`, {

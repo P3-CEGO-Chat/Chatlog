@@ -10,7 +10,16 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display no messages when filter is empty', async () => {
-        const wrapper = mount(Filterchat)
+
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         const messages = wrapper.findAll('.searchedMessage')
@@ -19,7 +28,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a username is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         wrapper.setProps({
@@ -66,7 +83,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a customer id is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         wrapper.setProps({
@@ -114,7 +139,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a keyword is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         wrapper.setProps({
@@ -161,7 +194,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a date is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         wrapper.setProps({
@@ -209,7 +250,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a date range is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         wrapper.setProps({
@@ -257,7 +306,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when a flag is selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         // set the flag to true
@@ -301,7 +358,15 @@ describe('Filter chat', () => {
     });
 
     test('fetch and display messages when multiple filters are selected', async () => {
-        const wrapper = mount(Filterchat)
+        const wrapper = mount(Filterchat, {
+            global: {
+                mocks: {
+                    $route: {
+                        query: {}
+                    }
+                }
+            }
+        })
         await wrapper.vm.$nextTick()
 
         // set the flag to true
