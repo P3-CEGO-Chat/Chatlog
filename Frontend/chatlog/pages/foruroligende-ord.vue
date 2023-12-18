@@ -33,6 +33,7 @@
                 }
             },
             async postFlag() {
+                console.log("Posting flag")
                 if (this.newFlag.word == "") {
                     this.notificationHandler("Indtast venligst et flag", true);
                     return;
@@ -66,6 +67,7 @@
             },
             async removeFlag(flagword: String) {
                 try {
+                    console.log("Removing flag")
                     await $fetch(`http://localhost:8080/flags/removeflag?word=${flagword}`);
                     this.flags = this.flags.filter((flag: { word: String }) => flag.word !== flagword)
                     this.modalOpen = !this.modalOpen;

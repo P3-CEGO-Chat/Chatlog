@@ -252,10 +252,6 @@ describe('Allchat', async () => {
                 socket.send(mockMessage);
             });
 
-            // Wait for all asynchronous operations to complete
-            await wrapper.vm.$nextTick();
-            await wrapper.vm.$nextTick();
-
             // wait 1 seconds for the websocket to send the message
             await new Promise(resolve => setTimeout(resolve, 1000));
 
