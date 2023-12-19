@@ -32,6 +32,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 
@@ -126,7 +127,7 @@ public class MessageControllerTest {
 
         assertThat(Flagger.flagChecker(flaggedMap, dataCustomerMessage)).isEqualTo(1);
 
-        Mockito.doNothing().when(customerService).createUpdateUser(dataCustomerMessage);
+        doNothing().when(customerService).createUpdateUser(dataCustomerMessage);
 
         Message message = new Message();
         message.setCustomerId(dataCustomerMessage.getCustomerId());
@@ -135,7 +136,7 @@ public class MessageControllerTest {
         message.setIsFlagged(1);
         message.setOGUsername(dataCustomerMessage.getUsername());
 
-        Mockito.doNothing().when(sessionManager).emitEvent("newMessage", convertObjectToJSON(message));
+        doNothing().when(sessionManager).emitEvent("newMessage", convertObjectToJSON(message));
 
         when(messageRepository.save(message)).thenReturn(message);
 
