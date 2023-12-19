@@ -1,7 +1,6 @@
-import { afterAll, afterEach, beforeAll, describe, expect, test, vi, type Mock, beforeEach } from 'vitest'
-import { mount, VueWrapper } from '@vue/test-utils'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import { mount } from '@vue/test-utils'
 import foruroligendeord from '../pages/foruroligende-ord.vue'
-import { ref } from 'vue'
 
 describe('Foruroligende ord', () => {
     
