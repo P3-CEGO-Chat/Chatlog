@@ -1,19 +1,4 @@
-<template>
-    <div class="layout">
-      <div>
-        <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeObject="updateDateTimeObject" />
-        <Filterchat :keywordArray="keywordArray" :dateTimeObject="dateTimeObject" @updateMessageId="updateMessageId"/>
-      </div>
-      <div>
-        <Allchat :messageId="messageId" @resetMessageId="resetMessageId">
-          ikke dav
-        </Allchat>
-      </div>
-      <NuxtPage />
-    </div>
-  </template>
-  
-  <script lang="ts">
+<script lang="ts">
   
   import('~/assets/css/main.css')
   import Searchbar from '~/components/Searchbar.vue';
@@ -50,3 +35,18 @@
     },
   };
   </script>
+
+<template>
+  <div class="layout">
+    <div>
+      <Searchbar @updateKeywordArray="updateKeywordArray" @updateDateTimeObject="updateDateTimeObject" />
+      <Filterchat :keywordArray="keywordArray" :dateTimeObject="dateTimeObject" @updateMessageId="updateMessageId"/>
+    </div>
+    <div>
+      <Allchat :messageId="messageId" @resetMessageId="resetMessageId">
+        ikke dav
+      </Allchat>
+    </div>
+    <NuxtPage />
+  </div>
+</template>
