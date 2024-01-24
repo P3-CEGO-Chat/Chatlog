@@ -64,7 +64,7 @@ export default {
           // Create a new message object from parsedData.data
 
           const newMessage = {
-            id: parsedData.data.id,
+            id: -1,
             customerId: parsedData.data.customerId,
             text: parsedData.data.messageText,
             dateTime: parsedData.data.dateTime,
